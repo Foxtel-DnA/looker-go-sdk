@@ -1,6 +1,6 @@
 # looker-go-sdk
 
-
+```go
 package main
 
 import (
@@ -50,3 +50,4 @@ func main() {
 
 	println("group: " + group.Payload.Name + ", group id: " + string(group.Payload.ID))
 }
+```
