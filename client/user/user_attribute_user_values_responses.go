@@ -13,7 +13,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "looker-go-sdk/models"
+	models "github.com/bmccarthy/looker-go-sdk/models"
 )
 
 // UserAttributeUserValuesReader is a Reader for the UserAttributeUserValues structure.

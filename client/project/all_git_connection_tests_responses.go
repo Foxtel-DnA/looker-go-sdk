@@ -13,7 +13,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "looker-go-sdk/models"
+	models "github.com/bmccarthy/looker-go-sdk/models"
 )
 
 // AllGitConnectionTestsReader is a Reader for the AllGitConnectionTests structure.

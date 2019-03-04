@@ -17,7 +17,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "looker-go-sdk/models"
+	models "github.com/bmccarthy/looker-go-sdk/models"
 )
 
 // NewUpdateRoleParams creates a new UpdateRoleParams object

@@ -16,7 +16,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "looker-go-sdk/models"
+	models "github.com/bmccarthy/looker-go-sdk/models"
 )
 
 // NewUpdateSessionParams creates a new UpdateSessionParams object
