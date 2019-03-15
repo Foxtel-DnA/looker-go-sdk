@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -65,7 +66,7 @@ type DeleteSpaceParams struct {
 	  Id of space
 
 	*/
-	SpaceID string
+	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -106,13 +107,13 @@ func (o *DeleteSpaceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithSpaceID adds the spaceID to the delete space params
-func (o *DeleteSpaceParams) WithSpaceID(spaceID string) *DeleteSpaceParams {
+func (o *DeleteSpaceParams) WithSpaceID(spaceID int64) *DeleteSpaceParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the delete space params
-func (o *DeleteSpaceParams) SetSpaceID(spaceID string) {
+func (o *DeleteSpaceParams) SetSpaceID(spaceID int64) {
 	o.SpaceID = spaceID
 }
 
@@ -125,7 +126,7 @@ func (o *DeleteSpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	var res []error
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
+	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
 		return err
 	}
 

@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -80,7 +81,7 @@ type SpaceChildrenSearchParams struct {
 	  Id of space
 
 	*/
-	SpaceID string
+	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -154,13 +155,13 @@ func (o *SpaceChildrenSearchParams) SetSorts(sorts *string) {
 }
 
 // WithSpaceID adds the spaceID to the space children search params
-func (o *SpaceChildrenSearchParams) WithSpaceID(spaceID string) *SpaceChildrenSearchParams {
+func (o *SpaceChildrenSearchParams) WithSpaceID(spaceID int64) *SpaceChildrenSearchParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space children search params
-func (o *SpaceChildrenSearchParams) SetSpaceID(spaceID string) {
+func (o *SpaceChildrenSearchParams) SetSpaceID(spaceID int64) {
 	o.SpaceID = spaceID
 }
 
@@ -221,7 +222,7 @@ func (o *SpaceChildrenSearchParams) WriteToRequest(r runtime.ClientRequest, reg 
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
+	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
 		return err
 	}
 

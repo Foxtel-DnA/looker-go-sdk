@@ -135,7 +135,7 @@ type Dashboard struct {
 	Space *SpaceBase `json:"space,omitempty"`
 
 	// Id of Space
-	SpaceID string `json:"space_id,omitempty"`
+	SpaceID int64 `json:"space_id,omitempty"`
 
 	// Color of text on text tiles
 	TextTileTextColor string `json:"text_tile_text_color,omitempty"`

@@ -83,7 +83,7 @@ type ImportLookmlDashboardParams struct {
 	  Id of space to import the dashboard to
 
 	*/
-	SpaceID string
+	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -157,13 +157,13 @@ func (o *ImportLookmlDashboardParams) SetRawLocale(rawLocale *bool) {
 }
 
 // WithSpaceID adds the spaceID to the import lookml dashboard params
-func (o *ImportLookmlDashboardParams) WithSpaceID(spaceID string) *ImportLookmlDashboardParams {
+func (o *ImportLookmlDashboardParams) WithSpaceID(spaceID int64) *ImportLookmlDashboardParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the import lookml dashboard params
-func (o *ImportLookmlDashboardParams) SetSpaceID(spaceID string) {
+func (o *ImportLookmlDashboardParams) SetSpaceID(spaceID int64) {
 	o.SpaceID = spaceID
 }
 
@@ -203,7 +203,7 @@ func (o *ImportLookmlDashboardParams) WriteToRequest(r runtime.ClientRequest, re
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
+	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
 		return err
 	}
 

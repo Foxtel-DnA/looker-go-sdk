@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -70,7 +71,7 @@ type SpaceParentParams struct {
 	  Id of space
 
 	*/
-	SpaceID string
+	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -122,13 +123,13 @@ func (o *SpaceParentParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space parent params
-func (o *SpaceParentParams) WithSpaceID(spaceID string) *SpaceParentParams {
+func (o *SpaceParentParams) WithSpaceID(spaceID int64) *SpaceParentParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space parent params
-func (o *SpaceParentParams) SetSpaceID(spaceID string) {
+func (o *SpaceParentParams) SetSpaceID(spaceID int64) {
 	o.SpaceID = spaceID
 }
 
@@ -157,7 +158,7 @@ func (o *SpaceParentParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
+	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
 		return err
 	}
 

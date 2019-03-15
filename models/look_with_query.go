@@ -118,7 +118,7 @@ type LookWithQuery struct {
 	Space *SpaceBase `json:"space,omitempty"`
 
 	// (Write-Only) Space Id
-	SpaceID string `json:"space_id,omitempty"`
+	SpaceID int64 `json:"space_id,omitempty"`
 
 	// Look Title
 	Title string `json:"title,omitempty"`

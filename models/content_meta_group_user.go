@@ -21,7 +21,7 @@ type ContentMetaGroupUser struct {
 
 	// Id of associated Content Metadata
 	// Read Only: true
-	ContentMetadataID string `json:"content_metadata_id,omitempty"`
+	ContentMetadataID int64 `json:"content_metadata_id,omitempty"`
 
 	// ID of associated group
 	// Read Only: true
@@ -29,7 +29,7 @@ type ContentMetaGroupUser struct {
 
 	// Unique Id
 	// Read Only: true
-	ID string `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 
 	// Type of permission: "view" or "edit"
 	// Read Only: true

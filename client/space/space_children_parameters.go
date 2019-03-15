@@ -86,7 +86,7 @@ type SpaceChildrenParams struct {
 	  Id of space
 
 	*/
-	SpaceID string
+	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -171,13 +171,13 @@ func (o *SpaceChildrenParams) SetSorts(sorts *string) {
 }
 
 // WithSpaceID adds the spaceID to the space children params
-func (o *SpaceChildrenParams) WithSpaceID(spaceID string) *SpaceChildrenParams {
+func (o *SpaceChildrenParams) WithSpaceID(spaceID int64) *SpaceChildrenParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space children params
-func (o *SpaceChildrenParams) SetSpaceID(spaceID string) {
+func (o *SpaceChildrenParams) SetSpaceID(spaceID int64) {
 	o.SpaceID = spaceID
 }
 
@@ -254,7 +254,7 @@ func (o *SpaceChildrenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
+	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
 		return err
 	}
 

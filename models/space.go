@@ -45,7 +45,7 @@ type Space struct {
 
 	// Unique Id
 	// Read Only: true
-	ID string `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 
 	// Space is an embed space
 	// Read Only: true
