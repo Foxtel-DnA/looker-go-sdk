@@ -34,7 +34,7 @@ type LookWithDashboards struct {
 	// Time that the Look was created.
 	// Read Only: true
 	// Format: date-time
-	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
+	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 
 	// Dashboards
 	// Read Only: true
@@ -46,7 +46,7 @@ type LookWithDashboards struct {
 	// Time that the Look was deleted.
 	// Read Only: true
 	// Format: date-time
-	DeletedAt strfmt.DateTime `json:"deleted_at,omitempty"`
+	DeletedAt *strfmt.DateTime `json:"deleted_at,omitempty"`
 
 	// Id of User that deleted the look.
 	// Read Only: true
@@ -81,7 +81,7 @@ type LookWithDashboards struct {
 	// Time that the Look was last accessed by any user
 	// Read Only: true
 	// Format: date-time
-	LastAccessedAt strfmt.DateTime `json:"last_accessed_at,omitempty"`
+	LastAccessedAt *strfmt.DateTime `json:"last_accessed_at,omitempty"`
 
 	// (Write-Only) Id of User that last updated the look.
 	LastUpdaterID int64 `json:"last_updater_id,omitempty"`
@@ -89,7 +89,7 @@ type LookWithDashboards struct {
 	// Time last viewed in the Looker web UI
 	// Read Only: true
 	// Format: date-time
-	LastViewedAt strfmt.DateTime `json:"last_viewed_at,omitempty"`
+	LastViewedAt *strfmt.DateTime `json:"last_viewed_at,omitempty"`
 
 	// Model
 	// Read Only: true
@@ -127,7 +127,7 @@ type LookWithDashboards struct {
 	// Time that the Look was updated.
 	// Read Only: true
 	// Format: date-time
-	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
 
 	// User
 	// Read Only: true
