@@ -17,7 +17,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/bmccarthy/looker-go-sdk/models"
+	models "github.com/billtrust/looker-go-sdk/models"
 )
 
 // NewRunInlineQueryParams creates a new RunInlineQueryParams object

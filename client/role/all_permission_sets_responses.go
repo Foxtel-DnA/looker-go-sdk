@@ -13,7 +13,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/bmccarthy/looker-go-sdk/models"
+	models "github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllPermissionSetsReader is a Reader for the AllPermissionSets structure.

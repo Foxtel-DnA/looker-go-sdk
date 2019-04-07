@@ -36,7 +36,7 @@ type ContentMeta struct {
 	InheritingID int64 `json:"inheriting_id,omitempty"`
 
 	// Whether content inherits its access levels from parent
-	// bmccarthy need to change to pointer so it can be set to false correctly
+	// billtrust need to change to pointer so it can be set to false correctly
 	Inherits *bool `json:"inherits,omitempty"`
 
 	// Id of associated look when content_type is "look"
@@ -57,7 +57,7 @@ type ContentMeta struct {
 
 	// Id of associated space when content_type is "space"
 	// Read Only: true
-	// bmccarthy API actually returns int64 and not string
+	// billtrust API actually returns int64 and not string
 	SpaceID int64 `json:"space_id,omitempty"`
 }
 

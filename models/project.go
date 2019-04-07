@@ -35,7 +35,7 @@ type Project struct {
 
 	// Git remote repository url
 	// Format: uri
-	// bmccarthy - this value comes back as null when creating a project and causes an exception. Setting this to a pointer fixes this
+	// billtrust - this value comes back as null when creating a project and causes an exception. Setting this to a pointer fixes this
 	GitRemoteURL *strfmt.URI `json:"git_remote_url,omitempty"`
 
 	// Name of the git service provider

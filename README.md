@@ -6,9 +6,9 @@
 package main
 
 import (
-	apiclient "github.com/bmccarthy/looker-go-sdk/client"
-	"github.com/bmccarthy/looker-go-sdk/client/api_auth"
-	"github.com/bmccarthy/looker-go-sdk/client/group"
+	apiclient "github.com/billtrust/looker-go-sdk/client"
+	"github.com/billtrust/looker-go-sdk/client/api_auth"
+	"github.com/billtrust/looker-go-sdk/client/group"
 
 	"github.com/go-openapi/strfmt"
 
