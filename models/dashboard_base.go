@@ -38,7 +38,8 @@ type DashboardBase struct {
 
 	// Unique Id
 	// Read Only: true
-	ID string `json:"id,omitempty"`
+	// billtrust change made to type because the API returns back an int64 and not a string for this field
+	ID int64 `json:"id,omitempty"`
 
 	// Model
 	// Read Only: true
