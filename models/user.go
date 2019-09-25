@@ -130,8 +130,9 @@ type User struct {
 	// Read Only: true
 	Sessions []*Session `json:"sessions"`
 
-	// Per user dictionary of undocumented state information owned by the Looker UI.
-	UIState map[string]string `json:"ui_state,omitempty"`
+	// billtrust removing ui_state from response since this is not the correct type and we don't need it for the terraform provider
+	// // Per user dictionary of undocumented state information owned by the Looker UI.
+	// UIState map[string]string `json:"ui_state,omitempty"`
 
 	// Link to get this item
 	// Read Only: true
