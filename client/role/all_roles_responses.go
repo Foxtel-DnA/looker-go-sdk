@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // AllRolesReader is a Reader for the AllRoles structure.
@@ -24,30 +23,26 @@ type AllRolesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllRolesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllRolesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllRolesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllRolesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllRolesOK() *AllRolesOK {
 	return &AllRolesOK{}
 }
 
-/*AllRolesOK handles this case with default header values.
+/* AllRolesOK describes a response with status code 200, with default header values.
 
 Role
 */
@@ -66,6 +61,9 @@ type AllRolesOK struct {
 
 func (o *AllRolesOK) Error() string {
 	return fmt.Sprintf("[GET /roles][%d] allRolesOK  %+v", 200, o.Payload)
+}
+func (o *AllRolesOK) GetPayload() []*models.Role {
+	return o.Payload
 }
 
 func (o *AllRolesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllRolesBadRequest() *AllRolesBadRequest {
 	return &AllRolesBadRequest{}
 }
 
-/*AllRolesBadRequest handles this case with default header values.
+/* AllRolesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllRolesBadRequest struct {
 
 func (o *AllRolesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /roles][%d] allRolesBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllRolesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllRolesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllRolesNotFound() *AllRolesNotFound {
 	return &AllRolesNotFound{}
 }
 
-/*AllRolesNotFound handles this case with default header values.
+/* AllRolesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllRolesNotFound struct {
 
 func (o *AllRolesNotFound) Error() string {
 	return fmt.Sprintf("[GET /roles][%d] allRolesNotFound  %+v", 404, o.Payload)
+}
+func (o *AllRolesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllRolesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

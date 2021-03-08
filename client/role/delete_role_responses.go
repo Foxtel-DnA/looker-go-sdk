@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteRoleReader is a Reader for the DeleteRole structure.
@@ -24,37 +23,38 @@ type DeleteRoleReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteRoleReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteRoleNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteRoleBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteRoleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 405:
 		result := NewDeleteRoleMethodNotAllowed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteRoleTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewDeleteRoleNoContent() *DeleteRoleNoContent {
 	return &DeleteRoleNoContent{}
 }
 
-/*DeleteRoleNoContent handles this case with default header values.
+/* DeleteRoleNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -73,6 +73,9 @@ type DeleteRoleNoContent struct {
 
 func (o *DeleteRoleNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /roles/{role_id}][%d] deleteRoleNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteRoleNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteRoleNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewDeleteRoleBadRequest() *DeleteRoleBadRequest {
 	return &DeleteRoleBadRequest{}
 }
 
-/*DeleteRoleBadRequest handles this case with default header values.
+/* DeleteRoleBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type DeleteRoleBadRequest struct {
 
 func (o *DeleteRoleBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /roles/{role_id}][%d] deleteRoleBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteRoleBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteRoleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewDeleteRoleNotFound() *DeleteRoleNotFound {
 	return &DeleteRoleNotFound{}
 }
 
-/*DeleteRoleNotFound handles this case with default header values.
+/* DeleteRoleNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type DeleteRoleNotFound struct {
 
 func (o *DeleteRoleNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /roles/{role_id}][%d] deleteRoleNotFound  %+v", 404, o.Payload)
+}
+func (o *DeleteRoleNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteRoleNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewDeleteRoleMethodNotAllowed() *DeleteRoleMethodNotAllowed {
 	return &DeleteRoleMethodNotAllowed{}
 }
 
-/*DeleteRoleMethodNotAllowed handles this case with default header values.
+/* DeleteRoleMethodNotAllowed describes a response with status code 405, with default header values.
 
 Resource Can't Be Modified
 */
@@ -159,8 +168,43 @@ type DeleteRoleMethodNotAllowed struct {
 func (o *DeleteRoleMethodNotAllowed) Error() string {
 	return fmt.Sprintf("[DELETE /roles/{role_id}][%d] deleteRoleMethodNotAllowed  %+v", 405, o.Payload)
 }
+func (o *DeleteRoleMethodNotAllowed) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteRoleMethodNotAllowed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteRoleTooManyRequests creates a DeleteRoleTooManyRequests with default headers values
+func NewDeleteRoleTooManyRequests() *DeleteRoleTooManyRequests {
+	return &DeleteRoleTooManyRequests{}
+}
+
+/* DeleteRoleTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteRoleTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteRoleTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /roles/{role_id}][%d] deleteRoleTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteRoleTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteRoleTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

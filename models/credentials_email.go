@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // CredentialsEmail credentials email
+//
 // swagger:model CredentialsEmail
 type CredentialsEmail struct {
 
@@ -29,8 +31,7 @@ type CredentialsEmail struct {
 	Email string `json:"email,omitempty"`
 
 	// Force the user to change their password upon their next login
-	// Read Only: true
-	ForcedPasswordResetAtNextLogin *bool `json:"forced_password_reset_at_next_login,omitempty"`
+	ForcedPasswordResetAtNextLogin bool `json:"forced_password_reset_at_next_login,omitempty"`
 
 	// Has this credential been disabled?
 	// Read Only: true
@@ -78,7 +79,6 @@ func (m *CredentialsEmail) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CredentialsEmail) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
@@ -91,12 +91,121 @@ func (m *CredentialsEmail) validateURL(formats strfmt.Registry) error {
 }
 
 func (m *CredentialsEmail) validateUserURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserURL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("user_url", "body", "uri", m.UserURL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this credentials email based on the context it is used
+func (m *CredentialsEmail) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsDisabled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLoggedInAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePasswordResetURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateIsDisabled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_disabled", "body", m.IsDisabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateLoggedInAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "logged_in_at", "body", string(m.LoggedInAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidatePasswordResetURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "password_reset_url", "body", string(m.PasswordResetURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "type", "body", string(m.Type)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsEmail) contextValidateUserURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_url", "body", strfmt.URI(m.UserURL)); err != nil {
 		return err
 	}
 

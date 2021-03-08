@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateOidcConfigReader is a Reader for the UpdateOidcConfig structure.
@@ -24,37 +23,32 @@ type UpdateOidcConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateOidcConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateOidcConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateOidcConfigBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateOidcConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateOidcConfigUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewUpdateOidcConfigOK() *UpdateOidcConfigOK {
 	return &UpdateOidcConfigOK{}
 }
 
-/*UpdateOidcConfigOK handles this case with default header values.
+/* UpdateOidcConfigOK describes a response with status code 200, with default header values.
 
 New state for OIDC Configuration.
 */
@@ -73,6 +67,9 @@ type UpdateOidcConfigOK struct {
 
 func (o *UpdateOidcConfigOK) Error() string {
 	return fmt.Sprintf("[PATCH /oidc_config][%d] updateOidcConfigOK  %+v", 200, o.Payload)
+}
+func (o *UpdateOidcConfigOK) GetPayload() *models.OIDCConfig {
+	return o.Payload
 }
 
 func (o *UpdateOidcConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewUpdateOidcConfigBadRequest() *UpdateOidcConfigBadRequest {
 	return &UpdateOidcConfigBadRequest{}
 }
 
-/*UpdateOidcConfigBadRequest handles this case with default header values.
+/* UpdateOidcConfigBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type UpdateOidcConfigBadRequest struct {
 
 func (o *UpdateOidcConfigBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /oidc_config][%d] updateOidcConfigBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateOidcConfigBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateOidcConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewUpdateOidcConfigNotFound() *UpdateOidcConfigNotFound {
 	return &UpdateOidcConfigNotFound{}
 }
 
-/*UpdateOidcConfigNotFound handles this case with default header values.
+/* UpdateOidcConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type UpdateOidcConfigNotFound struct {
 
 func (o *UpdateOidcConfigNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /oidc_config][%d] updateOidcConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateOidcConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateOidcConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewUpdateOidcConfigUnprocessableEntity() *UpdateOidcConfigUnprocessableEnti
 	return &UpdateOidcConfigUnprocessableEntity{}
 }
 
-/*UpdateOidcConfigUnprocessableEntity handles this case with default header values.
+/* UpdateOidcConfigUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type UpdateOidcConfigUnprocessableEntity struct {
 
 func (o *UpdateOidcConfigUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /oidc_config][%d] updateOidcConfigUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *UpdateOidcConfigUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *UpdateOidcConfigUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

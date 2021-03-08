@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewDeployToProductionParams creates a new DeployToProductionParams object
-// with the default values initialized.
+// NewDeployToProductionParams creates a new DeployToProductionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeployToProductionParams() *DeployToProductionParams {
-	var ()
 	return &DeployToProductionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeployToProductionParamsWithTimeout creates a new DeployToProductionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeployToProductionParamsWithTimeout(timeout time.Duration) *DeployToProductionParams {
-	var ()
 	return &DeployToProductionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeployToProductionParamsWithContext creates a new DeployToProductionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeployToProductionParamsWithContext(ctx context.Context) *DeployToProductionParams {
-	var ()
 	return &DeployToProductionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeployToProductionParamsWithHTTPClient creates a new DeployToProductionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeployToProductionParamsWithHTTPClient(client *http.Client) *DeployToProductionParams {
-	var ()
 	return &DeployToProductionParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeployToProductionParams contains all the parameters to send to the API endpoint
-for the deploy to production operation typically these are written to a http.Request
+/* DeployToProductionParams contains all the parameters to send to the API endpoint
+   for the deploy to production operation.
+
+   Typically these are written to a http.Request.
 */
 type DeployToProductionParams struct {
 
-	/*ProjectID
-	  Id of project
+	/* ProjectID.
 
+	   Id of project
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the deploy to production params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeployToProductionParams) WithDefaults() *DeployToProductionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the deploy to production params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeployToProductionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the deploy to production params

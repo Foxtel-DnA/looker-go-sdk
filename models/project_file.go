@@ -6,19 +6,26 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ProjectFile project file
+//
 // swagger:model ProjectFile
 type ProjectFile struct {
 
 	// Operations the current user is able to perform on this object
 	// Read Only: true
 	Can map[string]bool `json:"can,omitempty"`
+
+	// State of editability for the file.
+	// Read Only: true
+	Editable *bool `json:"editable,omitempty"`
 
 	// The extension of the file: .view.lkml, .model.lkml, etc
 	// Read Only: true
@@ -64,7 +71,6 @@ func (m *ProjectFile) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ProjectFile) validateGitStatus(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GitStatus) { // not required
 		return nil
 	}
@@ -76,6 +82,134 @@ func (m *ProjectFile) validateGitStatus(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this project file based on the context it is used
+func (m *ProjectFile) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEditable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtension(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGitStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMimeType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePath(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTitle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ProjectFile) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateEditable(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "editable", "body", m.Editable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateExtension(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "extension", "body", string(m.Extension)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateGitStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GitStatus != nil {
+		if err := m.GitStatus.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("git_status")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateMimeType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "mime_type", "body", string(m.MimeType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidatePath(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "path", "body", string(m.Path)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateTitle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "title", "body", string(m.Title)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectFile) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "type", "body", string(m.Type)); err != nil {
+		return err
 	}
 
 	return nil

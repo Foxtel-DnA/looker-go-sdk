@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreSupportedMeasureType lookml model explore supported measure type
+//
 // swagger:model LookmlModelExploreSupportedMeasureType
 type LookmlModelExploreSupportedMeasureType struct {
 
@@ -26,6 +30,42 @@ type LookmlModelExploreSupportedMeasureType struct {
 
 // Validate validates this lookml model explore supported measure type
 func (m *LookmlModelExploreSupportedMeasureType) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this lookml model explore supported measure type based on the context it is used
+func (m *LookmlModelExploreSupportedMeasureType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDimensionType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMeasureTypes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreSupportedMeasureType) contextValidateDimensionType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dimension_type", "body", string(m.DimensionType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreSupportedMeasureType) contextValidateMeasureTypes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "measure_types", "body", []string(m.MeasureTypes)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

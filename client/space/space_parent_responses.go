@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SpaceParentReader is a Reader for the SpaceParent structure.
@@ -24,30 +23,26 @@ type SpaceParentReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SpaceParentReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSpaceParentOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSpaceParentBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSpaceParentNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSpaceParentOK() *SpaceParentOK {
 	return &SpaceParentOK{}
 }
 
-/*SpaceParentOK handles this case with default header values.
+/* SpaceParentOK describes a response with status code 200, with default header values.
 
 Space
 */
@@ -66,6 +61,9 @@ type SpaceParentOK struct {
 
 func (o *SpaceParentOK) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/parent][%d] spaceParentOK  %+v", 200, o.Payload)
+}
+func (o *SpaceParentOK) GetPayload() *models.Space {
+	return o.Payload
 }
 
 func (o *SpaceParentOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewSpaceParentBadRequest() *SpaceParentBadRequest {
 	return &SpaceParentBadRequest{}
 }
 
-/*SpaceParentBadRequest handles this case with default header values.
+/* SpaceParentBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type SpaceParentBadRequest struct {
 
 func (o *SpaceParentBadRequest) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/parent][%d] spaceParentBadRequest  %+v", 400, o.Payload)
+}
+func (o *SpaceParentBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SpaceParentBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewSpaceParentNotFound() *SpaceParentNotFound {
 	return &SpaceParentNotFound{}
 }
 
-/*SpaceParentNotFound handles this case with default header values.
+/* SpaceParentNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type SpaceParentNotFound struct {
 
 func (o *SpaceParentNotFound) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/parent][%d] spaceParentNotFound  %+v", 404, o.Payload)
+}
+func (o *SpaceParentNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SpaceParentNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

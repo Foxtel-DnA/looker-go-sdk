@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Datagroup datagroup
+//
 // swagger:model Datagroup
 type Datagroup struct {
 
@@ -23,9 +27,9 @@ type Datagroup struct {
 	// Read Only: true
 	CreatedAt int64 `json:"created_at,omitempty"`
 
-	// ID of the datagroup. Also used as the unique identifier.
+	// Unique ID of the datagroup
 	// Read Only: true
-	ID int64 `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// Name of the model containing the datagroup. Unique when combined with name.
 	// Read Only: true
@@ -56,6 +60,116 @@ type Datagroup struct {
 
 // Validate validates this datagroup
 func (m *Datagroup) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this datagroup based on the context it is used
+func (m *Datagroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModelName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTriggerCheckAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTriggerError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTriggerValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Datagroup) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", int64(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateModelName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "model_name", "body", string(m.ModelName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateTriggerCheckAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "trigger_check_at", "body", int64(m.TriggerCheckAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateTriggerError(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "trigger_error", "body", string(m.TriggerError)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Datagroup) contextValidateTriggerValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "trigger_value", "body", string(m.TriggerValue)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

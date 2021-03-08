@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // OidcConfigReader is a Reader for the OidcConfig structure.
@@ -24,23 +23,20 @@ type OidcConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *OidcConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewOidcConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 404:
 		result := NewOidcConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -49,7 +45,7 @@ func NewOidcConfigOK() *OidcConfigOK {
 	return &OidcConfigOK{}
 }
 
-/*OidcConfigOK handles this case with default header values.
+/* OidcConfigOK describes a response with status code 200, with default header values.
 
 OIDC Configuration.
 */
@@ -59,6 +55,9 @@ type OidcConfigOK struct {
 
 func (o *OidcConfigOK) Error() string {
 	return fmt.Sprintf("[GET /oidc_config][%d] oidcConfigOK  %+v", 200, o.Payload)
+}
+func (o *OidcConfigOK) GetPayload() *models.OIDCConfig {
+	return o.Payload
 }
 
 func (o *OidcConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -78,7 +77,7 @@ func NewOidcConfigNotFound() *OidcConfigNotFound {
 	return &OidcConfigNotFound{}
 }
 
-/*OidcConfigNotFound handles this case with default header values.
+/* OidcConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -88,6 +87,9 @@ type OidcConfigNotFound struct {
 
 func (o *OidcConfigNotFound) Error() string {
 	return fmt.Sprintf("[GET /oidc_config][%d] oidcConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *OidcConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *OidcConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -6,13 +6,14 @@ package connection
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new connection API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,44 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllConnections gets all connections
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get information about all connections.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllConnections(params *AllConnectionsParams, opts ...ClientOption) (*AllConnectionsOK, error)
+
+	AllDialectInfos(params *AllDialectInfosParams, opts ...ClientOption) (*AllDialectInfosOK, error)
+
+	Connection(params *ConnectionParams, opts ...ClientOption) (*ConnectionOK, error)
+
+	CreateConnection(params *CreateConnectionParams, opts ...ClientOption) (*CreateConnectionOK, error)
+
+	DeleteConnection(params *DeleteConnectionParams, opts ...ClientOption) (*DeleteConnectionNoContent, error)
+
+	DeleteConnectionOverride(params *DeleteConnectionOverrideParams, opts ...ClientOption) (*DeleteConnectionOverrideNoContent, error)
+
+	TestConnection(params *TestConnectionParams, opts ...ClientOption) (*TestConnectionOK, error)
+
+	TestConnectionConfig(params *TestConnectionConfigParams, opts ...ClientOption) (*TestConnectionConfigOK, error)
+
+	UpdateConnection(params *UpdateConnectionParams, opts ...ClientOption) (*UpdateConnectionOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllConnections gets all connections
+
+  ### Get information about all connections.
 
 */
-func (a *Client) AllConnections(params *AllConnectionsParams) (*AllConnectionsOK, error) {
+func (a *Client) AllConnections(params *AllConnectionsParams, opts ...ClientOption) (*AllConnectionsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllConnectionsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_connections",
 		Method:             "GET",
 		PathPattern:        "/connections",
@@ -47,27 +73,37 @@ func (a *Client) AllConnections(params *AllConnectionsParams) (*AllConnectionsOK
 		Reader:             &AllConnectionsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllConnectionsOK), nil
-
+	success, ok := result.(*AllConnectionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_connections: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllDialectInfos gets all dialect infos
+  AllDialectInfos gets all dialect infos
 
-### Get information about all dialects.
+  ### Get information about all dialects.
 
 */
-func (a *Client) AllDialectInfos(params *AllDialectInfosParams) (*AllDialectInfosOK, error) {
+func (a *Client) AllDialectInfos(params *AllDialectInfosParams, opts ...ClientOption) (*AllDialectInfosOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllDialectInfosParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_dialect_infos",
 		Method:             "GET",
 		PathPattern:        "/dialect_info",
@@ -78,27 +114,37 @@ func (a *Client) AllDialectInfos(params *AllDialectInfosParams) (*AllDialectInfo
 		Reader:             &AllDialectInfosReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllDialectInfosOK), nil
-
+	success, ok := result.(*AllDialectInfosOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_dialect_infos: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Connection gets connection
+  Connection gets connection
 
-### Get information about a connection.
+  ### Get information about a connection.
 
 */
-func (a *Client) Connection(params *ConnectionParams) (*ConnectionOK, error) {
+func (a *Client) Connection(params *ConnectionParams, opts ...ClientOption) (*ConnectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "connection",
 		Method:             "GET",
 		PathPattern:        "/connections/{connection_name}",
@@ -109,27 +155,37 @@ func (a *Client) Connection(params *ConnectionParams) (*ConnectionOK, error) {
 		Reader:             &ConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ConnectionOK), nil
-
+	success, ok := result.(*ConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateConnection creates connection
+  CreateConnection creates connection
 
-### Create a connection using the specified configuration.
+  ### Create a connection using the specified configuration.
 
 */
-func (a *Client) CreateConnection(params *CreateConnectionParams) (*CreateConnectionOK, error) {
+func (a *Client) CreateConnection(params *CreateConnectionParams, opts ...ClientOption) (*CreateConnectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_connection",
 		Method:             "POST",
 		PathPattern:        "/connections",
@@ -140,27 +196,37 @@ func (a *Client) CreateConnection(params *CreateConnectionParams) (*CreateConnec
 		Reader:             &CreateConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateConnectionOK), nil
-
+	success, ok := result.(*CreateConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteConnection deletes connection
+  DeleteConnection deletes connection
 
-### Delete a connection.
+  ### Delete a connection.
 
 */
-func (a *Client) DeleteConnection(params *DeleteConnectionParams) (*DeleteConnectionNoContent, error) {
+func (a *Client) DeleteConnection(params *DeleteConnectionParams, opts ...ClientOption) (*DeleteConnectionNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_connection",
 		Method:             "DELETE",
 		PathPattern:        "/connections/{connection_name}",
@@ -171,27 +237,37 @@ func (a *Client) DeleteConnection(params *DeleteConnectionParams) (*DeleteConnec
 		Reader:             &DeleteConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteConnectionNoContent), nil
-
+	success, ok := result.(*DeleteConnectionNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteConnectionOverride deletes connection override
+  DeleteConnectionOverride deletes connection override
 
-### Delete a connection override.
+  ### Delete a connection override.
 
 */
-func (a *Client) DeleteConnectionOverride(params *DeleteConnectionOverrideParams) (*DeleteConnectionOverrideNoContent, error) {
+func (a *Client) DeleteConnectionOverride(params *DeleteConnectionOverrideParams, opts ...ClientOption) (*DeleteConnectionOverrideNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteConnectionOverrideParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_connection_override",
 		Method:             "DELETE",
 		PathPattern:        "/connections/{connection_name}/connection_override/{override_context}",
@@ -202,32 +278,44 @@ func (a *Client) DeleteConnectionOverride(params *DeleteConnectionOverrideParams
 		Reader:             &DeleteConnectionOverrideReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteConnectionOverrideNoContent), nil
-
+	success, ok := result.(*DeleteConnectionOverrideNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_connection_override: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestConnection tests connection
+  TestConnection tests connection
 
-### Test an existing connection.
+  ### Test an existing connection.
 
 Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
 specific types of tests that the connection supports.
 
+This API is rate limited.
+
 Unsupported tests in the request will be ignored.
 
 */
-func (a *Client) TestConnection(params *TestConnectionParams) (*TestConnectionOK, error) {
+func (a *Client) TestConnection(params *TestConnectionParams, opts ...ClientOption) (*TestConnectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_connection",
 		Method:             "PUT",
 		PathPattern:        "/connections/{connection_name}/test",
@@ -238,32 +326,44 @@ func (a *Client) TestConnection(params *TestConnectionParams) (*TestConnectionOK
 		Reader:             &TestConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestConnectionOK), nil
-
+	success, ok := result.(*TestConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestConnectionConfig tests connection configuration
+  TestConnectionConfig tests connection configuration
 
-### Test a connection configuration.
+  ### Test a connection configuration.
 
 Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
 specific types of tests that the connection supports.
 
+This API is rate limited.
+
 Unsupported tests in the request will be ignored.
 
 */
-func (a *Client) TestConnectionConfig(params *TestConnectionConfigParams) (*TestConnectionConfigOK, error) {
+func (a *Client) TestConnectionConfig(params *TestConnectionConfigParams, opts ...ClientOption) (*TestConnectionConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestConnectionConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_connection_config",
 		Method:             "PUT",
 		PathPattern:        "/connections/test",
@@ -274,27 +374,37 @@ func (a *Client) TestConnectionConfig(params *TestConnectionConfigParams) (*Test
 		Reader:             &TestConnectionConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestConnectionConfigOK), nil
-
+	success, ok := result.(*TestConnectionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_connection_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateConnection updates connection
+  UpdateConnection updates connection
 
-### Update a connection using the specified configuration.
+  ### Update a connection using the specified configuration.
 
 */
-func (a *Client) UpdateConnection(params *UpdateConnectionParams) (*UpdateConnectionOK, error) {
+func (a *Client) UpdateConnection(params *UpdateConnectionParams, opts ...ClientOption) (*UpdateConnectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_connection",
 		Method:             "PATCH",
 		PathPattern:        "/connections/{connection_name}",
@@ -305,12 +415,23 @@ func (a *Client) UpdateConnection(params *UpdateConnectionParams) (*UpdateConnec
 		Reader:             &UpdateConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateConnectionOK), nil
-
+	success, ok := result.(*UpdateConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

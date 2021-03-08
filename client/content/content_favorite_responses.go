@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ContentFavoriteReader is a Reader for the ContentFavorite structure.
@@ -24,30 +23,26 @@ type ContentFavoriteReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ContentFavoriteReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewContentFavoriteOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewContentFavoriteBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewContentFavoriteNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewContentFavoriteOK() *ContentFavoriteOK {
 	return &ContentFavoriteOK{}
 }
 
-/*ContentFavoriteOK handles this case with default header values.
+/* ContentFavoriteOK describes a response with status code 200, with default header values.
 
 Favorite Content
 */
@@ -66,6 +61,9 @@ type ContentFavoriteOK struct {
 
 func (o *ContentFavoriteOK) Error() string {
 	return fmt.Sprintf("[GET /content_favorite/{content_favorite_id}][%d] contentFavoriteOK  %+v", 200, o.Payload)
+}
+func (o *ContentFavoriteOK) GetPayload() *models.ContentFavorite {
+	return o.Payload
 }
 
 func (o *ContentFavoriteOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewContentFavoriteBadRequest() *ContentFavoriteBadRequest {
 	return &ContentFavoriteBadRequest{}
 }
 
-/*ContentFavoriteBadRequest handles this case with default header values.
+/* ContentFavoriteBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ContentFavoriteBadRequest struct {
 
 func (o *ContentFavoriteBadRequest) Error() string {
 	return fmt.Sprintf("[GET /content_favorite/{content_favorite_id}][%d] contentFavoriteBadRequest  %+v", 400, o.Payload)
+}
+func (o *ContentFavoriteBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ContentFavoriteBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewContentFavoriteNotFound() *ContentFavoriteNotFound {
 	return &ContentFavoriteNotFound{}
 }
 
-/*ContentFavoriteNotFound handles this case with default header values.
+/* ContentFavoriteNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ContentFavoriteNotFound struct {
 
 func (o *ContentFavoriteNotFound) Error() string {
 	return fmt.Sprintf("[GET /content_favorite/{content_favorite_id}][%d] contentFavoriteNotFound  %+v", 404, o.Payload)
+}
+func (o *ContentFavoriteNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ContentFavoriteNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

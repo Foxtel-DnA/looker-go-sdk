@@ -6,13 +6,14 @@ package workspace
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new workspace API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,21 +25,32 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllWorkspaces gets all workspaces
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get All Workspaces
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllWorkspaces(params *AllWorkspacesParams, opts ...ClientOption) (*AllWorkspacesOK, error)
+
+	Workspace(params *WorkspaceParams, opts ...ClientOption) (*WorkspaceOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllWorkspaces gets all workspaces
+
+  ### Get All Workspaces
 
 Returns all workspaces available to the calling user.
 
 */
-func (a *Client) AllWorkspaces(params *AllWorkspacesParams) (*AllWorkspacesOK, error) {
+func (a *Client) AllWorkspaces(params *AllWorkspacesParams, opts ...ClientOption) (*AllWorkspacesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllWorkspacesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_workspaces",
 		Method:             "GET",
 		PathPattern:        "/workspaces",
@@ -49,18 +61,29 @@ func (a *Client) AllWorkspaces(params *AllWorkspacesParams) (*AllWorkspacesOK, e
 		Reader:             &AllWorkspacesReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllWorkspacesOK), nil
-
+	success, ok := result.(*AllWorkspacesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_workspaces: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Workspace gets workspace
+  Workspace gets workspace
 
-### Get A Workspace
+  ### Get A Workspace
 
 Returns information about a workspace such as the git status and selected branches
 of all projects available to the caller's user account.
@@ -91,13 +114,12 @@ reside in a special user-specific directory on the Looker server and will still 
 later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
 
 */
-func (a *Client) Workspace(params *WorkspaceParams) (*WorkspaceOK, error) {
+func (a *Client) Workspace(params *WorkspaceParams, opts ...ClientOption) (*WorkspaceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewWorkspaceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "workspace",
 		Method:             "GET",
 		PathPattern:        "/workspaces/{workspace_id}",
@@ -108,12 +130,23 @@ func (a *Client) Workspace(params *WorkspaceParams) (*WorkspaceOK, error) {
 		Reader:             &WorkspaceReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*WorkspaceOK), nil
-
+	success, ok := result.(*WorkspaceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for workspace: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

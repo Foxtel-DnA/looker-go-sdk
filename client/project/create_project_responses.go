@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateProjectReader is a Reader for the CreateProject structure.
@@ -24,37 +23,44 @@ type CreateProjectReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateProjectReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateProjectOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateProjectBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateProjectNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 409:
+		result := NewCreateProjectConflict()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 422:
 		result := NewCreateProjectUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateProjectTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +69,7 @@ func NewCreateProjectOK() *CreateProjectOK {
 	return &CreateProjectOK{}
 }
 
-/*CreateProjectOK handles this case with default header values.
+/* CreateProjectOK describes a response with status code 200, with default header values.
 
 Project
 */
@@ -73,6 +79,9 @@ type CreateProjectOK struct {
 
 func (o *CreateProjectOK) Error() string {
 	return fmt.Sprintf("[POST /projects][%d] createProjectOK  %+v", 200, o.Payload)
+}
+func (o *CreateProjectOK) GetPayload() *models.Project {
+	return o.Payload
 }
 
 func (o *CreateProjectOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +101,7 @@ func NewCreateProjectBadRequest() *CreateProjectBadRequest {
 	return &CreateProjectBadRequest{}
 }
 
-/*CreateProjectBadRequest handles this case with default header values.
+/* CreateProjectBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +111,9 @@ type CreateProjectBadRequest struct {
 
 func (o *CreateProjectBadRequest) Error() string {
 	return fmt.Sprintf("[POST /projects][%d] createProjectBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateProjectBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateProjectBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +133,7 @@ func NewCreateProjectNotFound() *CreateProjectNotFound {
 	return &CreateProjectNotFound{}
 }
 
-/*CreateProjectNotFound handles this case with default header values.
+/* CreateProjectNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -132,8 +144,43 @@ type CreateProjectNotFound struct {
 func (o *CreateProjectNotFound) Error() string {
 	return fmt.Sprintf("[POST /projects][%d] createProjectNotFound  %+v", 404, o.Payload)
 }
+func (o *CreateProjectNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *CreateProjectNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateProjectConflict creates a CreateProjectConflict with default headers values
+func NewCreateProjectConflict() *CreateProjectConflict {
+	return &CreateProjectConflict{}
+}
+
+/* CreateProjectConflict describes a response with status code 409, with default header values.
+
+Resource Already Exists
+*/
+type CreateProjectConflict struct {
+	Payload *models.Error
+}
+
+func (o *CreateProjectConflict) Error() string {
+	return fmt.Sprintf("[POST /projects][%d] createProjectConflict  %+v", 409, o.Payload)
+}
+func (o *CreateProjectConflict) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateProjectConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 
@@ -150,7 +197,7 @@ func NewCreateProjectUnprocessableEntity() *CreateProjectUnprocessableEntity {
 	return &CreateProjectUnprocessableEntity{}
 }
 
-/*CreateProjectUnprocessableEntity handles this case with default header values.
+/* CreateProjectUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +208,45 @@ type CreateProjectUnprocessableEntity struct {
 func (o *CreateProjectUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /projects][%d] createProjectUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateProjectUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateProjectUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateProjectTooManyRequests creates a CreateProjectTooManyRequests with default headers values
+func NewCreateProjectTooManyRequests() *CreateProjectTooManyRequests {
+	return &CreateProjectTooManyRequests{}
+}
+
+/* CreateProjectTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateProjectTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateProjectTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /projects][%d] createProjectTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateProjectTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateProjectTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

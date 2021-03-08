@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // QueryTaskMultiResultsReader is a Reader for the QueryTaskMultiResults structure.
@@ -24,30 +23,26 @@ type QueryTaskMultiResultsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *QueryTaskMultiResultsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewQueryTaskMultiResultsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewQueryTaskMultiResultsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewQueryTaskMultiResultsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewQueryTaskMultiResultsOK() *QueryTaskMultiResultsOK {
 	return &QueryTaskMultiResultsOK{}
 }
 
-/*QueryTaskMultiResultsOK handles this case with default header values.
+/* QueryTaskMultiResultsOK describes a response with status code 200, with default header values.
 
 Multiple query results
 */
@@ -66,6 +61,9 @@ type QueryTaskMultiResultsOK struct {
 
 func (o *QueryTaskMultiResultsOK) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/multi_results][%d] queryTaskMultiResultsOK  %+v", 200, o.Payload)
+}
+func (o *QueryTaskMultiResultsOK) GetPayload() map[string]string {
+	return o.Payload
 }
 
 func (o *QueryTaskMultiResultsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewQueryTaskMultiResultsBadRequest() *QueryTaskMultiResultsBadRequest {
 	return &QueryTaskMultiResultsBadRequest{}
 }
 
-/*QueryTaskMultiResultsBadRequest handles this case with default header values.
+/* QueryTaskMultiResultsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type QueryTaskMultiResultsBadRequest struct {
 
 func (o *QueryTaskMultiResultsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/multi_results][%d] queryTaskMultiResultsBadRequest  %+v", 400, o.Payload)
+}
+func (o *QueryTaskMultiResultsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskMultiResultsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewQueryTaskMultiResultsNotFound() *QueryTaskMultiResultsNotFound {
 	return &QueryTaskMultiResultsNotFound{}
 }
 
-/*QueryTaskMultiResultsNotFound handles this case with default header values.
+/* QueryTaskMultiResultsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type QueryTaskMultiResultsNotFound struct {
 
 func (o *QueryTaskMultiResultsNotFound) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/multi_results][%d] queryTaskMultiResultsNotFound  %+v", 404, o.Payload)
+}
+func (o *QueryTaskMultiResultsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskMultiResultsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

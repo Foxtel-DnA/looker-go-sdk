@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LDAPUser l d a p user
+//
 // swagger:model LDAPUser
 type LDAPUser struct {
 
@@ -21,7 +23,7 @@ type LDAPUser struct {
 	// Read Only: true
 	AllEmails []string `json:"all_emails"`
 
-	// Dictionary of user's attrributes (name/value)
+	// Dictionary of user's attributes (name/value)
 	// Read Only: true
 	Attributes map[string]string `json:"attributes,omitempty"`
 
@@ -78,12 +80,156 @@ func (m *LDAPUser) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LDAPUser) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this l d a p user based on the context it is used
+func (m *LDAPUser) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAllEmails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAttributes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmail(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFirstName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLdapDn(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLdapID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRoles(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LDAPUser) contextValidateAllEmails(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "all_emails", "body", []string(m.AllEmails)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateAttributes(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateEmail(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "email", "body", string(m.Email)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateFirstName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "first_name", "body", string(m.FirstName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "groups", "body", []string(m.Groups)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateLastName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_name", "body", string(m.LastName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateLdapDn(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ldap_dn", "body", string(m.LdapDn)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateLdapID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ldap_id", "body", string(m.LdapID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateRoles(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "roles", "body", []string(m.Roles)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPUser) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

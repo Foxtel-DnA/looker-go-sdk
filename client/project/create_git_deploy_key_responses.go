@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateGitDeployKeyReader is a Reader for the CreateGitDeployKey structure.
@@ -24,37 +23,44 @@ type CreateGitDeployKeyReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateGitDeployKeyReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateGitDeployKeyOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateGitDeployKeyBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateGitDeployKeyNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateGitDeployKeyConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 422:
+		result := NewCreateGitDeployKeyUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 429:
+		result := NewCreateGitDeployKeyTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +69,7 @@ func NewCreateGitDeployKeyOK() *CreateGitDeployKeyOK {
 	return &CreateGitDeployKeyOK{}
 }
 
-/*CreateGitDeployKeyOK handles this case with default header values.
+/* CreateGitDeployKeyOK describes a response with status code 200, with default header values.
 
 Project
 */
@@ -73,6 +79,9 @@ type CreateGitDeployKeyOK struct {
 
 func (o *CreateGitDeployKeyOK) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyOK  %+v", 200, o.Payload)
+}
+func (o *CreateGitDeployKeyOK) GetPayload() string {
+	return o.Payload
 }
 
 func (o *CreateGitDeployKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +99,7 @@ func NewCreateGitDeployKeyBadRequest() *CreateGitDeployKeyBadRequest {
 	return &CreateGitDeployKeyBadRequest{}
 }
 
-/*CreateGitDeployKeyBadRequest handles this case with default header values.
+/* CreateGitDeployKeyBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +109,9 @@ type CreateGitDeployKeyBadRequest struct {
 
 func (o *CreateGitDeployKeyBadRequest) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateGitDeployKeyBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGitDeployKeyBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +131,7 @@ func NewCreateGitDeployKeyNotFound() *CreateGitDeployKeyNotFound {
 	return &CreateGitDeployKeyNotFound{}
 }
 
-/*CreateGitDeployKeyNotFound handles this case with default header values.
+/* CreateGitDeployKeyNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +141,9 @@ type CreateGitDeployKeyNotFound struct {
 
 func (o *CreateGitDeployKeyNotFound) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateGitDeployKeyNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGitDeployKeyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +163,7 @@ func NewCreateGitDeployKeyConflict() *CreateGitDeployKeyConflict {
 	return &CreateGitDeployKeyConflict{}
 }
 
-/*CreateGitDeployKeyConflict handles this case with default header values.
+/* CreateGitDeployKeyConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -159,8 +174,75 @@ type CreateGitDeployKeyConflict struct {
 func (o *CreateGitDeployKeyConflict) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyConflict  %+v", 409, o.Payload)
 }
+func (o *CreateGitDeployKeyConflict) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *CreateGitDeployKeyConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateGitDeployKeyUnprocessableEntity creates a CreateGitDeployKeyUnprocessableEntity with default headers values
+func NewCreateGitDeployKeyUnprocessableEntity() *CreateGitDeployKeyUnprocessableEntity {
+	return &CreateGitDeployKeyUnprocessableEntity{}
+}
+
+/* CreateGitDeployKeyUnprocessableEntity describes a response with status code 422, with default header values.
+
+Validation Error
+*/
+type CreateGitDeployKeyUnprocessableEntity struct {
+	Payload *models.ValidationError
+}
+
+func (o *CreateGitDeployKeyUnprocessableEntity) Error() string {
+	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *CreateGitDeployKeyUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
+
+func (o *CreateGitDeployKeyUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateGitDeployKeyTooManyRequests creates a CreateGitDeployKeyTooManyRequests with default headers values
+func NewCreateGitDeployKeyTooManyRequests() *CreateGitDeployKeyTooManyRequests {
+	return &CreateGitDeployKeyTooManyRequests{}
+}
+
+/* CreateGitDeployKeyTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateGitDeployKeyTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateGitDeployKeyTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /projects/{project_id}/git/deploy_key][%d] createGitDeployKeyTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateGitDeployKeyTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateGitDeployKeyTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

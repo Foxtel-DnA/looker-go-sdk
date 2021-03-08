@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewGroupParams creates a new GroupParams object
-// with the default values initialized.
+// NewGroupParams creates a new GroupParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGroupParams() *GroupParams {
-	var ()
 	return &GroupParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGroupParamsWithTimeout creates a new GroupParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGroupParamsWithTimeout(timeout time.Duration) *GroupParams {
-	var ()
 	return &GroupParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGroupParamsWithContext creates a new GroupParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGroupParamsWithContext(ctx context.Context) *GroupParams {
-	var ()
 	return &GroupParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGroupParamsWithHTTPClient creates a new GroupParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGroupParamsWithHTTPClient(client *http.Client) *GroupParams {
-	var ()
 	return &GroupParams{
 		HTTPClient: client,
 	}
 }
 
-/*GroupParams contains all the parameters to send to the API endpoint
-for the group operation typically these are written to a http.Request
+/* GroupParams contains all the parameters to send to the API endpoint
+   for the group operation.
+
+   Typically these are written to a http.Request.
 */
 type GroupParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*GroupID
-	  Id of group
 
+	/* GroupID.
+
+	   Id of group
+
+	   Format: int64
 	*/
 	GroupID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GroupParams) WithDefaults() *GroupParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GroupParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the group params
@@ -145,16 +161,17 @@ func (o *GroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registr
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param group_id

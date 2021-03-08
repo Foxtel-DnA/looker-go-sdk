@@ -13,84 +13,105 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSpaceChildrenParams creates a new SpaceChildrenParams object
-// with the default values initialized.
+// NewSpaceChildrenParams creates a new SpaceChildrenParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceChildrenParams() *SpaceChildrenParams {
-	var ()
 	return &SpaceChildrenParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceChildrenParamsWithTimeout creates a new SpaceChildrenParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceChildrenParamsWithTimeout(timeout time.Duration) *SpaceChildrenParams {
-	var ()
 	return &SpaceChildrenParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceChildrenParamsWithContext creates a new SpaceChildrenParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceChildrenParamsWithContext(ctx context.Context) *SpaceChildrenParams {
-	var ()
 	return &SpaceChildrenParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceChildrenParamsWithHTTPClient creates a new SpaceChildrenParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceChildrenParamsWithHTTPClient(client *http.Client) *SpaceChildrenParams {
-	var ()
 	return &SpaceChildrenParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceChildrenParams contains all the parameters to send to the API endpoint
-for the space children operation typically these are written to a http.Request
+/* SpaceChildrenParams contains all the parameters to send to the API endpoint
+   for the space children operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceChildrenParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*Page
-	  Requested page.
 
+	/* Page.
+
+	   Requested page.
+
+	   Format: int64
 	*/
 	Page *int64
-	/*PerPage
-	  Results per page.
 
+	/* PerPage.
+
+	   Results per page.
+
+	   Format: int64
 	*/
 	PerPage *int64
-	/*Sorts
-	  Fields to sort by.
 
+	/* Sorts.
+
+	   Fields to sort by.
 	*/
 	Sorts *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space children params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceChildrenParams) WithDefaults() *SpaceChildrenParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space children params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceChildrenParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space children params
@@ -171,13 +192,13 @@ func (o *SpaceChildrenParams) SetSorts(sorts *string) {
 }
 
 // WithSpaceID adds the spaceID to the space children params
-func (o *SpaceChildrenParams) WithSpaceID(spaceID int64) *SpaceChildrenParams {
+func (o *SpaceChildrenParams) WithSpaceID(spaceID string) *SpaceChildrenParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space children params
-func (o *SpaceChildrenParams) SetSpaceID(spaceID int64) {
+func (o *SpaceChildrenParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -193,68 +214,72 @@ func (o *SpaceChildrenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Page != nil {
 
 		// query param page
 		var qrPage int64
+
 		if o.Page != nil {
 			qrPage = *o.Page
 		}
 		qPage := swag.FormatInt64(qrPage)
 		if qPage != "" {
+
 			if err := r.SetQueryParam("page", qPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PerPage != nil {
 
 		// query param per_page
 		var qrPerPage int64
+
 		if o.PerPage != nil {
 			qrPerPage = *o.PerPage
 		}
 		qPerPage := swag.FormatInt64(qrPerPage)
 		if qPerPage != "" {
+
 			if err := r.SetQueryParam("per_page", qPerPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

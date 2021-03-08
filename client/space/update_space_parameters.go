@@ -13,71 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewUpdateSpaceParams creates a new UpdateSpaceParams object
-// with the default values initialized.
+// NewUpdateSpaceParams creates a new UpdateSpaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateSpaceParams() *UpdateSpaceParams {
-	var ()
 	return &UpdateSpaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateSpaceParamsWithTimeout creates a new UpdateSpaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateSpaceParamsWithTimeout(timeout time.Duration) *UpdateSpaceParams {
-	var ()
 	return &UpdateSpaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateSpaceParamsWithContext creates a new UpdateSpaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateSpaceParamsWithContext(ctx context.Context) *UpdateSpaceParams {
-	var ()
 	return &UpdateSpaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateSpaceParamsWithHTTPClient creates a new UpdateSpaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateSpaceParamsWithHTTPClient(client *http.Client) *UpdateSpaceParams {
-	var ()
 	return &UpdateSpaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateSpaceParams contains all the parameters to send to the API endpoint
-for the update space operation typically these are written to a http.Request
+/* UpdateSpaceParams contains all the parameters to send to the API endpoint
+   for the update space operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateSpaceParams struct {
 
-	/*Body
-	  Space
+	/* Body.
 
+	   Space parameters
 	*/
-	Body *models.Space
-	/*SpaceID
-	  Id of space
+	Body *models.UpdateSpace
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateSpaceParams) WithDefaults() *UpdateSpaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateSpaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update space params
@@ -114,24 +127,24 @@ func (o *UpdateSpaceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the update space params
-func (o *UpdateSpaceParams) WithBody(body *models.Space) *UpdateSpaceParams {
+func (o *UpdateSpaceParams) WithBody(body *models.UpdateSpace) *UpdateSpaceParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the update space params
-func (o *UpdateSpaceParams) SetBody(body *models.Space) {
+func (o *UpdateSpaceParams) SetBody(body *models.UpdateSpace) {
 	o.Body = body
 }
 
 // WithSpaceID adds the spaceID to the update space params
-func (o *UpdateSpaceParams) WithSpaceID(spaceID int64) *UpdateSpaceParams {
+func (o *UpdateSpaceParams) WithSpaceID(spaceID string) *UpdateSpaceParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the update space params
-func (o *UpdateSpaceParams) SetSpaceID(spaceID int64) {
+func (o *UpdateSpaceParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -142,7 +155,6 @@ func (o *UpdateSpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -150,7 +162,7 @@ func (o *UpdateSpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

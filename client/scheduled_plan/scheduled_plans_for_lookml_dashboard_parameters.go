@@ -13,74 +13,97 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewScheduledPlansForLookmlDashboardParams creates a new ScheduledPlansForLookmlDashboardParams object
-// with the default values initialized.
+// NewScheduledPlansForLookmlDashboardParams creates a new ScheduledPlansForLookmlDashboardParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewScheduledPlansForLookmlDashboardParams() *ScheduledPlansForLookmlDashboardParams {
-	var ()
 	return &ScheduledPlansForLookmlDashboardParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewScheduledPlansForLookmlDashboardParamsWithTimeout creates a new ScheduledPlansForLookmlDashboardParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewScheduledPlansForLookmlDashboardParamsWithTimeout(timeout time.Duration) *ScheduledPlansForLookmlDashboardParams {
-	var ()
 	return &ScheduledPlansForLookmlDashboardParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewScheduledPlansForLookmlDashboardParamsWithContext creates a new ScheduledPlansForLookmlDashboardParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewScheduledPlansForLookmlDashboardParamsWithContext(ctx context.Context) *ScheduledPlansForLookmlDashboardParams {
-	var ()
 	return &ScheduledPlansForLookmlDashboardParams{
-
 		Context: ctx,
 	}
 }
 
 // NewScheduledPlansForLookmlDashboardParamsWithHTTPClient creates a new ScheduledPlansForLookmlDashboardParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewScheduledPlansForLookmlDashboardParamsWithHTTPClient(client *http.Client) *ScheduledPlansForLookmlDashboardParams {
-	var ()
 	return &ScheduledPlansForLookmlDashboardParams{
 		HTTPClient: client,
 	}
 }
 
-/*ScheduledPlansForLookmlDashboardParams contains all the parameters to send to the API endpoint
-for the scheduled plans for lookml dashboard operation typically these are written to a http.Request
+/* ScheduledPlansForLookmlDashboardParams contains all the parameters to send to the API endpoint
+   for the scheduled plans for lookml dashboard operation.
+
+   Typically these are written to a http.Request.
 */
 type ScheduledPlansForLookmlDashboardParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* AllUsers.
 
+	   Return scheduled plans belonging to all users for the dashboard
+	*/
+	AllUsers *bool
+
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*LookmlDashboardID
-	  LookML Dashboard Id
 
+	/* LookmlDashboardID.
+
+	   LookML Dashboard Id
 	*/
-	LookmlDashboardID int64
-	/*UserID
-	  User Id (default is requesting user if not specified)
+	LookmlDashboardID string
 
+	/* UserID.
+
+	   User Id (default is requesting user if not specified)
+
+	   Format: int64
 	*/
 	UserID *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the scheduled plans for lookml dashboard params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForLookmlDashboardParams) WithDefaults() *ScheduledPlansForLookmlDashboardParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the scheduled plans for lookml dashboard params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForLookmlDashboardParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the scheduled plans for lookml dashboard params
@@ -116,6 +139,17 @@ func (o *ScheduledPlansForLookmlDashboardParams) SetHTTPClient(client *http.Clie
 	o.HTTPClient = client
 }
 
+// WithAllUsers adds the allUsers to the scheduled plans for lookml dashboard params
+func (o *ScheduledPlansForLookmlDashboardParams) WithAllUsers(allUsers *bool) *ScheduledPlansForLookmlDashboardParams {
+	o.SetAllUsers(allUsers)
+	return o
+}
+
+// SetAllUsers adds the allUsers to the scheduled plans for lookml dashboard params
+func (o *ScheduledPlansForLookmlDashboardParams) SetAllUsers(allUsers *bool) {
+	o.AllUsers = allUsers
+}
+
 // WithFields adds the fields to the scheduled plans for lookml dashboard params
 func (o *ScheduledPlansForLookmlDashboardParams) WithFields(fields *string) *ScheduledPlansForLookmlDashboardParams {
 	o.SetFields(fields)
@@ -128,13 +162,13 @@ func (o *ScheduledPlansForLookmlDashboardParams) SetFields(fields *string) {
 }
 
 // WithLookmlDashboardID adds the lookmlDashboardID to the scheduled plans for lookml dashboard params
-func (o *ScheduledPlansForLookmlDashboardParams) WithLookmlDashboardID(lookmlDashboardID int64) *ScheduledPlansForLookmlDashboardParams {
+func (o *ScheduledPlansForLookmlDashboardParams) WithLookmlDashboardID(lookmlDashboardID string) *ScheduledPlansForLookmlDashboardParams {
 	o.SetLookmlDashboardID(lookmlDashboardID)
 	return o
 }
 
 // SetLookmlDashboardID adds the lookmlDashboardId to the scheduled plans for lookml dashboard params
-func (o *ScheduledPlansForLookmlDashboardParams) SetLookmlDashboardID(lookmlDashboardID int64) {
+func (o *ScheduledPlansForLookmlDashboardParams) SetLookmlDashboardID(lookmlDashboardID string) {
 	o.LookmlDashboardID = lookmlDashboardID
 }
 
@@ -157,24 +191,42 @@ func (o *ScheduledPlansForLookmlDashboardParams) WriteToRequest(r runtime.Client
 	}
 	var res []error
 
+	if o.AllUsers != nil {
+
+		// query param all_users
+		var qrAllUsers bool
+
+		if o.AllUsers != nil {
+			qrAllUsers = *o.AllUsers
+		}
+		qAllUsers := swag.FormatBool(qrAllUsers)
+		if qAllUsers != "" {
+
+			if err := r.SetQueryParam("all_users", qAllUsers); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param lookml_dashboard_id
-	if err := r.SetPathParam("lookml_dashboard_id", swag.FormatInt64(o.LookmlDashboardID)); err != nil {
+	if err := r.SetPathParam("lookml_dashboard_id", o.LookmlDashboardID); err != nil {
 		return err
 	}
 
@@ -182,16 +234,17 @@ func (o *ScheduledPlansForLookmlDashboardParams) WriteToRequest(r runtime.Client
 
 		// query param user_id
 		var qrUserID int64
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := swag.FormatInt64(qrUserID)
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

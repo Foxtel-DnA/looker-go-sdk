@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ManifestReader is a Reader for the Manifest structure.
@@ -24,30 +23,26 @@ type ManifestReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ManifestReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewManifestOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewManifestBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewManifestNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewManifestOK() *ManifestOK {
 	return &ManifestOK{}
 }
 
-/*ManifestOK handles this case with default header values.
+/* ManifestOK describes a response with status code 200, with default header values.
 
 Manifest
 */
@@ -66,6 +61,9 @@ type ManifestOK struct {
 
 func (o *ManifestOK) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/manifest][%d] manifestOK  %+v", 200, o.Payload)
+}
+func (o *ManifestOK) GetPayload() *models.Manifest {
+	return o.Payload
 }
 
 func (o *ManifestOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewManifestBadRequest() *ManifestBadRequest {
 	return &ManifestBadRequest{}
 }
 
-/*ManifestBadRequest handles this case with default header values.
+/* ManifestBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ManifestBadRequest struct {
 
 func (o *ManifestBadRequest) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/manifest][%d] manifestBadRequest  %+v", 400, o.Payload)
+}
+func (o *ManifestBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ManifestBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewManifestNotFound() *ManifestNotFound {
 	return &ManifestNotFound{}
 }
 
-/*ManifestNotFound handles this case with default header values.
+/* ManifestNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ManifestNotFound struct {
 
 func (o *ManifestNotFound) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/manifest][%d] manifestNotFound  %+v", 404, o.Payload)
+}
+func (o *ManifestNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ManifestNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSamlTestConfigParams creates a new SamlTestConfigParams object
-// with the default values initialized.
+// NewSamlTestConfigParams creates a new SamlTestConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSamlTestConfigParams() *SamlTestConfigParams {
-	var ()
 	return &SamlTestConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSamlTestConfigParamsWithTimeout creates a new SamlTestConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSamlTestConfigParamsWithTimeout(timeout time.Duration) *SamlTestConfigParams {
-	var ()
 	return &SamlTestConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSamlTestConfigParamsWithContext creates a new SamlTestConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSamlTestConfigParamsWithContext(ctx context.Context) *SamlTestConfigParams {
-	var ()
 	return &SamlTestConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSamlTestConfigParamsWithHTTPClient creates a new SamlTestConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSamlTestConfigParamsWithHTTPClient(client *http.Client) *SamlTestConfigParams {
-	var ()
 	return &SamlTestConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*SamlTestConfigParams contains all the parameters to send to the API endpoint
-for the saml test config operation typically these are written to a http.Request
+/* SamlTestConfigParams contains all the parameters to send to the API endpoint
+   for the saml test config operation.
+
+   Typically these are written to a http.Request.
 */
 type SamlTestConfigParams struct {
 
-	/*TestSlug
-	  Slug of test config
+	/* TestSlug.
 
+	   Slug of test config
 	*/
 	TestSlug string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the saml test config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SamlTestConfigParams) WithDefaults() *SamlTestConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the saml test config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SamlTestConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the saml test config params

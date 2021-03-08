@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewFetchAndParseSamlIdpMetadataParams creates a new FetchAndParseSamlIdpMetadataParams object
-// with the default values initialized.
+// NewFetchAndParseSamlIdpMetadataParams creates a new FetchAndParseSamlIdpMetadataParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewFetchAndParseSamlIdpMetadataParams() *FetchAndParseSamlIdpMetadataParams {
-	var ()
 	return &FetchAndParseSamlIdpMetadataParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewFetchAndParseSamlIdpMetadataParamsWithTimeout creates a new FetchAndParseSamlIdpMetadataParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewFetchAndParseSamlIdpMetadataParamsWithTimeout(timeout time.Duration) *FetchAndParseSamlIdpMetadataParams {
-	var ()
 	return &FetchAndParseSamlIdpMetadataParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewFetchAndParseSamlIdpMetadataParamsWithContext creates a new FetchAndParseSamlIdpMetadataParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewFetchAndParseSamlIdpMetadataParamsWithContext(ctx context.Context) *FetchAndParseSamlIdpMetadataParams {
-	var ()
 	return &FetchAndParseSamlIdpMetadataParams{
-
 		Context: ctx,
 	}
 }
 
 // NewFetchAndParseSamlIdpMetadataParamsWithHTTPClient creates a new FetchAndParseSamlIdpMetadataParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewFetchAndParseSamlIdpMetadataParamsWithHTTPClient(client *http.Client) *FetchAndParseSamlIdpMetadataParams {
-	var ()
 	return &FetchAndParseSamlIdpMetadataParams{
 		HTTPClient: client,
 	}
 }
 
-/*FetchAndParseSamlIdpMetadataParams contains all the parameters to send to the API endpoint
-for the fetch and parse saml idp metadata operation typically these are written to a http.Request
+/* FetchAndParseSamlIdpMetadataParams contains all the parameters to send to the API endpoint
+   for the fetch and parse saml idp metadata operation.
+
+   Typically these are written to a http.Request.
 */
 type FetchAndParseSamlIdpMetadataParams struct {
 
-	/*Body
-	  SAML IdP metadata public url
+	/* Body.
 
+	   SAML IdP metadata public url
 	*/
 	Body string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the fetch and parse saml idp metadata params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FetchAndParseSamlIdpMetadataParams) WithDefaults() *FetchAndParseSamlIdpMetadataParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the fetch and parse saml idp metadata params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FetchAndParseSamlIdpMetadataParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the fetch and parse saml idp metadata params
@@ -123,7 +136,6 @@ func (o *FetchAndParseSamlIdpMetadataParams) WriteToRequest(r runtime.ClientRequ
 		return err
 	}
 	var res []error
-
 	if err := r.SetBodyParam(o.Body); err != nil {
 		return err
 	}

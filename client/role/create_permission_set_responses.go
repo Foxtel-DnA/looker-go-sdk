@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreatePermissionSetReader is a Reader for the CreatePermissionSet structure.
@@ -24,44 +23,44 @@ type CreatePermissionSetReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreatePermissionSetReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreatePermissionSetOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreatePermissionSetBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreatePermissionSetNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreatePermissionSetConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreatePermissionSetUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreatePermissionSetTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreatePermissionSetOK() *CreatePermissionSetOK {
 	return &CreatePermissionSetOK{}
 }
 
-/*CreatePermissionSetOK handles this case with default header values.
+/* CreatePermissionSetOK describes a response with status code 200, with default header values.
 
 Permission Set
 */
@@ -80,6 +79,9 @@ type CreatePermissionSetOK struct {
 
 func (o *CreatePermissionSetOK) Error() string {
 	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetOK  %+v", 200, o.Payload)
+}
+func (o *CreatePermissionSetOK) GetPayload() *models.PermissionSet {
+	return o.Payload
 }
 
 func (o *CreatePermissionSetOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreatePermissionSetBadRequest() *CreatePermissionSetBadRequest {
 	return &CreatePermissionSetBadRequest{}
 }
 
-/*CreatePermissionSetBadRequest handles this case with default header values.
+/* CreatePermissionSetBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreatePermissionSetBadRequest struct {
 
 func (o *CreatePermissionSetBadRequest) Error() string {
 	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreatePermissionSetBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreatePermissionSetBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreatePermissionSetNotFound() *CreatePermissionSetNotFound {
 	return &CreatePermissionSetNotFound{}
 }
 
-/*CreatePermissionSetNotFound handles this case with default header values.
+/* CreatePermissionSetNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreatePermissionSetNotFound struct {
 
 func (o *CreatePermissionSetNotFound) Error() string {
 	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetNotFound  %+v", 404, o.Payload)
+}
+func (o *CreatePermissionSetNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreatePermissionSetNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreatePermissionSetConflict() *CreatePermissionSetConflict {
 	return &CreatePermissionSetConflict{}
 }
 
-/*CreatePermissionSetConflict handles this case with default header values.
+/* CreatePermissionSetConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreatePermissionSetConflict struct {
 
 func (o *CreatePermissionSetConflict) Error() string {
 	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetConflict  %+v", 409, o.Payload)
+}
+func (o *CreatePermissionSetConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreatePermissionSetConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreatePermissionSetUnprocessableEntity() *CreatePermissionSetUnprocessab
 	return &CreatePermissionSetUnprocessableEntity{}
 }
 
-/*CreatePermissionSetUnprocessableEntity handles this case with default header values.
+/* CreatePermissionSetUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreatePermissionSetUnprocessableEntity struct {
 func (o *CreatePermissionSetUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreatePermissionSetUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreatePermissionSetUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreatePermissionSetTooManyRequests creates a CreatePermissionSetTooManyRequests with default headers values
+func NewCreatePermissionSetTooManyRequests() *CreatePermissionSetTooManyRequests {
+	return &CreatePermissionSetTooManyRequests{}
+}
+
+/* CreatePermissionSetTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreatePermissionSetTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreatePermissionSetTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /permission_sets][%d] createPermissionSetTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreatePermissionSetTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreatePermissionSetTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

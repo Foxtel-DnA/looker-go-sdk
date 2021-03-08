@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SetUserAttributeGroupValuesReader is a Reader for the SetUserAttributeGroupValues structure.
@@ -24,44 +23,44 @@ type SetUserAttributeGroupValuesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SetUserAttributeGroupValuesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSetUserAttributeGroupValuesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSetUserAttributeGroupValuesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSetUserAttributeGroupValuesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewSetUserAttributeGroupValuesConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewSetUserAttributeGroupValuesUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewSetUserAttributeGroupValuesTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewSetUserAttributeGroupValuesOK() *SetUserAttributeGroupValuesOK {
 	return &SetUserAttributeGroupValuesOK{}
 }
 
-/*SetUserAttributeGroupValuesOK handles this case with default header values.
+/* SetUserAttributeGroupValuesOK describes a response with status code 200, with default header values.
 
 Array of group values.
 */
@@ -80,6 +79,9 @@ type SetUserAttributeGroupValuesOK struct {
 
 func (o *SetUserAttributeGroupValuesOK) Error() string {
 	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesOK  %+v", 200, o.Payload)
+}
+func (o *SetUserAttributeGroupValuesOK) GetPayload() []*models.UserAttributeGroupValue {
+	return o.Payload
 }
 
 func (o *SetUserAttributeGroupValuesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -97,7 +99,7 @@ func NewSetUserAttributeGroupValuesBadRequest() *SetUserAttributeGroupValuesBadR
 	return &SetUserAttributeGroupValuesBadRequest{}
 }
 
-/*SetUserAttributeGroupValuesBadRequest handles this case with default header values.
+/* SetUserAttributeGroupValuesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -107,6 +109,9 @@ type SetUserAttributeGroupValuesBadRequest struct {
 
 func (o *SetUserAttributeGroupValuesBadRequest) Error() string {
 	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesBadRequest  %+v", 400, o.Payload)
+}
+func (o *SetUserAttributeGroupValuesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserAttributeGroupValuesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -126,7 +131,7 @@ func NewSetUserAttributeGroupValuesNotFound() *SetUserAttributeGroupValuesNotFou
 	return &SetUserAttributeGroupValuesNotFound{}
 }
 
-/*SetUserAttributeGroupValuesNotFound handles this case with default header values.
+/* SetUserAttributeGroupValuesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -136,6 +141,9 @@ type SetUserAttributeGroupValuesNotFound struct {
 
 func (o *SetUserAttributeGroupValuesNotFound) Error() string {
 	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesNotFound  %+v", 404, o.Payload)
+}
+func (o *SetUserAttributeGroupValuesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserAttributeGroupValuesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -155,7 +163,7 @@ func NewSetUserAttributeGroupValuesConflict() *SetUserAttributeGroupValuesConfli
 	return &SetUserAttributeGroupValuesConflict{}
 }
 
-/*SetUserAttributeGroupValuesConflict handles this case with default header values.
+/* SetUserAttributeGroupValuesConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -165,6 +173,9 @@ type SetUserAttributeGroupValuesConflict struct {
 
 func (o *SetUserAttributeGroupValuesConflict) Error() string {
 	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesConflict  %+v", 409, o.Payload)
+}
+func (o *SetUserAttributeGroupValuesConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserAttributeGroupValuesConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -184,7 +195,7 @@ func NewSetUserAttributeGroupValuesUnprocessableEntity() *SetUserAttributeGroupV
 	return &SetUserAttributeGroupValuesUnprocessableEntity{}
 }
 
-/*SetUserAttributeGroupValuesUnprocessableEntity handles this case with default header values.
+/* SetUserAttributeGroupValuesUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -195,10 +206,45 @@ type SetUserAttributeGroupValuesUnprocessableEntity struct {
 func (o *SetUserAttributeGroupValuesUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *SetUserAttributeGroupValuesUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *SetUserAttributeGroupValuesUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewSetUserAttributeGroupValuesTooManyRequests creates a SetUserAttributeGroupValuesTooManyRequests with default headers values
+func NewSetUserAttributeGroupValuesTooManyRequests() *SetUserAttributeGroupValuesTooManyRequests {
+	return &SetUserAttributeGroupValuesTooManyRequests{}
+}
+
+/* SetUserAttributeGroupValuesTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type SetUserAttributeGroupValuesTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *SetUserAttributeGroupValuesTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /user_attributes/{user_attribute_id}/group_values][%d] setUserAttributeGroupValuesTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *SetUserAttributeGroupValuesTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *SetUserAttributeGroupValuesTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

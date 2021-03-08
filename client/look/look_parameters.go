@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewLookParams creates a new LookParams object
-// with the default values initialized.
+// NewLookParams creates a new LookParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewLookParams() *LookParams {
-	var ()
 	return &LookParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewLookParamsWithTimeout creates a new LookParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewLookParamsWithTimeout(timeout time.Duration) *LookParams {
-	var ()
 	return &LookParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewLookParamsWithContext creates a new LookParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewLookParamsWithContext(ctx context.Context) *LookParams {
-	var ()
 	return &LookParams{
-
 		Context: ctx,
 	}
 }
 
 // NewLookParamsWithHTTPClient creates a new LookParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewLookParamsWithHTTPClient(client *http.Client) *LookParams {
-	var ()
 	return &LookParams{
 		HTTPClient: client,
 	}
 }
 
-/*LookParams contains all the parameters to send to the API endpoint
-for the look operation typically these are written to a http.Request
+/* LookParams contains all the parameters to send to the API endpoint
+   for the look operation.
+
+   Typically these are written to a http.Request.
 */
 type LookParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*LookID
-	  Id of look
 
+	/* LookID.
+
+	   Id of look
+
+	   Format: int64
 	*/
 	LookID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LookParams) WithDefaults() *LookParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LookParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the look params
@@ -145,16 +161,17 @@ func (o *LookParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param look_id

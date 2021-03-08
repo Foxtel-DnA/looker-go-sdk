@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewCreateHomepageSectionParams creates a new CreateHomepageSectionParams object
-// with the default values initialized.
+// NewCreateHomepageSectionParams creates a new CreateHomepageSectionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateHomepageSectionParams() *CreateHomepageSectionParams {
-	var ()
 	return &CreateHomepageSectionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateHomepageSectionParamsWithTimeout creates a new CreateHomepageSectionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateHomepageSectionParamsWithTimeout(timeout time.Duration) *CreateHomepageSectionParams {
-	var ()
 	return &CreateHomepageSectionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateHomepageSectionParamsWithContext creates a new CreateHomepageSectionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateHomepageSectionParamsWithContext(ctx context.Context) *CreateHomepageSectionParams {
-	var ()
 	return &CreateHomepageSectionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateHomepageSectionParamsWithHTTPClient creates a new CreateHomepageSectionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateHomepageSectionParamsWithHTTPClient(client *http.Client) *CreateHomepageSectionParams {
-	var ()
 	return &CreateHomepageSectionParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateHomepageSectionParams contains all the parameters to send to the API endpoint
-for the create homepage section operation typically these are written to a http.Request
+/* CreateHomepageSectionParams contains all the parameters to send to the API endpoint
+   for the create homepage section operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateHomepageSectionParams struct {
 
-	/*Body
-	  Homepage section
+	/* Body.
 
+	   Homepage section
 	*/
 	Body *models.HomepageSection
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create homepage section params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateHomepageSectionParams) WithDefaults() *CreateHomepageSectionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create homepage section params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateHomepageSectionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create homepage section params
@@ -141,7 +155,6 @@ func (o *CreateHomepageSectionParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -152,16 +165,17 @@ func (o *CreateHomepageSectionParams) WriteToRequest(r runtime.ClientRequest, re
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

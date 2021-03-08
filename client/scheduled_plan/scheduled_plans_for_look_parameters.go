@@ -13,74 +13,99 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewScheduledPlansForLookParams creates a new ScheduledPlansForLookParams object
-// with the default values initialized.
+// NewScheduledPlansForLookParams creates a new ScheduledPlansForLookParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewScheduledPlansForLookParams() *ScheduledPlansForLookParams {
-	var ()
 	return &ScheduledPlansForLookParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewScheduledPlansForLookParamsWithTimeout creates a new ScheduledPlansForLookParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewScheduledPlansForLookParamsWithTimeout(timeout time.Duration) *ScheduledPlansForLookParams {
-	var ()
 	return &ScheduledPlansForLookParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewScheduledPlansForLookParamsWithContext creates a new ScheduledPlansForLookParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewScheduledPlansForLookParamsWithContext(ctx context.Context) *ScheduledPlansForLookParams {
-	var ()
 	return &ScheduledPlansForLookParams{
-
 		Context: ctx,
 	}
 }
 
 // NewScheduledPlansForLookParamsWithHTTPClient creates a new ScheduledPlansForLookParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewScheduledPlansForLookParamsWithHTTPClient(client *http.Client) *ScheduledPlansForLookParams {
-	var ()
 	return &ScheduledPlansForLookParams{
 		HTTPClient: client,
 	}
 }
 
-/*ScheduledPlansForLookParams contains all the parameters to send to the API endpoint
-for the scheduled plans for look operation typically these are written to a http.Request
+/* ScheduledPlansForLookParams contains all the parameters to send to the API endpoint
+   for the scheduled plans for look operation.
+
+   Typically these are written to a http.Request.
 */
 type ScheduledPlansForLookParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* AllUsers.
 
+	   Return scheduled plans belonging to all users for the look
+	*/
+	AllUsers *bool
+
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*LookID
-	  Look Id
 
+	/* LookID.
+
+	   Look Id
+
+	   Format: int64
 	*/
 	LookID int64
-	/*UserID
-	  User Id (default is requesting user if not specified)
 
+	/* UserID.
+
+	   User Id (default is requesting user if not specified)
+
+	   Format: int64
 	*/
 	UserID *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the scheduled plans for look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForLookParams) WithDefaults() *ScheduledPlansForLookParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the scheduled plans for look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForLookParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the scheduled plans for look params
@@ -114,6 +139,17 @@ func (o *ScheduledPlansForLookParams) WithHTTPClient(client *http.Client) *Sched
 // SetHTTPClient adds the HTTPClient to the scheduled plans for look params
 func (o *ScheduledPlansForLookParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
+}
+
+// WithAllUsers adds the allUsers to the scheduled plans for look params
+func (o *ScheduledPlansForLookParams) WithAllUsers(allUsers *bool) *ScheduledPlansForLookParams {
+	o.SetAllUsers(allUsers)
+	return o
+}
+
+// SetAllUsers adds the allUsers to the scheduled plans for look params
+func (o *ScheduledPlansForLookParams) SetAllUsers(allUsers *bool) {
+	o.AllUsers = allUsers
 }
 
 // WithFields adds the fields to the scheduled plans for look params
@@ -157,20 +193,38 @@ func (o *ScheduledPlansForLookParams) WriteToRequest(r runtime.ClientRequest, re
 	}
 	var res []error
 
+	if o.AllUsers != nil {
+
+		// query param all_users
+		var qrAllUsers bool
+
+		if o.AllUsers != nil {
+			qrAllUsers = *o.AllUsers
+		}
+		qAllUsers := swag.FormatBool(qrAllUsers)
+		if qAllUsers != "" {
+
+			if err := r.SetQueryParam("all_users", qAllUsers); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param look_id
@@ -182,16 +236,17 @@ func (o *ScheduledPlansForLookParams) WriteToRequest(r runtime.ClientRequest, re
 
 		// query param user_id
 		var qrUserID int64
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := swag.FormatInt64(qrUserID)
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

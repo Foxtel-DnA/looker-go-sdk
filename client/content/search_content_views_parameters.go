@@ -13,119 +13,161 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSearchContentViewsParams creates a new SearchContentViewsParams object
-// with the default values initialized.
+// NewSearchContentViewsParams creates a new SearchContentViewsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchContentViewsParams() *SearchContentViewsParams {
-	var ()
 	return &SearchContentViewsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchContentViewsParamsWithTimeout creates a new SearchContentViewsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchContentViewsParamsWithTimeout(timeout time.Duration) *SearchContentViewsParams {
-	var ()
 	return &SearchContentViewsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchContentViewsParamsWithContext creates a new SearchContentViewsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchContentViewsParamsWithContext(ctx context.Context) *SearchContentViewsParams {
-	var ()
 	return &SearchContentViewsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchContentViewsParamsWithHTTPClient creates a new SearchContentViewsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchContentViewsParamsWithHTTPClient(client *http.Client) *SearchContentViewsParams {
-	var ()
 	return &SearchContentViewsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchContentViewsParams contains all the parameters to send to the API endpoint
-for the search content views operation typically these are written to a http.Request
+/* SearchContentViewsParams contains all the parameters to send to the API endpoint
+   for the search content views operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchContentViewsParams struct {
 
-	/*AllTime
-	  True if only all time view records should be returned
+	/* AllTime.
 
+	   True if only all time view records should be returned
 	*/
 	AllTime *bool
-	/*ContentMetadataID
-	  Match content metadata id
 
+	/* ContentMetadataID.
+
+	   Match content metadata id
+
+	   Format: int64
 	*/
 	ContentMetadataID *int64
-	/*DashboardID
-	  Match dashboard_id
 
+	/* DashboardID.
+
+	   Match dashboard_id
 	*/
 	DashboardID *string
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields
 	*/
 	Fields *string
-	/*GroupID
-	  Match Group Id
 
+	/* FilterOr.
+
+	   Combine given search criteria in a boolean OR expression
+	*/
+	FilterOr *bool
+
+	/* GroupID.
+
+	   Match Group Id
+
+	   Format: int64
 	*/
 	GroupID *int64
-	/*Limit
-	  Number of results to return. Use with `offset` to manage pagination of results
 
+	/* Limit.
+
+	   Number of results to return. Use with `offset` to manage pagination of results
+
+	   Format: int64
 	*/
 	Limit *int64
-	/*LookID
-	  Match look_id
 
+	/* LookID.
+
+	   Match look_id
 	*/
 	LookID *string
-	/*Offset
-	  Number of results to skip before returning data
 
+	/* Offset.
+
+	   Number of results to skip before returning data
+
+	   Format: int64
 	*/
 	Offset *int64
-	/*Sorts
-	  Fields to sort by
 
+	/* Sorts.
+
+	   Fields to sort by
 	*/
 	Sorts *string
-	/*StartOfWeekDate
-	  Match start of week date
 
+	/* StartOfWeekDate.
+
+	   Match start of week date (format is "YYYY-MM-DD")
 	*/
 	StartOfWeekDate *string
-	/*UserID
-	  Match user id
 
+	/* UserID.
+
+	   Match user id
+
+	   Format: int64
 	*/
 	UserID *int64
-	/*ViewCount
-	  Match view count
 
+	/* ViewCount.
+
+	   Match view count
+
+	   Format: int64
 	*/
 	ViewCount *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search content views params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchContentViewsParams) WithDefaults() *SearchContentViewsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search content views params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchContentViewsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search content views params
@@ -203,6 +245,17 @@ func (o *SearchContentViewsParams) WithFields(fields *string) *SearchContentView
 // SetFields adds the fields to the search content views params
 func (o *SearchContentViewsParams) SetFields(fields *string) {
 	o.Fields = fields
+}
+
+// WithFilterOr adds the filterOr to the search content views params
+func (o *SearchContentViewsParams) WithFilterOr(filterOr *bool) *SearchContentViewsParams {
+	o.SetFilterOr(filterOr)
+	return o
+}
+
+// SetFilterOr adds the filterOr to the search content views params
+func (o *SearchContentViewsParams) SetFilterOr(filterOr *bool) {
+	o.FilterOr = filterOr
 }
 
 // WithGroupID adds the groupID to the search content views params
@@ -305,192 +358,221 @@ func (o *SearchContentViewsParams) WriteToRequest(r runtime.ClientRequest, reg s
 
 		// query param all_time
 		var qrAllTime bool
+
 		if o.AllTime != nil {
 			qrAllTime = *o.AllTime
 		}
 		qAllTime := swag.FormatBool(qrAllTime)
 		if qAllTime != "" {
+
 			if err := r.SetQueryParam("all_time", qAllTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ContentMetadataID != nil {
 
 		// query param content_metadata_id
 		var qrContentMetadataID int64
+
 		if o.ContentMetadataID != nil {
 			qrContentMetadataID = *o.ContentMetadataID
 		}
 		qContentMetadataID := swag.FormatInt64(qrContentMetadataID)
 		if qContentMetadataID != "" {
+
 			if err := r.SetQueryParam("content_metadata_id", qContentMetadataID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.DashboardID != nil {
 
 		// query param dashboard_id
 		var qrDashboardID string
+
 		if o.DashboardID != nil {
 			qrDashboardID = *o.DashboardID
 		}
 		qDashboardID := qrDashboardID
 		if qDashboardID != "" {
+
 			if err := r.SetQueryParam("dashboard_id", qDashboardID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.FilterOr != nil {
+
+		// query param filter_or
+		var qrFilterOr bool
+
+		if o.FilterOr != nil {
+			qrFilterOr = *o.FilterOr
+		}
+		qFilterOr := swag.FormatBool(qrFilterOr)
+		if qFilterOr != "" {
+
+			if err := r.SetQueryParam("filter_or", qFilterOr); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.GroupID != nil {
 
 		// query param group_id
 		var qrGroupID int64
+
 		if o.GroupID != nil {
 			qrGroupID = *o.GroupID
 		}
 		qGroupID := swag.FormatInt64(qrGroupID)
 		if qGroupID != "" {
+
 			if err := r.SetQueryParam("group_id", qGroupID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LookID != nil {
 
 		// query param look_id
 		var qrLookID string
+
 		if o.LookID != nil {
 			qrLookID = *o.LookID
 		}
 		qLookID := qrLookID
 		if qLookID != "" {
+
 			if err := r.SetQueryParam("look_id", qLookID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Offset != nil {
 
 		// query param offset
 		var qrOffset int64
+
 		if o.Offset != nil {
 			qrOffset = *o.Offset
 		}
 		qOffset := swag.FormatInt64(qrOffset)
 		if qOffset != "" {
+
 			if err := r.SetQueryParam("offset", qOffset); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.StartOfWeekDate != nil {
 
 		// query param start_of_week_date
 		var qrStartOfWeekDate string
+
 		if o.StartOfWeekDate != nil {
 			qrStartOfWeekDate = *o.StartOfWeekDate
 		}
 		qStartOfWeekDate := qrStartOfWeekDate
 		if qStartOfWeekDate != "" {
+
 			if err := r.SetQueryParam("start_of_week_date", qStartOfWeekDate); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.UserID != nil {
 
 		// query param user_id
 		var qrUserID int64
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := swag.FormatInt64(qrUserID)
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ViewCount != nil {
 
 		// query param view_count
 		var qrViewCount int64
+
 		if o.ViewCount != nil {
 			qrViewCount = *o.ViewCount
 		}
 		qViewCount := swag.FormatInt64(qrViewCount)
 		if qViewCount != "" {
+
 			if err := r.SetQueryParam("view_count", qViewCount); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

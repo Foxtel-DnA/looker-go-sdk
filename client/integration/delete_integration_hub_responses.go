@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteIntegrationHubReader is a Reader for the DeleteIntegrationHub structure.
@@ -24,30 +23,32 @@ type DeleteIntegrationHubReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteIntegrationHubReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteIntegrationHubNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteIntegrationHubBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteIntegrationHubNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteIntegrationHubTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteIntegrationHubNoContent() *DeleteIntegrationHubNoContent {
 	return &DeleteIntegrationHubNoContent{}
 }
 
-/*DeleteIntegrationHubNoContent handles this case with default header values.
+/* DeleteIntegrationHubNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteIntegrationHubNoContent struct {
 
 func (o *DeleteIntegrationHubNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /integration_hubs/{integration_hub_id}][%d] deleteIntegrationHubNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteIntegrationHubNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteIntegrationHubNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteIntegrationHubBadRequest() *DeleteIntegrationHubBadRequest {
 	return &DeleteIntegrationHubBadRequest{}
 }
 
-/*DeleteIntegrationHubBadRequest handles this case with default header values.
+/* DeleteIntegrationHubBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteIntegrationHubBadRequest struct {
 
 func (o *DeleteIntegrationHubBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /integration_hubs/{integration_hub_id}][%d] deleteIntegrationHubBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteIntegrationHubBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteIntegrationHubBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteIntegrationHubNotFound() *DeleteIntegrationHubNotFound {
 	return &DeleteIntegrationHubNotFound{}
 }
 
-/*DeleteIntegrationHubNotFound handles this case with default header values.
+/* DeleteIntegrationHubNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteIntegrationHubNotFound struct {
 func (o *DeleteIntegrationHubNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /integration_hubs/{integration_hub_id}][%d] deleteIntegrationHubNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteIntegrationHubNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteIntegrationHubNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteIntegrationHubTooManyRequests creates a DeleteIntegrationHubTooManyRequests with default headers values
+func NewDeleteIntegrationHubTooManyRequests() *DeleteIntegrationHubTooManyRequests {
+	return &DeleteIntegrationHubTooManyRequests{}
+}
+
+/* DeleteIntegrationHubTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteIntegrationHubTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteIntegrationHubTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /integration_hubs/{integration_hub_id}][%d] deleteIntegrationHubTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteIntegrationHubTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteIntegrationHubTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

@@ -13,84 +13,103 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserAttributeUserValuesParams creates a new UserAttributeUserValuesParams object
-// with the default values initialized.
+// NewUserAttributeUserValuesParams creates a new UserAttributeUserValuesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserAttributeUserValuesParams() *UserAttributeUserValuesParams {
-	var ()
 	return &UserAttributeUserValuesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserAttributeUserValuesParamsWithTimeout creates a new UserAttributeUserValuesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserAttributeUserValuesParamsWithTimeout(timeout time.Duration) *UserAttributeUserValuesParams {
-	var ()
 	return &UserAttributeUserValuesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserAttributeUserValuesParamsWithContext creates a new UserAttributeUserValuesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserAttributeUserValuesParamsWithContext(ctx context.Context) *UserAttributeUserValuesParams {
-	var ()
 	return &UserAttributeUserValuesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserAttributeUserValuesParamsWithHTTPClient creates a new UserAttributeUserValuesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserAttributeUserValuesParamsWithHTTPClient(client *http.Client) *UserAttributeUserValuesParams {
-	var ()
 	return &UserAttributeUserValuesParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserAttributeUserValuesParams contains all the parameters to send to the API endpoint
-for the user attribute user values operation typically these are written to a http.Request
+/* UserAttributeUserValuesParams contains all the parameters to send to the API endpoint
+   for the user attribute user values operation.
+
+   Typically these are written to a http.Request.
 */
 type UserAttributeUserValuesParams struct {
 
-	/*AllValues
-	  If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
+	/* AllValues.
 
+	   If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
 	*/
 	AllValues *bool
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*IncludeUnset
-	  If true, returns an empty record for each requested attribute that has no user, group, or default value.
 
+	/* IncludeUnset.
+
+	   If true, returns an empty record for each requested attribute that has no user, group, or default value.
 	*/
 	IncludeUnset *bool
-	/*UserAttributeIds
-	  Specific user attributes to request. Omit or leave blank to request all user attributes.
 
+	/* UserAttributeIds.
+
+	   Specific user attributes to request. Omit or leave blank to request all user attributes.
 	*/
 	UserAttributeIds []int64
-	/*UserID
-	  Id of user
 
+	/* UserID.
+
+	   Id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user attribute user values params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserAttributeUserValuesParams) WithDefaults() *UserAttributeUserValuesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user attribute user values params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserAttributeUserValuesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user attribute user values params
@@ -193,59 +212,62 @@ func (o *UserAttributeUserValuesParams) WriteToRequest(r runtime.ClientRequest, 
 
 		// query param all_values
 		var qrAllValues bool
+
 		if o.AllValues != nil {
 			qrAllValues = *o.AllValues
 		}
 		qAllValues := swag.FormatBool(qrAllValues)
 		if qAllValues != "" {
+
 			if err := r.SetQueryParam("all_values", qAllValues); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.IncludeUnset != nil {
 
 		// query param include_unset
 		var qrIncludeUnset bool
+
 		if o.IncludeUnset != nil {
 			qrIncludeUnset = *o.IncludeUnset
 		}
 		qIncludeUnset := swag.FormatBool(qrIncludeUnset)
 		if qIncludeUnset != "" {
+
 			if err := r.SetQueryParam("include_unset", qIncludeUnset); err != nil {
 				return err
 			}
 		}
-
 	}
 
-	var valuesUserAttributeIds []string
-	for _, v := range o.UserAttributeIds {
-		valuesUserAttributeIds = append(valuesUserAttributeIds, swag.FormatInt64(v))
-	}
+	if o.UserAttributeIds != nil {
 
-	joinedUserAttributeIds := swag.JoinByFormat(valuesUserAttributeIds, "csv")
-	// query array param user_attribute_ids
-	if err := r.SetQueryParam("user_attribute_ids", joinedUserAttributeIds...); err != nil {
-		return err
+		// binding items for user_attribute_ids
+		joinedUserAttributeIds := o.bindParamUserAttributeIds(reg)
+
+		// query array param user_attribute_ids
+		if err := r.SetQueryParam("user_attribute_ids", joinedUserAttributeIds...); err != nil {
+			return err
+		}
 	}
 
 	// path param user_id
@@ -257,4 +279,21 @@ func (o *UserAttributeUserValuesParams) WriteToRequest(r runtime.ClientRequest, 
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamUserAttributeUserValues binds the parameter user_attribute_ids
+func (o *UserAttributeUserValuesParams) bindParamUserAttributeIds(formats strfmt.Registry) []string {
+	userAttributeIdsIR := o.UserAttributeIds
+
+	var userAttributeIdsIC []string
+	for _, userAttributeIdsIIR := range userAttributeIdsIR { // explode []int64
+
+		userAttributeIdsIIV := swag.FormatInt64(userAttributeIdsIIR) // int64 as string
+		userAttributeIdsIC = append(userAttributeIdsIC, userAttributeIdsIIV)
+	}
+
+	// items.CollectionFormat: "csv"
+	userAttributeIdsIS := swag.JoinByFormat(userAttributeIdsIC, "csv")
+
+	return userAttributeIdsIS
 }

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // FetchRemoteDataActionFormReader is a Reader for the FetchRemoteDataActionForm structure.
@@ -24,37 +23,32 @@ type FetchRemoteDataActionFormReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *FetchRemoteDataActionFormReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewFetchRemoteDataActionFormOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewFetchRemoteDataActionFormBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewFetchRemoteDataActionFormNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewFetchRemoteDataActionFormUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewFetchRemoteDataActionFormOK() *FetchRemoteDataActionFormOK {
 	return &FetchRemoteDataActionFormOK{}
 }
 
-/*FetchRemoteDataActionFormOK handles this case with default header values.
+/* FetchRemoteDataActionFormOK describes a response with status code 200, with default header values.
 
 Data Action Form
 */
@@ -73,6 +67,9 @@ type FetchRemoteDataActionFormOK struct {
 
 func (o *FetchRemoteDataActionFormOK) Error() string {
 	return fmt.Sprintf("[POST /data_actions/form][%d] fetchRemoteDataActionFormOK  %+v", 200, o.Payload)
+}
+func (o *FetchRemoteDataActionFormOK) GetPayload() *models.DataActionForm {
+	return o.Payload
 }
 
 func (o *FetchRemoteDataActionFormOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewFetchRemoteDataActionFormBadRequest() *FetchRemoteDataActionFormBadReque
 	return &FetchRemoteDataActionFormBadRequest{}
 }
 
-/*FetchRemoteDataActionFormBadRequest handles this case with default header values.
+/* FetchRemoteDataActionFormBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type FetchRemoteDataActionFormBadRequest struct {
 
 func (o *FetchRemoteDataActionFormBadRequest) Error() string {
 	return fmt.Sprintf("[POST /data_actions/form][%d] fetchRemoteDataActionFormBadRequest  %+v", 400, o.Payload)
+}
+func (o *FetchRemoteDataActionFormBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *FetchRemoteDataActionFormBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewFetchRemoteDataActionFormNotFound() *FetchRemoteDataActionFormNotFound {
 	return &FetchRemoteDataActionFormNotFound{}
 }
 
-/*FetchRemoteDataActionFormNotFound handles this case with default header values.
+/* FetchRemoteDataActionFormNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type FetchRemoteDataActionFormNotFound struct {
 
 func (o *FetchRemoteDataActionFormNotFound) Error() string {
 	return fmt.Sprintf("[POST /data_actions/form][%d] fetchRemoteDataActionFormNotFound  %+v", 404, o.Payload)
+}
+func (o *FetchRemoteDataActionFormNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *FetchRemoteDataActionFormNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewFetchRemoteDataActionFormUnprocessableEntity() *FetchRemoteDataActionFor
 	return &FetchRemoteDataActionFormUnprocessableEntity{}
 }
 
-/*FetchRemoteDataActionFormUnprocessableEntity handles this case with default header values.
+/* FetchRemoteDataActionFormUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type FetchRemoteDataActionFormUnprocessableEntity struct {
 
 func (o *FetchRemoteDataActionFormUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /data_actions/form][%d] fetchRemoteDataActionFormUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *FetchRemoteDataActionFormUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *FetchRemoteDataActionFormUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

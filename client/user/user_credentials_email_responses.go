@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UserCredentialsEmailReader is a Reader for the UserCredentialsEmail structure.
@@ -24,30 +23,26 @@ type UserCredentialsEmailReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserCredentialsEmailReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserCredentialsEmailOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserCredentialsEmailBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserCredentialsEmailNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserCredentialsEmailOK() *UserCredentialsEmailOK {
 	return &UserCredentialsEmailOK{}
 }
 
-/*UserCredentialsEmailOK handles this case with default header values.
+/* UserCredentialsEmailOK describes a response with status code 200, with default header values.
 
 Email/Password Credential
 */
@@ -66,6 +61,9 @@ type UserCredentialsEmailOK struct {
 
 func (o *UserCredentialsEmailOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_email][%d] userCredentialsEmailOK  %+v", 200, o.Payload)
+}
+func (o *UserCredentialsEmailOK) GetPayload() *models.CredentialsEmail {
+	return o.Payload
 }
 
 func (o *UserCredentialsEmailOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserCredentialsEmailBadRequest() *UserCredentialsEmailBadRequest {
 	return &UserCredentialsEmailBadRequest{}
 }
 
-/*UserCredentialsEmailBadRequest handles this case with default header values.
+/* UserCredentialsEmailBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserCredentialsEmailBadRequest struct {
 
 func (o *UserCredentialsEmailBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_email][%d] userCredentialsEmailBadRequest  %+v", 400, o.Payload)
+}
+func (o *UserCredentialsEmailBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsEmailBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserCredentialsEmailNotFound() *UserCredentialsEmailNotFound {
 	return &UserCredentialsEmailNotFound{}
 }
 
-/*UserCredentialsEmailNotFound handles this case with default header values.
+/* UserCredentialsEmailNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserCredentialsEmailNotFound struct {
 
 func (o *UserCredentialsEmailNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_email][%d] userCredentialsEmailNotFound  %+v", 404, o.Payload)
+}
+func (o *UserCredentialsEmailNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsEmailNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

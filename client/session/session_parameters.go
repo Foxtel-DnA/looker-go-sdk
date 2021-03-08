@@ -13,56 +13,69 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSessionParams creates a new SessionParams object
-// with the default values initialized.
+// NewSessionParams creates a new SessionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSessionParams() *SessionParams {
-
 	return &SessionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSessionParamsWithTimeout creates a new SessionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSessionParamsWithTimeout(timeout time.Duration) *SessionParams {
-
 	return &SessionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSessionParamsWithContext creates a new SessionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSessionParamsWithContext(ctx context.Context) *SessionParams {
-
 	return &SessionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSessionParamsWithHTTPClient creates a new SessionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSessionParamsWithHTTPClient(client *http.Client) *SessionParams {
-
 	return &SessionParams{
 		HTTPClient: client,
 	}
 }
 
-/*SessionParams contains all the parameters to send to the API endpoint
-for the session operation typically these are written to a http.Request
+/* SessionParams contains all the parameters to send to the API endpoint
+   for the session operation.
+
+   Typically these are written to a http.Request.
 */
 type SessionParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the session params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SessionParams) WithDefaults() *SessionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the session params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SessionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the session params

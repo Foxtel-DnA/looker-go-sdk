@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SearchUsersNamesReader is a Reader for the SearchUsersNames structure.
@@ -24,30 +23,26 @@ type SearchUsersNamesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SearchUsersNamesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSearchUsersNamesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSearchUsersNamesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSearchUsersNamesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSearchUsersNamesOK() *SearchUsersNamesOK {
 	return &SearchUsersNamesOK{}
 }
 
-/*SearchUsersNamesOK handles this case with default header values.
+/* SearchUsersNamesOK describes a response with status code 200, with default header values.
 
 Matching users.
 */
@@ -66,6 +61,9 @@ type SearchUsersNamesOK struct {
 
 func (o *SearchUsersNamesOK) Error() string {
 	return fmt.Sprintf("[GET /users/search/names/{pattern}][%d] searchUsersNamesOK  %+v", 200, o.Payload)
+}
+func (o *SearchUsersNamesOK) GetPayload() []*models.User {
+	return o.Payload
 }
 
 func (o *SearchUsersNamesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSearchUsersNamesBadRequest() *SearchUsersNamesBadRequest {
 	return &SearchUsersNamesBadRequest{}
 }
 
-/*SearchUsersNamesBadRequest handles this case with default header values.
+/* SearchUsersNamesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SearchUsersNamesBadRequest struct {
 
 func (o *SearchUsersNamesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/search/names/{pattern}][%d] searchUsersNamesBadRequest  %+v", 400, o.Payload)
+}
+func (o *SearchUsersNamesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchUsersNamesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSearchUsersNamesNotFound() *SearchUsersNamesNotFound {
 	return &SearchUsersNamesNotFound{}
 }
 
-/*SearchUsersNamesNotFound handles this case with default header values.
+/* SearchUsersNamesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SearchUsersNamesNotFound struct {
 
 func (o *SearchUsersNamesNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/search/names/{pattern}][%d] searchUsersNamesNotFound  %+v", 404, o.Payload)
+}
+func (o *SearchUsersNamesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchUsersNamesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

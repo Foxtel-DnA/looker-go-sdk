@@ -6,19 +6,21 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreField lookml model explore field
+//
 // swagger:model LookmlModelExploreField
 type LookmlModelExploreField struct {
 
-	// The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right".
+	// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
 	// Read Only: true
 	Align string `json:"align,omitempty"`
 
@@ -41,6 +43,10 @@ type LookmlModelExploreField struct {
 	// Description
 	// Read Only: true
 	Description string `json:"description,omitempty"`
+
+	// Dimension group if this field is part of a dimension group. If not, this will be null.
+	// Read Only: true
+	DimensionGroup string `json:"dimension_group,omitempty"`
 
 	// Whether this field was specified in "dynamic_fields" and is not part of the model.
 	// Read Only: true
@@ -65,6 +71,10 @@ type LookmlModelExploreField struct {
 	// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
 	// Read Only: true
 	FillStyle string `json:"fill_style,omitempty"`
+
+	// Array of filter conditions defined for the measure in LookML.
+	// Read Only: true
+	Filters []*LookmlModelExploreFieldMeasureFilters `json:"filters"`
 
 	// An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to.
 	// Read Only: true
@@ -166,6 +176,10 @@ type LookmlModelExploreField struct {
 	// Read Only: true
 	SQLCase []*LookmlModelExploreFieldSQLCase `json:"sql_case"`
 
+	// If yes, the field will not be localized with the user attribute number_format. Defaults to no
+	// Read Only: true
+	StrictValueFormat *bool `json:"strict_value_format,omitempty"`
+
 	// The name of the dimension to base suggest queries from.
 	// Read Only: true
 	SuggestDimension string `json:"suggest_dimension,omitempty"`
@@ -194,7 +208,7 @@ type LookmlModelExploreField struct {
 	// Read Only: true
 	Type string `json:"type,omitempty"`
 
-	// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "yesno", "zipcode".
+	// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
 	// Read Only: true
 	UserAttributeFilterTypes []string `json:"user_attribute_filter_types"`
 
@@ -223,6 +237,10 @@ func (m *LookmlModelExploreField) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateFilters(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateMapLayer(formats); err != nil {
 		res = append(res, err)
 	}
@@ -242,7 +260,6 @@ func (m *LookmlModelExploreField) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LookmlModelExploreField) validateEnumerations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Enumerations) { // not required
 		return nil
 	}
@@ -266,8 +283,31 @@ func (m *LookmlModelExploreField) validateEnumerations(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *LookmlModelExploreField) validateMapLayer(formats strfmt.Registry) error {
+func (m *LookmlModelExploreField) validateFilters(formats strfmt.Registry) error {
+	if swag.IsZero(m.Filters) { // not required
+		return nil
+	}
 
+	for i := 0; i < len(m.Filters); i++ {
+		if swag.IsZero(m.Filters[i]) { // not required
+			continue
+		}
+
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) validateMapLayer(formats strfmt.Registry) error {
 	if swag.IsZero(m.MapLayer) { // not required
 		return nil
 	}
@@ -285,7 +325,6 @@ func (m *LookmlModelExploreField) validateMapLayer(formats strfmt.Registry) erro
 }
 
 func (m *LookmlModelExploreField) validateSQLCase(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SQLCase) { // not required
 		return nil
 	}
@@ -310,7 +349,6 @@ func (m *LookmlModelExploreField) validateSQLCase(formats strfmt.Registry) error
 }
 
 func (m *LookmlModelExploreField) validateTimeInterval(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TimeInterval) { // not required
 		return nil
 	}
@@ -322,6 +360,741 @@ func (m *LookmlModelExploreField) validateTimeInterval(formats strfmt.Registry) 
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this lookml model explore field based on the context it is used
+func (m *LookmlModelExploreField) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAlign(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCanFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCanTimeFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCategory(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultFilterValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDimensionGroup(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDynamic(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEnumerations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFieldGroupLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFieldGroupVariant(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFillStyle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFiscalMonthOffset(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasAllowedValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHidden(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsFiscal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsNumeric(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsTimeframe(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabelFromParameter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabelShort(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookmlLink(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMapLayer(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMeasure(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermanent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrimaryKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjectName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequiresRefreshOnSort(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateScope(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSortable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceFile(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceFilePath(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLCase(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStrictValueFormat(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSuggestDimension(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSuggestExplore(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSuggestable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSuggestions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTimeInterval(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributeFilterTypes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValueFormat(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateView(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWeekStartDay(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateAlign(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "align", "body", string(m.Align)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateCanFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "can_filter", "body", m.CanFilter); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateCanTimeFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "can_time_filter", "body", m.CanTimeFilter); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateCategory(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "category", "body", string(m.Category)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateDefaultFilterValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_filter_value", "body", string(m.DefaultFilterValue)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateDimensionGroup(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dimension_group", "body", string(m.DimensionGroup)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateDynamic(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dynamic", "body", m.Dynamic); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateEnumerations(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "enumerations", "body", []*LookmlModelExploreFieldEnumeration(m.Enumerations)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Enumerations); i++ {
+
+		if m.Enumerations[i] != nil {
+			if err := m.Enumerations[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("enumerations" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "error", "body", string(m.Error)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateFieldGroupLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field_group_label", "body", string(m.FieldGroupLabel)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateFieldGroupVariant(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field_group_variant", "body", string(m.FieldGroupVariant)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateFillStyle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "fill_style", "body", string(m.FillStyle)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "filters", "body", []*LookmlModelExploreFieldMeasureFilters(m.Filters)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Filters); i++ {
+
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateFiscalMonthOffset(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "fiscal_month_offset", "body", int64(m.FiscalMonthOffset)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateHasAllowedValues(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_allowed_values", "body", m.HasAllowedValues); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateHidden(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "hidden", "body", m.Hidden); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateIsFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_filter", "body", m.IsFilter); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateIsFiscal(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_fiscal", "body", m.IsFiscal); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateIsNumeric(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_numeric", "body", m.IsNumeric); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateIsTimeframe(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_timeframe", "body", m.IsTimeframe); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateLabelFromParameter(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label_from_parameter", "body", string(m.LabelFromParameter)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateLabelShort(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label_short", "body", string(m.LabelShort)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateLookmlLink(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "lookml_link", "body", string(m.LookmlLink)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateMapLayer(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MapLayer != nil {
+		if err := m.MapLayer.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("map_layer")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateMeasure(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "measure", "body", m.Measure); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateParameter(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "parameter", "body", m.Parameter); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidatePermanent(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "permanent", "body", m.Permanent); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidatePrimaryKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "primary_key", "body", m.PrimaryKey); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateProjectName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "project_name", "body", string(m.ProjectName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateRequiresRefreshOnSort(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "requires_refresh_on_sort", "body", m.RequiresRefreshOnSort); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateScope(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "scope", "body", string(m.Scope)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSortable(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sortable", "body", m.Sortable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSourceFile(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "source_file", "body", string(m.SourceFile)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSourceFilePath(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "source_file_path", "body", string(m.SourceFilePath)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSQL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql", "body", string(m.SQL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSQLCase(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql_case", "body", []*LookmlModelExploreFieldSQLCase(m.SQLCase)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.SQLCase); i++ {
+
+		if m.SQLCase[i] != nil {
+			if err := m.SQLCase[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("sql_case" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateStrictValueFormat(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "strict_value_format", "body", m.StrictValueFormat); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSuggestDimension(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "suggest_dimension", "body", string(m.SuggestDimension)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSuggestExplore(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "suggest_explore", "body", string(m.SuggestExplore)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSuggestable(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "suggestable", "body", m.Suggestable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateSuggestions(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "suggestions", "body", []string(m.Suggestions)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "tags", "body", []string(m.Tags)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateTimeInterval(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TimeInterval != nil {
+		if err := m.TimeInterval.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("time_interval")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "type", "body", string(m.Type)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateUserAttributeFilterTypes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attribute_filter_types", "body", []string(m.UserAttributeFilterTypes)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateValueFormat(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "value_format", "body", string(m.ValueFormat)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateView(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view", "body", string(m.View)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateViewLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_label", "body", string(m.ViewLabel)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreField) contextValidateWeekStartDay(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "week_start_day", "body", string(m.WeekStartDay)); err != nil {
+		return err
 	}
 
 	return nil

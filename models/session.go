@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // Session session
+//
 // swagger:model Session
 type Session struct {
 
@@ -94,12 +96,212 @@ func (m *Session) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Session) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this session based on the context it is used
+func (m *Session) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBrowser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCity(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCountry(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCredentialsType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpiresAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtendedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExtendedCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIPAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOperatingSystem(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateState(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSudoUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Session) contextValidateBrowser(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "browser", "body", string(m.Browser)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Session) contextValidateCity(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "city", "body", string(m.City)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateCountry(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "country", "body", string(m.Country)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateCredentialsType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "credentials_type", "body", string(m.CredentialsType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateExpiresAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "expires_at", "body", string(m.ExpiresAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateExtendedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "extended_at", "body", string(m.ExtendedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateExtendedCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "extended_count", "body", int64(m.ExtendedCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateIPAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ip_address", "body", string(m.IPAddress)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateOperatingSystem(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "operating_system", "body", string(m.OperatingSystem)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateState(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "state", "body", string(m.State)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateSudoUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sudo_user_id", "body", int64(m.SudoUserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Session) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteDashboardReader is a Reader for the DeleteDashboard structure.
@@ -24,30 +23,38 @@ type DeleteDashboardReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteDashboardReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteDashboardNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
+	case 400:
+		result := NewDeleteDashboardBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewDeleteDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 405:
 		result := NewDeleteDashboardMethodNotAllowed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteDashboardTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +63,7 @@ func NewDeleteDashboardNoContent() *DeleteDashboardNoContent {
 	return &DeleteDashboardNoContent{}
 }
 
-/*DeleteDashboardNoContent handles this case with default header values.
+/* DeleteDashboardNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +73,9 @@ type DeleteDashboardNoContent struct {
 
 func (o *DeleteDashboardNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /dashboards/{dashboard_id}][%d] deleteDashboardNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteDashboardNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteDashboardNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -78,12 +88,44 @@ func (o *DeleteDashboardNoContent) readResponse(response runtime.ClientResponse,
 	return nil
 }
 
+// NewDeleteDashboardBadRequest creates a DeleteDashboardBadRequest with default headers values
+func NewDeleteDashboardBadRequest() *DeleteDashboardBadRequest {
+	return &DeleteDashboardBadRequest{}
+}
+
+/* DeleteDashboardBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type DeleteDashboardBadRequest struct {
+	Payload *models.Error
+}
+
+func (o *DeleteDashboardBadRequest) Error() string {
+	return fmt.Sprintf("[DELETE /dashboards/{dashboard_id}][%d] deleteDashboardBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteDashboardBadRequest) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewDeleteDashboardNotFound creates a DeleteDashboardNotFound with default headers values
 func NewDeleteDashboardNotFound() *DeleteDashboardNotFound {
 	return &DeleteDashboardNotFound{}
 }
 
-/*DeleteDashboardNotFound handles this case with default header values.
+/* DeleteDashboardNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -93,6 +135,9 @@ type DeleteDashboardNotFound struct {
 
 func (o *DeleteDashboardNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /dashboards/{dashboard_id}][%d] deleteDashboardNotFound  %+v", 404, o.Payload)
+}
+func (o *DeleteDashboardNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteDashboardNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +157,7 @@ func NewDeleteDashboardMethodNotAllowed() *DeleteDashboardMethodNotAllowed {
 	return &DeleteDashboardMethodNotAllowed{}
 }
 
-/*DeleteDashboardMethodNotAllowed handles this case with default header values.
+/* DeleteDashboardMethodNotAllowed describes a response with status code 405, with default header values.
 
 Resource Can't Be Modified
 */
@@ -123,8 +168,43 @@ type DeleteDashboardMethodNotAllowed struct {
 func (o *DeleteDashboardMethodNotAllowed) Error() string {
 	return fmt.Sprintf("[DELETE /dashboards/{dashboard_id}][%d] deleteDashboardMethodNotAllowed  %+v", 405, o.Payload)
 }
+func (o *DeleteDashboardMethodNotAllowed) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteDashboardMethodNotAllowed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteDashboardTooManyRequests creates a DeleteDashboardTooManyRequests with default headers values
+func NewDeleteDashboardTooManyRequests() *DeleteDashboardTooManyRequests {
+	return &DeleteDashboardTooManyRequests{}
+}
+
+/* DeleteDashboardTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteDashboardTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteDashboardTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /dashboards/{dashboard_id}][%d] deleteDashboardTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteDashboardTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteDashboardTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

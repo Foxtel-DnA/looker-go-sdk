@@ -13,69 +13,83 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewTestConnectionParams creates a new TestConnectionParams object
-// with the default values initialized.
+// NewTestConnectionParams creates a new TestConnectionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewTestConnectionParams() *TestConnectionParams {
-	var ()
 	return &TestConnectionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewTestConnectionParamsWithTimeout creates a new TestConnectionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewTestConnectionParamsWithTimeout(timeout time.Duration) *TestConnectionParams {
-	var ()
 	return &TestConnectionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewTestConnectionParamsWithContext creates a new TestConnectionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewTestConnectionParamsWithContext(ctx context.Context) *TestConnectionParams {
-	var ()
 	return &TestConnectionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewTestConnectionParamsWithHTTPClient creates a new TestConnectionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewTestConnectionParamsWithHTTPClient(client *http.Client) *TestConnectionParams {
-	var ()
 	return &TestConnectionParams{
 		HTTPClient: client,
 	}
 }
 
-/*TestConnectionParams contains all the parameters to send to the API endpoint
-for the test connection operation typically these are written to a http.Request
+/* TestConnectionParams contains all the parameters to send to the API endpoint
+   for the test connection operation.
+
+   Typically these are written to a http.Request.
 */
 type TestConnectionParams struct {
 
-	/*ConnectionName
-	  Name of connection
+	/* ConnectionName.
 
+	   Name of connection
 	*/
 	ConnectionName string
-	/*Tests
-	  Array of names of tests to run
 
+	/* Tests.
+
+	   Array of names of tests to run
 	*/
 	Tests []string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the test connection params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestConnectionParams) WithDefaults() *TestConnectionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the test connection params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestConnectionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the test connection params
@@ -146,16 +160,36 @@ func (o *TestConnectionParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 
-	valuesTests := o.Tests
+	if o.Tests != nil {
 
-	joinedTests := swag.JoinByFormat(valuesTests, "csv")
-	// query array param tests
-	if err := r.SetQueryParam("tests", joinedTests...); err != nil {
-		return err
+		// binding items for tests
+		joinedTests := o.bindParamTests(reg)
+
+		// query array param tests
+		if err := r.SetQueryParam("tests", joinedTests...); err != nil {
+			return err
+		}
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamTestConnection binds the parameter tests
+func (o *TestConnectionParams) bindParamTests(formats strfmt.Registry) []string {
+	testsIR := o.Tests
+
+	var testsIC []string
+	for _, testsIIR := range testsIR { // explode []string
+
+		testsIIV := testsIIR // string as string
+		testsIC = append(testsIC, testsIIV)
+	}
+
+	// items.CollectionFormat: "csv"
+	testsIS := swag.JoinByFormat(testsIC, "csv")
+
+	return testsIS
 }

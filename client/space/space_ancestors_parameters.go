@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSpaceAncestorsParams creates a new SpaceAncestorsParams object
-// with the default values initialized.
+// NewSpaceAncestorsParams creates a new SpaceAncestorsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceAncestorsParams() *SpaceAncestorsParams {
-	var ()
 	return &SpaceAncestorsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceAncestorsParamsWithTimeout creates a new SpaceAncestorsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceAncestorsParamsWithTimeout(timeout time.Duration) *SpaceAncestorsParams {
-	var ()
 	return &SpaceAncestorsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceAncestorsParamsWithContext creates a new SpaceAncestorsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceAncestorsParamsWithContext(ctx context.Context) *SpaceAncestorsParams {
-	var ()
 	return &SpaceAncestorsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceAncestorsParamsWithHTTPClient creates a new SpaceAncestorsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceAncestorsParamsWithHTTPClient(client *http.Client) *SpaceAncestorsParams {
-	var ()
 	return &SpaceAncestorsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceAncestorsParams contains all the parameters to send to the API endpoint
-for the space ancestors operation typically these are written to a http.Request
+/* SpaceAncestorsParams contains all the parameters to send to the API endpoint
+   for the space ancestors operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceAncestorsParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space ancestors params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceAncestorsParams) WithDefaults() *SpaceAncestorsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space ancestors params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceAncestorsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space ancestors params
@@ -123,13 +136,13 @@ func (o *SpaceAncestorsParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space ancestors params
-func (o *SpaceAncestorsParams) WithSpaceID(spaceID int64) *SpaceAncestorsParams {
+func (o *SpaceAncestorsParams) WithSpaceID(spaceID string) *SpaceAncestorsParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space ancestors params
-func (o *SpaceAncestorsParams) SetSpaceID(spaceID int64) {
+func (o *SpaceAncestorsParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -145,20 +158,21 @@ func (o *SpaceAncestorsParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

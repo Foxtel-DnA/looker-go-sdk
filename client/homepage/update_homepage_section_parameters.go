@@ -13,76 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewUpdateHomepageSectionParams creates a new UpdateHomepageSectionParams object
-// with the default values initialized.
+// NewUpdateHomepageSectionParams creates a new UpdateHomepageSectionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateHomepageSectionParams() *UpdateHomepageSectionParams {
-	var ()
 	return &UpdateHomepageSectionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateHomepageSectionParamsWithTimeout creates a new UpdateHomepageSectionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateHomepageSectionParamsWithTimeout(timeout time.Duration) *UpdateHomepageSectionParams {
-	var ()
 	return &UpdateHomepageSectionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateHomepageSectionParamsWithContext creates a new UpdateHomepageSectionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateHomepageSectionParamsWithContext(ctx context.Context) *UpdateHomepageSectionParams {
-	var ()
 	return &UpdateHomepageSectionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateHomepageSectionParamsWithHTTPClient creates a new UpdateHomepageSectionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateHomepageSectionParamsWithHTTPClient(client *http.Client) *UpdateHomepageSectionParams {
-	var ()
 	return &UpdateHomepageSectionParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateHomepageSectionParams contains all the parameters to send to the API endpoint
-for the update homepage section operation typically these are written to a http.Request
+/* UpdateHomepageSectionParams contains all the parameters to send to the API endpoint
+   for the update homepage section operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateHomepageSectionParams struct {
 
-	/*Body
-	  Homepage section
+	/* Body.
 
+	   Homepage section
 	*/
 	Body *models.HomepageSection
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*HomepageSectionID
-	  Id of homepage section
 
+	/* HomepageSectionID.
+
+	   Id of homepage section
+
+	   Format: int64
 	*/
 	HomepageSectionID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update homepage section params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateHomepageSectionParams) WithDefaults() *UpdateHomepageSectionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update homepage section params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateHomepageSectionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update homepage section params
@@ -158,7 +175,6 @@ func (o *UpdateHomepageSectionParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,16 +185,17 @@ func (o *UpdateHomepageSectionParams) WriteToRequest(r runtime.ClientRequest, re
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param homepage_section_id

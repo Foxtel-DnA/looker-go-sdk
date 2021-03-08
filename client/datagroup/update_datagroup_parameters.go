@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewUpdateDatagroupParams creates a new UpdateDatagroupParams object
-// with the default values initialized.
+// NewUpdateDatagroupParams creates a new UpdateDatagroupParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateDatagroupParams() *UpdateDatagroupParams {
-	var ()
 	return &UpdateDatagroupParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateDatagroupParamsWithTimeout creates a new UpdateDatagroupParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateDatagroupParamsWithTimeout(timeout time.Duration) *UpdateDatagroupParams {
-	var ()
 	return &UpdateDatagroupParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateDatagroupParamsWithContext creates a new UpdateDatagroupParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateDatagroupParamsWithContext(ctx context.Context) *UpdateDatagroupParams {
-	var ()
 	return &UpdateDatagroupParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateDatagroupParamsWithHTTPClient creates a new UpdateDatagroupParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateDatagroupParamsWithHTTPClient(client *http.Client) *UpdateDatagroupParams {
-	var ()
 	return &UpdateDatagroupParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateDatagroupParams contains all the parameters to send to the API endpoint
-for the update datagroup operation typically these are written to a http.Request
+/* UpdateDatagroupParams contains all the parameters to send to the API endpoint
+   for the update datagroup operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateDatagroupParams struct {
 
-	/*Body
-	  Datagroup
+	/* Body.
 
+	   Datagroup
 	*/
 	Body *models.Datagroup
-	/*DatagroupID
-	  ID of datagroup.
 
+	/* DatagroupID.
+
+	   ID of datagroup.
 	*/
 	DatagroupID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update datagroup params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateDatagroupParams) WithDefaults() *UpdateDatagroupParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update datagroup params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateDatagroupParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update datagroup params
@@ -141,7 +155,6 @@ func (o *UpdateDatagroupParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

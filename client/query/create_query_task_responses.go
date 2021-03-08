@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateQueryTaskReader is a Reader for the CreateQueryTask structure.
@@ -24,44 +23,44 @@ type CreateQueryTaskReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateQueryTaskReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateQueryTaskOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateQueryTaskBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateQueryTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateQueryTaskConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateQueryTaskUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateQueryTaskTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateQueryTaskOK() *CreateQueryTaskOK {
 	return &CreateQueryTaskOK{}
 }
 
-/*CreateQueryTaskOK handles this case with default header values.
+/* CreateQueryTaskOK describes a response with status code 200, with default header values.
 
 query_task
 */
@@ -80,6 +79,9 @@ type CreateQueryTaskOK struct {
 
 func (o *CreateQueryTaskOK) Error() string {
 	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskOK  %+v", 200, o.Payload)
+}
+func (o *CreateQueryTaskOK) GetPayload() *models.QueryTask {
+	return o.Payload
 }
 
 func (o *CreateQueryTaskOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateQueryTaskBadRequest() *CreateQueryTaskBadRequest {
 	return &CreateQueryTaskBadRequest{}
 }
 
-/*CreateQueryTaskBadRequest handles this case with default header values.
+/* CreateQueryTaskBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateQueryTaskBadRequest struct {
 
 func (o *CreateQueryTaskBadRequest) Error() string {
 	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateQueryTaskBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateQueryTaskBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateQueryTaskNotFound() *CreateQueryTaskNotFound {
 	return &CreateQueryTaskNotFound{}
 }
 
-/*CreateQueryTaskNotFound handles this case with default header values.
+/* CreateQueryTaskNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateQueryTaskNotFound struct {
 
 func (o *CreateQueryTaskNotFound) Error() string {
 	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateQueryTaskNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateQueryTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateQueryTaskConflict() *CreateQueryTaskConflict {
 	return &CreateQueryTaskConflict{}
 }
 
-/*CreateQueryTaskConflict handles this case with default header values.
+/* CreateQueryTaskConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateQueryTaskConflict struct {
 
 func (o *CreateQueryTaskConflict) Error() string {
 	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskConflict  %+v", 409, o.Payload)
+}
+func (o *CreateQueryTaskConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateQueryTaskConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateQueryTaskUnprocessableEntity() *CreateQueryTaskUnprocessableEntity
 	return &CreateQueryTaskUnprocessableEntity{}
 }
 
-/*CreateQueryTaskUnprocessableEntity handles this case with default header values.
+/* CreateQueryTaskUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateQueryTaskUnprocessableEntity struct {
 func (o *CreateQueryTaskUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateQueryTaskUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateQueryTaskUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateQueryTaskTooManyRequests creates a CreateQueryTaskTooManyRequests with default headers values
+func NewCreateQueryTaskTooManyRequests() *CreateQueryTaskTooManyRequests {
+	return &CreateQueryTaskTooManyRequests{}
+}
+
+/* CreateQueryTaskTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateQueryTaskTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateQueryTaskTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /query_tasks][%d] createQueryTaskTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateQueryTaskTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateQueryTaskTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

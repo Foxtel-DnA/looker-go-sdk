@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSpaceDashboardsParams creates a new SpaceDashboardsParams object
-// with the default values initialized.
+// NewSpaceDashboardsParams creates a new SpaceDashboardsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceDashboardsParams() *SpaceDashboardsParams {
-	var ()
 	return &SpaceDashboardsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceDashboardsParamsWithTimeout creates a new SpaceDashboardsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceDashboardsParamsWithTimeout(timeout time.Duration) *SpaceDashboardsParams {
-	var ()
 	return &SpaceDashboardsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceDashboardsParamsWithContext creates a new SpaceDashboardsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceDashboardsParamsWithContext(ctx context.Context) *SpaceDashboardsParams {
-	var ()
 	return &SpaceDashboardsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceDashboardsParamsWithHTTPClient creates a new SpaceDashboardsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceDashboardsParamsWithHTTPClient(client *http.Client) *SpaceDashboardsParams {
-	var ()
 	return &SpaceDashboardsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceDashboardsParams contains all the parameters to send to the API endpoint
-for the space dashboards operation typically these are written to a http.Request
+/* SpaceDashboardsParams contains all the parameters to send to the API endpoint
+   for the space dashboards operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceDashboardsParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space dashboards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceDashboardsParams) WithDefaults() *SpaceDashboardsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space dashboards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceDashboardsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space dashboards params
@@ -123,13 +136,13 @@ func (o *SpaceDashboardsParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space dashboards params
-func (o *SpaceDashboardsParams) WithSpaceID(spaceID int64) *SpaceDashboardsParams {
+func (o *SpaceDashboardsParams) WithSpaceID(spaceID string) *SpaceDashboardsParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space dashboards params
-func (o *SpaceDashboardsParams) SetSpaceID(spaceID int64) {
+func (o *SpaceDashboardsParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -145,20 +158,21 @@ func (o *SpaceDashboardsParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // AllUserAttributeGroupValuesReader is a Reader for the AllUserAttributeGroupValues structure.
@@ -24,30 +23,26 @@ type AllUserAttributeGroupValuesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllUserAttributeGroupValuesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllUserAttributeGroupValuesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllUserAttributeGroupValuesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllUserAttributeGroupValuesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllUserAttributeGroupValuesOK() *AllUserAttributeGroupValuesOK {
 	return &AllUserAttributeGroupValuesOK{}
 }
 
-/*AllUserAttributeGroupValuesOK handles this case with default header values.
+/* AllUserAttributeGroupValuesOK describes a response with status code 200, with default header values.
 
 All group values for attribute.
 */
@@ -66,6 +61,9 @@ type AllUserAttributeGroupValuesOK struct {
 
 func (o *AllUserAttributeGroupValuesOK) Error() string {
 	return fmt.Sprintf("[GET /user_attributes/{user_attribute_id}/group_values][%d] allUserAttributeGroupValuesOK  %+v", 200, o.Payload)
+}
+func (o *AllUserAttributeGroupValuesOK) GetPayload() []*models.UserAttributeGroupValue {
+	return o.Payload
 }
 
 func (o *AllUserAttributeGroupValuesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllUserAttributeGroupValuesBadRequest() *AllUserAttributeGroupValuesBadR
 	return &AllUserAttributeGroupValuesBadRequest{}
 }
 
-/*AllUserAttributeGroupValuesBadRequest handles this case with default header values.
+/* AllUserAttributeGroupValuesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllUserAttributeGroupValuesBadRequest struct {
 
 func (o *AllUserAttributeGroupValuesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /user_attributes/{user_attribute_id}/group_values][%d] allUserAttributeGroupValuesBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllUserAttributeGroupValuesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUserAttributeGroupValuesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllUserAttributeGroupValuesNotFound() *AllUserAttributeGroupValuesNotFou
 	return &AllUserAttributeGroupValuesNotFound{}
 }
 
-/*AllUserAttributeGroupValuesNotFound handles this case with default header values.
+/* AllUserAttributeGroupValuesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllUserAttributeGroupValuesNotFound struct {
 
 func (o *AllUserAttributeGroupValuesNotFound) Error() string {
 	return fmt.Sprintf("[GET /user_attributes/{user_attribute_id}/group_values][%d] allUserAttributeGroupValuesNotFound  %+v", 404, o.Payload)
+}
+func (o *AllUserAttributeGroupValuesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUserAttributeGroupValuesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

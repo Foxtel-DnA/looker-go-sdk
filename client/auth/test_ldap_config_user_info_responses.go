@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // TestLdapConfigUserInfoReader is a Reader for the TestLdapConfigUserInfo structure.
@@ -24,37 +23,32 @@ type TestLdapConfigUserInfoReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *TestLdapConfigUserInfoReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewTestLdapConfigUserInfoOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewTestLdapConfigUserInfoBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewTestLdapConfigUserInfoNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewTestLdapConfigUserInfoUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewTestLdapConfigUserInfoOK() *TestLdapConfigUserInfoOK {
 	return &TestLdapConfigUserInfoOK{}
 }
 
-/*TestLdapConfigUserInfoOK handles this case with default header values.
+/* TestLdapConfigUserInfoOK describes a response with status code 200, with default header values.
 
 Result info.
 */
@@ -73,6 +67,9 @@ type TestLdapConfigUserInfoOK struct {
 
 func (o *TestLdapConfigUserInfoOK) Error() string {
 	return fmt.Sprintf("[PUT /ldap_config/test_user_info][%d] testLdapConfigUserInfoOK  %+v", 200, o.Payload)
+}
+func (o *TestLdapConfigUserInfoOK) GetPayload() *models.LDAPConfigTestResult {
+	return o.Payload
 }
 
 func (o *TestLdapConfigUserInfoOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewTestLdapConfigUserInfoBadRequest() *TestLdapConfigUserInfoBadRequest {
 	return &TestLdapConfigUserInfoBadRequest{}
 }
 
-/*TestLdapConfigUserInfoBadRequest handles this case with default header values.
+/* TestLdapConfigUserInfoBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type TestLdapConfigUserInfoBadRequest struct {
 
 func (o *TestLdapConfigUserInfoBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /ldap_config/test_user_info][%d] testLdapConfigUserInfoBadRequest  %+v", 400, o.Payload)
+}
+func (o *TestLdapConfigUserInfoBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *TestLdapConfigUserInfoBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewTestLdapConfigUserInfoNotFound() *TestLdapConfigUserInfoNotFound {
 	return &TestLdapConfigUserInfoNotFound{}
 }
 
-/*TestLdapConfigUserInfoNotFound handles this case with default header values.
+/* TestLdapConfigUserInfoNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type TestLdapConfigUserInfoNotFound struct {
 
 func (o *TestLdapConfigUserInfoNotFound) Error() string {
 	return fmt.Sprintf("[PUT /ldap_config/test_user_info][%d] testLdapConfigUserInfoNotFound  %+v", 404, o.Payload)
+}
+func (o *TestLdapConfigUserInfoNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *TestLdapConfigUserInfoNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewTestLdapConfigUserInfoUnprocessableEntity() *TestLdapConfigUserInfoUnpro
 	return &TestLdapConfigUserInfoUnprocessableEntity{}
 }
 
-/*TestLdapConfigUserInfoUnprocessableEntity handles this case with default header values.
+/* TestLdapConfigUserInfoUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type TestLdapConfigUserInfoUnprocessableEntity struct {
 
 func (o *TestLdapConfigUserInfoUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PUT /ldap_config/test_user_info][%d] testLdapConfigUserInfoUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *TestLdapConfigUserInfoUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *TestLdapConfigUserInfoUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

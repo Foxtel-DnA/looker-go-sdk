@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewLoginParams creates a new LoginParams object
-// with the default values initialized.
+// NewLoginParams creates a new LoginParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewLoginParams() *LoginParams {
-	var ()
 	return &LoginParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewLoginParamsWithTimeout creates a new LoginParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewLoginParamsWithTimeout(timeout time.Duration) *LoginParams {
-	var ()
 	return &LoginParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewLoginParamsWithContext creates a new LoginParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewLoginParamsWithContext(ctx context.Context) *LoginParams {
-	var ()
 	return &LoginParams{
-
 		Context: ctx,
 	}
 }
 
 // NewLoginParamsWithHTTPClient creates a new LoginParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewLoginParamsWithHTTPClient(client *http.Client) *LoginParams {
-	var ()
 	return &LoginParams{
 		HTTPClient: client,
 	}
 }
 
-/*LoginParams contains all the parameters to send to the API endpoint
-for the login operation typically these are written to a http.Request
+/* LoginParams contains all the parameters to send to the API endpoint
+   for the login operation.
+
+   Typically these are written to a http.Request.
 */
 type LoginParams struct {
 
-	/*ClientID
-	  client_id part of API3 Key.
+	/* ClientID.
 
+	   client_id part of API3 Key.
 	*/
 	ClientID *string
-	/*ClientSecret
-	  client_secret part of API3 Key.
 
+	/* ClientSecret.
+
+	   client_secret part of API3 Key.
 	*/
 	ClientSecret *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the login params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LoginParams) WithDefaults() *LoginParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the login params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LoginParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the login params
@@ -144,32 +158,34 @@ func (o *LoginParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registr
 
 		// query param client_id
 		var qrClientID string
+
 		if o.ClientID != nil {
 			qrClientID = *o.ClientID
 		}
 		qClientID := qrClientID
 		if qClientID != "" {
+
 			if err := r.SetQueryParam("client_id", qClientID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ClientSecret != nil {
 
 		// query param client_secret
 		var qrClientSecret string
+
 		if o.ClientSecret != nil {
 			qrClientSecret = *o.ClientSecret
 		}
 		qClientSecret := qrClientSecret
 		if qClientSecret != "" {
+
 			if err := r.SetQueryParam("client_secret", qClientSecret); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

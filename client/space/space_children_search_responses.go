@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SpaceChildrenSearchReader is a Reader for the SpaceChildrenSearch structure.
@@ -24,30 +23,26 @@ type SpaceChildrenSearchReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SpaceChildrenSearchReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSpaceChildrenSearchOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSpaceChildrenSearchBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSpaceChildrenSearchNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSpaceChildrenSearchOK() *SpaceChildrenSearchOK {
 	return &SpaceChildrenSearchOK{}
 }
 
-/*SpaceChildrenSearchOK handles this case with default header values.
+/* SpaceChildrenSearchOK describes a response with status code 200, with default header values.
 
 Spaces
 */
@@ -66,6 +61,9 @@ type SpaceChildrenSearchOK struct {
 
 func (o *SpaceChildrenSearchOK) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/children/search][%d] spaceChildrenSearchOK  %+v", 200, o.Payload)
+}
+func (o *SpaceChildrenSearchOK) GetPayload() []*models.Space {
+	return o.Payload
 }
 
 func (o *SpaceChildrenSearchOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSpaceChildrenSearchBadRequest() *SpaceChildrenSearchBadRequest {
 	return &SpaceChildrenSearchBadRequest{}
 }
 
-/*SpaceChildrenSearchBadRequest handles this case with default header values.
+/* SpaceChildrenSearchBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SpaceChildrenSearchBadRequest struct {
 
 func (o *SpaceChildrenSearchBadRequest) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/children/search][%d] spaceChildrenSearchBadRequest  %+v", 400, o.Payload)
+}
+func (o *SpaceChildrenSearchBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SpaceChildrenSearchBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSpaceChildrenSearchNotFound() *SpaceChildrenSearchNotFound {
 	return &SpaceChildrenSearchNotFound{}
 }
 
-/*SpaceChildrenSearchNotFound handles this case with default header values.
+/* SpaceChildrenSearchNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SpaceChildrenSearchNotFound struct {
 
 func (o *SpaceChildrenSearchNotFound) Error() string {
 	return fmt.Sprintf("[GET /spaces/{space_id}/children/search][%d] spaceChildrenSearchNotFound  %+v", 404, o.Payload)
+}
+func (o *SpaceChildrenSearchNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SpaceChildrenSearchNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

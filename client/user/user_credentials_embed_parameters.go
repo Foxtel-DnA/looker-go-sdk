@@ -13,74 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserCredentialsEmbedParams creates a new UserCredentialsEmbedParams object
-// with the default values initialized.
+// NewUserCredentialsEmbedParams creates a new UserCredentialsEmbedParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserCredentialsEmbedParams() *UserCredentialsEmbedParams {
-	var ()
 	return &UserCredentialsEmbedParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserCredentialsEmbedParamsWithTimeout creates a new UserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserCredentialsEmbedParamsWithTimeout(timeout time.Duration) *UserCredentialsEmbedParams {
-	var ()
 	return &UserCredentialsEmbedParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserCredentialsEmbedParamsWithContext creates a new UserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserCredentialsEmbedParamsWithContext(ctx context.Context) *UserCredentialsEmbedParams {
-	var ()
 	return &UserCredentialsEmbedParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserCredentialsEmbedParamsWithHTTPClient creates a new UserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserCredentialsEmbedParamsWithHTTPClient(client *http.Client) *UserCredentialsEmbedParams {
-	var ()
 	return &UserCredentialsEmbedParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserCredentialsEmbedParams contains all the parameters to send to the API endpoint
-for the user credentials embed operation typically these are written to a http.Request
+/* UserCredentialsEmbedParams contains all the parameters to send to the API endpoint
+   for the user credentials embed operation.
+
+   Typically these are written to a http.Request.
 */
 type UserCredentialsEmbedParams struct {
 
-	/*CredentialsEmbedID
-	  Id of Embedding Credential
+	/* CredentialsEmbedID.
 
+	   Id of Embedding Credential
+
+	   Format: int64
 	*/
 	CredentialsEmbedID int64
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  Id of user
 
+	/* UserID.
+
+	   Id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user credentials embed params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsEmbedParams) WithDefaults() *UserCredentialsEmbedParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user credentials embed params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsEmbedParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user credentials embed params
@@ -166,16 +185,17 @@ func (o *UserCredentialsEmbedParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

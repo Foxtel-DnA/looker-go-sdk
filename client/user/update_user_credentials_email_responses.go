@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateUserCredentialsEmailReader is a Reader for the UpdateUserCredentialsEmail structure.
@@ -24,37 +23,38 @@ type UpdateUserCredentialsEmailReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateUserCredentialsEmailReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateUserCredentialsEmailOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateUserCredentialsEmailBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateUserCredentialsEmailNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateUserCredentialsEmailUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateUserCredentialsEmailTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateUserCredentialsEmailOK() *UpdateUserCredentialsEmailOK {
 	return &UpdateUserCredentialsEmailOK{}
 }
 
-/*UpdateUserCredentialsEmailOK handles this case with default header values.
+/* UpdateUserCredentialsEmailOK describes a response with status code 200, with default header values.
 
 Email/Password Credential
 */
@@ -73,6 +73,9 @@ type UpdateUserCredentialsEmailOK struct {
 
 func (o *UpdateUserCredentialsEmailOK) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/credentials_email][%d] updateUserCredentialsEmailOK  %+v", 200, o.Payload)
+}
+func (o *UpdateUserCredentialsEmailOK) GetPayload() *models.CredentialsEmail {
+	return o.Payload
 }
 
 func (o *UpdateUserCredentialsEmailOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateUserCredentialsEmailBadRequest() *UpdateUserCredentialsEmailBadReq
 	return &UpdateUserCredentialsEmailBadRequest{}
 }
 
-/*UpdateUserCredentialsEmailBadRequest handles this case with default header values.
+/* UpdateUserCredentialsEmailBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateUserCredentialsEmailBadRequest struct {
 
 func (o *UpdateUserCredentialsEmailBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/credentials_email][%d] updateUserCredentialsEmailBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateUserCredentialsEmailBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateUserCredentialsEmailBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateUserCredentialsEmailNotFound() *UpdateUserCredentialsEmailNotFound
 	return &UpdateUserCredentialsEmailNotFound{}
 }
 
-/*UpdateUserCredentialsEmailNotFound handles this case with default header values.
+/* UpdateUserCredentialsEmailNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateUserCredentialsEmailNotFound struct {
 
 func (o *UpdateUserCredentialsEmailNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/credentials_email][%d] updateUserCredentialsEmailNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateUserCredentialsEmailNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateUserCredentialsEmailNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateUserCredentialsEmailUnprocessableEntity() *UpdateUserCredentialsEm
 	return &UpdateUserCredentialsEmailUnprocessableEntity{}
 }
 
-/*UpdateUserCredentialsEmailUnprocessableEntity handles this case with default header values.
+/* UpdateUserCredentialsEmailUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateUserCredentialsEmailUnprocessableEntity struct {
 func (o *UpdateUserCredentialsEmailUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/credentials_email][%d] updateUserCredentialsEmailUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateUserCredentialsEmailUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateUserCredentialsEmailUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateUserCredentialsEmailTooManyRequests creates a UpdateUserCredentialsEmailTooManyRequests with default headers values
+func NewUpdateUserCredentialsEmailTooManyRequests() *UpdateUserCredentialsEmailTooManyRequests {
+	return &UpdateUserCredentialsEmailTooManyRequests{}
+}
+
+/* UpdateUserCredentialsEmailTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateUserCredentialsEmailTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateUserCredentialsEmailTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /users/{user_id}/credentials_email][%d] updateUserCredentialsEmailTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateUserCredentialsEmailTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateUserCredentialsEmailTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -6,14 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // OIDCUserAttributeWrite o ID c user attribute write
+//
 // swagger:model OIDCUserAttributeWrite
 type OIDCUserAttributeWrite struct {
 
@@ -27,20 +28,20 @@ type OIDCUserAttributeWrite struct {
 	// Required to be in OIDC assertion for login to be allowed to succeed
 	Required bool `json:"required,omitempty"`
 
-	// Link to oidc config
-	// Read Only: true
-	// Format: uri
-	URL strfmt.URI `json:"url,omitempty"`
-
 	// Looker User Attribute Ids
 	UserAttributeIds []int64 `json:"user_attribute_ids"`
 }
 
 // Validate validates this o ID c user attribute write
 func (m *OIDCUserAttributeWrite) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this o ID c user attribute write based on the context it is used
+func (m *OIDCUserAttributeWrite) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateURL(formats); err != nil {
+	if err := m.contextValidateCan(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -50,15 +51,7 @@ func (m *OIDCUserAttributeWrite) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *OIDCUserAttributeWrite) validateURL(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.URL) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
-		return err
-	}
+func (m *OIDCUserAttributeWrite) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
 
 	return nil
 }

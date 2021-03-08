@@ -13,76 +13,91 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewSyncLookmlDashboardParams creates a new SyncLookmlDashboardParams object
-// with the default values initialized.
+// NewSyncLookmlDashboardParams creates a new SyncLookmlDashboardParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSyncLookmlDashboardParams() *SyncLookmlDashboardParams {
-	var ()
 	return &SyncLookmlDashboardParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSyncLookmlDashboardParamsWithTimeout creates a new SyncLookmlDashboardParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSyncLookmlDashboardParamsWithTimeout(timeout time.Duration) *SyncLookmlDashboardParams {
-	var ()
 	return &SyncLookmlDashboardParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSyncLookmlDashboardParamsWithContext creates a new SyncLookmlDashboardParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSyncLookmlDashboardParamsWithContext(ctx context.Context) *SyncLookmlDashboardParams {
-	var ()
 	return &SyncLookmlDashboardParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSyncLookmlDashboardParamsWithHTTPClient creates a new SyncLookmlDashboardParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSyncLookmlDashboardParamsWithHTTPClient(client *http.Client) *SyncLookmlDashboardParams {
-	var ()
 	return &SyncLookmlDashboardParams{
 		HTTPClient: client,
 	}
 }
 
-/*SyncLookmlDashboardParams contains all the parameters to send to the API endpoint
-for the sync lookml dashboard operation typically these are written to a http.Request
+/* SyncLookmlDashboardParams contains all the parameters to send to the API endpoint
+   for the sync lookml dashboard operation.
+
+   Typically these are written to a http.Request.
 */
 type SyncLookmlDashboardParams struct {
 
-	/*Body
-	  Dashboard
+	/* Body.
 
+	   Dashboard
 	*/
 	Body *models.Dashboard
-	/*LookmlDashboardID
-	  Id of LookML dashboard
 
+	/* LookmlDashboardID.
+
+	   Id of LookML dashboard, in the form 'model::dashboardname'
 	*/
 	LookmlDashboardID string
-	/*RawLocale
-	  If true, and this dashboard is localized, export it with the raw keys, not localized.
 
+	/* RawLocale.
+
+	   If true, and this dashboard is localized, export it with the raw keys, not localized.
 	*/
 	RawLocale *bool
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the sync lookml dashboard params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SyncLookmlDashboardParams) WithDefaults() *SyncLookmlDashboardParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the sync lookml dashboard params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SyncLookmlDashboardParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the sync lookml dashboard params
@@ -158,7 +173,6 @@ func (o *SyncLookmlDashboardParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -174,16 +188,17 @@ func (o *SyncLookmlDashboardParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 		// query param raw_locale
 		var qrRawLocale bool
+
 		if o.RawLocale != nil {
 			qrRawLocale = *o.RawLocale
 		}
 		qRawLocale := swag.FormatBool(qrRawLocale)
 		if qRawLocale != "" {
+
 			if err := r.SetQueryParam("raw_locale", qRawLocale); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

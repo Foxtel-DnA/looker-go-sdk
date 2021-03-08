@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UserReader is a Reader for the User structure.
@@ -24,30 +23,26 @@ type UserReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserOK() *UserOK {
 	return &UserOK{}
 }
 
-/*UserOK handles this case with default header values.
+/* UserOK describes a response with status code 200, with default header values.
 
 Specified user.
 */
@@ -66,6 +61,9 @@ type UserOK struct {
 
 func (o *UserOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}][%d] userOK  %+v", 200, o.Payload)
+}
+func (o *UserOK) GetPayload() *models.User {
+	return o.Payload
 }
 
 func (o *UserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserBadRequest() *UserBadRequest {
 	return &UserBadRequest{}
 }
 
-/*UserBadRequest handles this case with default header values.
+/* UserBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserBadRequest struct {
 
 func (o *UserBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}][%d] userBadRequest  %+v", 400, o.Payload)
+}
+func (o *UserBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserNotFound() *UserNotFound {
 	return &UserNotFound{}
 }
 
-/*UserNotFound handles this case with default header values.
+/* UserNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserNotFound struct {
 
 func (o *UserNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}][%d] userNotFound  %+v", 404, o.Payload)
+}
+func (o *UserNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

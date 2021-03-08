@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ModelSetReader is a Reader for the ModelSet structure.
@@ -24,30 +23,26 @@ type ModelSetReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ModelSetReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewModelSetOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewModelSetBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewModelSetNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewModelSetOK() *ModelSetOK {
 	return &ModelSetOK{}
 }
 
-/*ModelSetOK handles this case with default header values.
+/* ModelSetOK describes a response with status code 200, with default header values.
 
 Specified model set.
 */
@@ -66,6 +61,9 @@ type ModelSetOK struct {
 
 func (o *ModelSetOK) Error() string {
 	return fmt.Sprintf("[GET /model_sets/{model_set_id}][%d] modelSetOK  %+v", 200, o.Payload)
+}
+func (o *ModelSetOK) GetPayload() *models.ModelSet {
+	return o.Payload
 }
 
 func (o *ModelSetOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewModelSetBadRequest() *ModelSetBadRequest {
 	return &ModelSetBadRequest{}
 }
 
-/*ModelSetBadRequest handles this case with default header values.
+/* ModelSetBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ModelSetBadRequest struct {
 
 func (o *ModelSetBadRequest) Error() string {
 	return fmt.Sprintf("[GET /model_sets/{model_set_id}][%d] modelSetBadRequest  %+v", 400, o.Payload)
+}
+func (o *ModelSetBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ModelSetBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewModelSetNotFound() *ModelSetNotFound {
 	return &ModelSetNotFound{}
 }
 
-/*ModelSetNotFound handles this case with default header values.
+/* ModelSetNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ModelSetNotFound struct {
 
 func (o *ModelSetNotFound) Error() string {
 	return fmt.Sprintf("[GET /model_sets/{model_set_id}][%d] modelSetNotFound  %+v", 404, o.Payload)
+}
+func (o *ModelSetNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ModelSetNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

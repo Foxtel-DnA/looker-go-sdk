@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // LookmlModelExploreReader is a Reader for the LookmlModelExplore structure.
@@ -24,30 +23,26 @@ type LookmlModelExploreReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *LookmlModelExploreReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewLookmlModelExploreOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewLookmlModelExploreBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewLookmlModelExploreNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewLookmlModelExploreOK() *LookmlModelExploreOK {
 	return &LookmlModelExploreOK{}
 }
 
-/*LookmlModelExploreOK handles this case with default header values.
+/* LookmlModelExploreOK describes a response with status code 200, with default header values.
 
 LookML Model Explore
 */
@@ -66,6 +61,9 @@ type LookmlModelExploreOK struct {
 
 func (o *LookmlModelExploreOK) Error() string {
 	return fmt.Sprintf("[GET /lookml_models/{lookml_model_name}/explores/{explore_name}][%d] lookmlModelExploreOK  %+v", 200, o.Payload)
+}
+func (o *LookmlModelExploreOK) GetPayload() *models.LookmlModelExplore {
+	return o.Payload
 }
 
 func (o *LookmlModelExploreOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewLookmlModelExploreBadRequest() *LookmlModelExploreBadRequest {
 	return &LookmlModelExploreBadRequest{}
 }
 
-/*LookmlModelExploreBadRequest handles this case with default header values.
+/* LookmlModelExploreBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type LookmlModelExploreBadRequest struct {
 
 func (o *LookmlModelExploreBadRequest) Error() string {
 	return fmt.Sprintf("[GET /lookml_models/{lookml_model_name}/explores/{explore_name}][%d] lookmlModelExploreBadRequest  %+v", 400, o.Payload)
+}
+func (o *LookmlModelExploreBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LookmlModelExploreBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewLookmlModelExploreNotFound() *LookmlModelExploreNotFound {
 	return &LookmlModelExploreNotFound{}
 }
 
-/*LookmlModelExploreNotFound handles this case with default header values.
+/* LookmlModelExploreNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type LookmlModelExploreNotFound struct {
 
 func (o *LookmlModelExploreNotFound) Error() string {
 	return fmt.Sprintf("[GET /lookml_models/{lookml_model_name}/explores/{explore_name}][%d] lookmlModelExploreNotFound  %+v", 404, o.Payload)
+}
+func (o *LookmlModelExploreNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LookmlModelExploreNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ScheduledPlanRunOnceReader is a Reader for the ScheduledPlanRunOnce structure.
@@ -24,44 +23,44 @@ type ScheduledPlanRunOnceReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ScheduledPlanRunOnceReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewScheduledPlanRunOnceOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewScheduledPlanRunOnceBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewScheduledPlanRunOnceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewScheduledPlanRunOnceConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewScheduledPlanRunOnceUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewScheduledPlanRunOnceTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewScheduledPlanRunOnceOK() *ScheduledPlanRunOnceOK {
 	return &ScheduledPlanRunOnceOK{}
 }
 
-/*ScheduledPlanRunOnceOK handles this case with default header values.
+/* ScheduledPlanRunOnceOK describes a response with status code 200, with default header values.
 
 Scheduled Plan
 */
@@ -80,6 +79,9 @@ type ScheduledPlanRunOnceOK struct {
 
 func (o *ScheduledPlanRunOnceOK) Error() string {
 	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceOK  %+v", 200, o.Payload)
+}
+func (o *ScheduledPlanRunOnceOK) GetPayload() *models.ScheduledPlan {
+	return o.Payload
 }
 
 func (o *ScheduledPlanRunOnceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewScheduledPlanRunOnceBadRequest() *ScheduledPlanRunOnceBadRequest {
 	return &ScheduledPlanRunOnceBadRequest{}
 }
 
-/*ScheduledPlanRunOnceBadRequest handles this case with default header values.
+/* ScheduledPlanRunOnceBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type ScheduledPlanRunOnceBadRequest struct {
 
 func (o *ScheduledPlanRunOnceBadRequest) Error() string {
 	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceBadRequest  %+v", 400, o.Payload)
+}
+func (o *ScheduledPlanRunOnceBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlanRunOnceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewScheduledPlanRunOnceNotFound() *ScheduledPlanRunOnceNotFound {
 	return &ScheduledPlanRunOnceNotFound{}
 }
 
-/*ScheduledPlanRunOnceNotFound handles this case with default header values.
+/* ScheduledPlanRunOnceNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type ScheduledPlanRunOnceNotFound struct {
 
 func (o *ScheduledPlanRunOnceNotFound) Error() string {
 	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceNotFound  %+v", 404, o.Payload)
+}
+func (o *ScheduledPlanRunOnceNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlanRunOnceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewScheduledPlanRunOnceConflict() *ScheduledPlanRunOnceConflict {
 	return &ScheduledPlanRunOnceConflict{}
 }
 
-/*ScheduledPlanRunOnceConflict handles this case with default header values.
+/* ScheduledPlanRunOnceConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type ScheduledPlanRunOnceConflict struct {
 
 func (o *ScheduledPlanRunOnceConflict) Error() string {
 	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceConflict  %+v", 409, o.Payload)
+}
+func (o *ScheduledPlanRunOnceConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlanRunOnceConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewScheduledPlanRunOnceUnprocessableEntity() *ScheduledPlanRunOnceUnprocess
 	return &ScheduledPlanRunOnceUnprocessableEntity{}
 }
 
-/*ScheduledPlanRunOnceUnprocessableEntity handles this case with default header values.
+/* ScheduledPlanRunOnceUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type ScheduledPlanRunOnceUnprocessableEntity struct {
 func (o *ScheduledPlanRunOnceUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *ScheduledPlanRunOnceUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *ScheduledPlanRunOnceUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewScheduledPlanRunOnceTooManyRequests creates a ScheduledPlanRunOnceTooManyRequests with default headers values
+func NewScheduledPlanRunOnceTooManyRequests() *ScheduledPlanRunOnceTooManyRequests {
+	return &ScheduledPlanRunOnceTooManyRequests{}
+}
+
+/* ScheduledPlanRunOnceTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type ScheduledPlanRunOnceTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *ScheduledPlanRunOnceTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /scheduled_plans/run_once][%d] scheduledPlanRunOnceTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *ScheduledPlanRunOnceTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *ScheduledPlanRunOnceTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

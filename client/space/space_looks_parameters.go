@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSpaceLooksParams creates a new SpaceLooksParams object
-// with the default values initialized.
+// NewSpaceLooksParams creates a new SpaceLooksParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceLooksParams() *SpaceLooksParams {
-	var ()
 	return &SpaceLooksParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceLooksParamsWithTimeout creates a new SpaceLooksParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceLooksParamsWithTimeout(timeout time.Duration) *SpaceLooksParams {
-	var ()
 	return &SpaceLooksParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceLooksParamsWithContext creates a new SpaceLooksParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceLooksParamsWithContext(ctx context.Context) *SpaceLooksParams {
-	var ()
 	return &SpaceLooksParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceLooksParamsWithHTTPClient creates a new SpaceLooksParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceLooksParamsWithHTTPClient(client *http.Client) *SpaceLooksParams {
-	var ()
 	return &SpaceLooksParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceLooksParams contains all the parameters to send to the API endpoint
-for the space looks operation typically these are written to a http.Request
+/* SpaceLooksParams contains all the parameters to send to the API endpoint
+   for the space looks operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceLooksParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space looks params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceLooksParams) WithDefaults() *SpaceLooksParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space looks params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceLooksParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space looks params
@@ -123,13 +136,13 @@ func (o *SpaceLooksParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space looks params
-func (o *SpaceLooksParams) WithSpaceID(spaceID int64) *SpaceLooksParams {
+func (o *SpaceLooksParams) WithSpaceID(spaceID string) *SpaceLooksParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space looks params
-func (o *SpaceLooksParams) SetSpaceID(spaceID int64) {
+func (o *SpaceLooksParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -145,20 +158,21 @@ func (o *SpaceLooksParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

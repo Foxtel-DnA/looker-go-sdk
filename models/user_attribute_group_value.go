@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // UserAttributeGroupValue user attribute group value
+//
 // swagger:model UserAttributeGroupValue
 type UserAttributeGroupValue struct {
 
@@ -46,6 +50,103 @@ type UserAttributeGroupValue struct {
 
 // Validate validates this user attribute group value
 func (m *UserAttributeGroupValue) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this user attribute group value based on the context it is used
+func (m *UserAttributeGroupValue) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRank(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributeID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValueIsHidden(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "group_id", "body", int64(m.GroupID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateRank(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "rank", "body", int64(m.Rank)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateUserAttributeID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attribute_id", "body", int64(m.UserAttributeID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "value", "body", string(m.Value)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeGroupValue) contextValidateValueIsHidden(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "value_is_hidden", "body", m.ValueIsHidden); err != nil {
+		return err
+	}
+
 	return nil
 }
 

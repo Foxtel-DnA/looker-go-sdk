@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewCreateSpaceParams creates a new CreateSpaceParams object
-// with the default values initialized.
+// NewCreateSpaceParams creates a new CreateSpaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateSpaceParams() *CreateSpaceParams {
-	var ()
 	return &CreateSpaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateSpaceParamsWithTimeout creates a new CreateSpaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateSpaceParamsWithTimeout(timeout time.Duration) *CreateSpaceParams {
-	var ()
 	return &CreateSpaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateSpaceParamsWithContext creates a new CreateSpaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateSpaceParamsWithContext(ctx context.Context) *CreateSpaceParams {
-	var ()
 	return &CreateSpaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateSpaceParamsWithHTTPClient creates a new CreateSpaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateSpaceParamsWithHTTPClient(client *http.Client) *CreateSpaceParams {
-	var ()
 	return &CreateSpaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateSpaceParams contains all the parameters to send to the API endpoint
-for the create space operation typically these are written to a http.Request
+/* CreateSpaceParams contains all the parameters to send to the API endpoint
+   for the create space operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateSpaceParams struct {
 
-	/*Body
-	  Space
+	/* Body.
 
+	   Create a new space
 	*/
-	Body *models.Space
+	Body *models.CreateSpace
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateSpaceParams) WithDefaults() *CreateSpaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateSpaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create space params
@@ -108,13 +121,13 @@ func (o *CreateSpaceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create space params
-func (o *CreateSpaceParams) WithBody(body *models.Space) *CreateSpaceParams {
+func (o *CreateSpaceParams) WithBody(body *models.CreateSpace) *CreateSpaceParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create space params
-func (o *CreateSpaceParams) SetBody(body *models.Space) {
+func (o *CreateSpaceParams) SetBody(body *models.CreateSpace) {
 	o.Body = body
 }
 
@@ -125,7 +138,6 @@ func (o *CreateSpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

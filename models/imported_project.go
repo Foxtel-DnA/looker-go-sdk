@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ImportedProject imported project
+//
 // swagger:model ImportedProject
 type ImportedProject struct {
 
@@ -38,6 +42,77 @@ type ImportedProject struct {
 
 // Validate validates this imported project
 func (m *ImportedProject) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this imported project based on the context it is used
+func (m *ImportedProject) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsRemote(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRef(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ImportedProject) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ImportedProject) contextValidateIsRemote(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_remote", "body", m.IsRemote); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImportedProject) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImportedProject) contextValidateRef(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ref", "body", string(m.Ref)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ImportedProject) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", string(m.URL)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

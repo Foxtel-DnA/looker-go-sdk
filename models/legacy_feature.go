@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LegacyFeature legacy feature
+//
 // swagger:model LegacyFeature
 type LegacyFeature struct {
 
@@ -90,7 +92,6 @@ func (m *LegacyFeature) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LegacyFeature) validateApproximateDisableDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ApproximateDisableDate) { // not required
 		return nil
 	}
@@ -103,12 +104,173 @@ func (m *LegacyFeature) validateApproximateDisableDate(formats strfmt.Registry) 
 }
 
 func (m *LegacyFeature) validateApproximateEndOfLifeDate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ApproximateEndOfLifeDate) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("approximate_end_of_life_date", "body", "date-time", m.ApproximateEndOfLifeDate.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this legacy feature based on the context it is used
+func (m *LegacyFeature) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateApproximateDisableDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateApproximateEndOfLifeDate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisableOnUpgradeToVersion(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDisallowedAsOfVersion(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDocumentationURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEnabled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEndOfLifeVersion(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasDisabledOnUpgrade(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateApproximateDisableDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "approximate_disable_date", "body", strfmt.DateTime(m.ApproximateDisableDate)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateApproximateEndOfLifeDate(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "approximate_end_of_life_date", "body", strfmt.DateTime(m.ApproximateEndOfLifeDate)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateDisableOnUpgradeToVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "disable_on_upgrade_to_version", "body", string(m.DisableOnUpgradeToVersion)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateDisallowedAsOfVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "disallowed_as_of_version", "body", string(m.DisallowedAsOfVersion)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateDocumentationURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "documentation_url", "body", string(m.DocumentationURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateEnabled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "enabled", "body", m.Enabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateEndOfLifeVersion(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "end_of_life_version", "body", string(m.EndOfLifeVersion)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateHasDisabledOnUpgrade(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_disabled_on_upgrade", "body", m.HasDisabledOnUpgrade); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LegacyFeature) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
 		return err
 	}
 

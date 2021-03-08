@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateLookmlModelReader is a Reader for the CreateLookmlModel structure.
@@ -24,44 +23,44 @@ type CreateLookmlModelReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateLookmlModelReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateLookmlModelOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateLookmlModelBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateLookmlModelNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateLookmlModelConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateLookmlModelUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateLookmlModelTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateLookmlModelOK() *CreateLookmlModelOK {
 	return &CreateLookmlModelOK{}
 }
 
-/*CreateLookmlModelOK handles this case with default header values.
+/* CreateLookmlModelOK describes a response with status code 200, with default header values.
 
 LookML Model
 */
@@ -80,6 +79,9 @@ type CreateLookmlModelOK struct {
 
 func (o *CreateLookmlModelOK) Error() string {
 	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelOK  %+v", 200, o.Payload)
+}
+func (o *CreateLookmlModelOK) GetPayload() *models.LookmlModel {
+	return o.Payload
 }
 
 func (o *CreateLookmlModelOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateLookmlModelBadRequest() *CreateLookmlModelBadRequest {
 	return &CreateLookmlModelBadRequest{}
 }
 
-/*CreateLookmlModelBadRequest handles this case with default header values.
+/* CreateLookmlModelBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateLookmlModelBadRequest struct {
 
 func (o *CreateLookmlModelBadRequest) Error() string {
 	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateLookmlModelBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlModelBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateLookmlModelNotFound() *CreateLookmlModelNotFound {
 	return &CreateLookmlModelNotFound{}
 }
 
-/*CreateLookmlModelNotFound handles this case with default header values.
+/* CreateLookmlModelNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateLookmlModelNotFound struct {
 
 func (o *CreateLookmlModelNotFound) Error() string {
 	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateLookmlModelNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlModelNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateLookmlModelConflict() *CreateLookmlModelConflict {
 	return &CreateLookmlModelConflict{}
 }
 
-/*CreateLookmlModelConflict handles this case with default header values.
+/* CreateLookmlModelConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateLookmlModelConflict struct {
 
 func (o *CreateLookmlModelConflict) Error() string {
 	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelConflict  %+v", 409, o.Payload)
+}
+func (o *CreateLookmlModelConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlModelConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateLookmlModelUnprocessableEntity() *CreateLookmlModelUnprocessableEn
 	return &CreateLookmlModelUnprocessableEntity{}
 }
 
-/*CreateLookmlModelUnprocessableEntity handles this case with default header values.
+/* CreateLookmlModelUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateLookmlModelUnprocessableEntity struct {
 func (o *CreateLookmlModelUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateLookmlModelUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateLookmlModelUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateLookmlModelTooManyRequests creates a CreateLookmlModelTooManyRequests with default headers values
+func NewCreateLookmlModelTooManyRequests() *CreateLookmlModelTooManyRequests {
+	return &CreateLookmlModelTooManyRequests{}
+}
+
+/* CreateLookmlModelTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateLookmlModelTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateLookmlModelTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /lookml_models][%d] createLookmlModelTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateLookmlModelTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateLookmlModelTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

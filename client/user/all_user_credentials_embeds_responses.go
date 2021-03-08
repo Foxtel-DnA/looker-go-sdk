@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // AllUserCredentialsEmbedsReader is a Reader for the AllUserCredentialsEmbeds structure.
@@ -24,30 +23,26 @@ type AllUserCredentialsEmbedsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllUserCredentialsEmbedsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllUserCredentialsEmbedsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllUserCredentialsEmbedsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllUserCredentialsEmbedsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllUserCredentialsEmbedsOK() *AllUserCredentialsEmbedsOK {
 	return &AllUserCredentialsEmbedsOK{}
 }
 
-/*AllUserCredentialsEmbedsOK handles this case with default header values.
+/* AllUserCredentialsEmbedsOK describes a response with status code 200, with default header values.
 
 Embedding Credential
 */
@@ -66,6 +61,9 @@ type AllUserCredentialsEmbedsOK struct {
 
 func (o *AllUserCredentialsEmbedsOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_embed][%d] allUserCredentialsEmbedsOK  %+v", 200, o.Payload)
+}
+func (o *AllUserCredentialsEmbedsOK) GetPayload() []*models.CredentialsEmbed {
+	return o.Payload
 }
 
 func (o *AllUserCredentialsEmbedsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllUserCredentialsEmbedsBadRequest() *AllUserCredentialsEmbedsBadRequest
 	return &AllUserCredentialsEmbedsBadRequest{}
 }
 
-/*AllUserCredentialsEmbedsBadRequest handles this case with default header values.
+/* AllUserCredentialsEmbedsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllUserCredentialsEmbedsBadRequest struct {
 
 func (o *AllUserCredentialsEmbedsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_embed][%d] allUserCredentialsEmbedsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllUserCredentialsEmbedsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUserCredentialsEmbedsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllUserCredentialsEmbedsNotFound() *AllUserCredentialsEmbedsNotFound {
 	return &AllUserCredentialsEmbedsNotFound{}
 }
 
-/*AllUserCredentialsEmbedsNotFound handles this case with default header values.
+/* AllUserCredentialsEmbedsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllUserCredentialsEmbedsNotFound struct {
 
 func (o *AllUserCredentialsEmbedsNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_embed][%d] allUserCredentialsEmbedsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllUserCredentialsEmbedsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUserCredentialsEmbedsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

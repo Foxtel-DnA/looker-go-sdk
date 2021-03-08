@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateLookmlModelReader is a Reader for the UpdateLookmlModel structure.
@@ -24,37 +23,38 @@ type UpdateLookmlModelReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateLookmlModelReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateLookmlModelOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateLookmlModelBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateLookmlModelNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateLookmlModelUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateLookmlModelTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateLookmlModelOK() *UpdateLookmlModelOK {
 	return &UpdateLookmlModelOK{}
 }
 
-/*UpdateLookmlModelOK handles this case with default header values.
+/* UpdateLookmlModelOK describes a response with status code 200, with default header values.
 
 LookML Model
 */
@@ -73,6 +73,9 @@ type UpdateLookmlModelOK struct {
 
 func (o *UpdateLookmlModelOK) Error() string {
 	return fmt.Sprintf("[PATCH /lookml_models/{lookml_model_name}][%d] updateLookmlModelOK  %+v", 200, o.Payload)
+}
+func (o *UpdateLookmlModelOK) GetPayload() *models.LookmlModel {
+	return o.Payload
 }
 
 func (o *UpdateLookmlModelOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateLookmlModelBadRequest() *UpdateLookmlModelBadRequest {
 	return &UpdateLookmlModelBadRequest{}
 }
 
-/*UpdateLookmlModelBadRequest handles this case with default header values.
+/* UpdateLookmlModelBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateLookmlModelBadRequest struct {
 
 func (o *UpdateLookmlModelBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /lookml_models/{lookml_model_name}][%d] updateLookmlModelBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateLookmlModelBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLookmlModelBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateLookmlModelNotFound() *UpdateLookmlModelNotFound {
 	return &UpdateLookmlModelNotFound{}
 }
 
-/*UpdateLookmlModelNotFound handles this case with default header values.
+/* UpdateLookmlModelNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateLookmlModelNotFound struct {
 
 func (o *UpdateLookmlModelNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /lookml_models/{lookml_model_name}][%d] updateLookmlModelNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateLookmlModelNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLookmlModelNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateLookmlModelUnprocessableEntity() *UpdateLookmlModelUnprocessableEn
 	return &UpdateLookmlModelUnprocessableEntity{}
 }
 
-/*UpdateLookmlModelUnprocessableEntity handles this case with default header values.
+/* UpdateLookmlModelUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateLookmlModelUnprocessableEntity struct {
 func (o *UpdateLookmlModelUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /lookml_models/{lookml_model_name}][%d] updateLookmlModelUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateLookmlModelUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateLookmlModelUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateLookmlModelTooManyRequests creates a UpdateLookmlModelTooManyRequests with default headers values
+func NewUpdateLookmlModelTooManyRequests() *UpdateLookmlModelTooManyRequests {
+	return &UpdateLookmlModelTooManyRequests{}
+}
+
+/* UpdateLookmlModelTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateLookmlModelTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateLookmlModelTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /lookml_models/{lookml_model_name}][%d] updateLookmlModelTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateLookmlModelTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateLookmlModelTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateGroupReader is a Reader for the UpdateGroup structure.
@@ -24,37 +23,38 @@ type UpdateGroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateGroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateGroupOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateGroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateGroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateGroupUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateGroupTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateGroupOK() *UpdateGroupOK {
 	return &UpdateGroupOK{}
 }
 
-/*UpdateGroupOK handles this case with default header values.
+/* UpdateGroupOK describes a response with status code 200, with default header values.
 
 Group
 */
@@ -73,6 +73,9 @@ type UpdateGroupOK struct {
 
 func (o *UpdateGroupOK) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}][%d] updateGroupOK  %+v", 200, o.Payload)
+}
+func (o *UpdateGroupOK) GetPayload() *models.Group {
+	return o.Payload
 }
 
 func (o *UpdateGroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateGroupBadRequest() *UpdateGroupBadRequest {
 	return &UpdateGroupBadRequest{}
 }
 
-/*UpdateGroupBadRequest handles this case with default header values.
+/* UpdateGroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateGroupBadRequest struct {
 
 func (o *UpdateGroupBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}][%d] updateGroupBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateGroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateGroupNotFound() *UpdateGroupNotFound {
 	return &UpdateGroupNotFound{}
 }
 
-/*UpdateGroupNotFound handles this case with default header values.
+/* UpdateGroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateGroupNotFound struct {
 
 func (o *UpdateGroupNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}][%d] updateGroupNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateGroupNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateGroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateGroupUnprocessableEntity() *UpdateGroupUnprocessableEntity {
 	return &UpdateGroupUnprocessableEntity{}
 }
 
-/*UpdateGroupUnprocessableEntity handles this case with default header values.
+/* UpdateGroupUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateGroupUnprocessableEntity struct {
 func (o *UpdateGroupUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}][%d] updateGroupUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateGroupUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateGroupUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateGroupTooManyRequests creates a UpdateGroupTooManyRequests with default headers values
+func NewUpdateGroupTooManyRequests() *UpdateGroupTooManyRequests {
+	return &UpdateGroupTooManyRequests{}
+}
+
+/* UpdateGroupTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateGroupTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateGroupTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /groups/{group_id}][%d] updateGroupTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateGroupTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateGroupTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

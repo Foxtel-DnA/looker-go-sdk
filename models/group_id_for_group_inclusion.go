@@ -6,18 +6,18 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // GroupIDForGroupInclusion group Id for group inclusion
+//
 // swagger:model GroupIdForGroupInclusion
 type GroupIDForGroupInclusion struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Id of group
 	// Read Only: true
@@ -26,6 +26,29 @@ type GroupIDForGroupInclusion struct {
 
 // Validate validates this group Id for group inclusion
 func (m *GroupIDForGroupInclusion) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this group Id for group inclusion based on the context it is used
+func (m *GroupIDForGroupInclusion) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GroupIDForGroupInclusion) contextValidateGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "group_id", "body", int64(m.GroupID)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

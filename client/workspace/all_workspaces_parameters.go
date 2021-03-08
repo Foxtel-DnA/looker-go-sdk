@@ -13,56 +13,69 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllWorkspacesParams creates a new AllWorkspacesParams object
-// with the default values initialized.
+// NewAllWorkspacesParams creates a new AllWorkspacesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllWorkspacesParams() *AllWorkspacesParams {
-
 	return &AllWorkspacesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllWorkspacesParamsWithTimeout creates a new AllWorkspacesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllWorkspacesParamsWithTimeout(timeout time.Duration) *AllWorkspacesParams {
-
 	return &AllWorkspacesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllWorkspacesParamsWithContext creates a new AllWorkspacesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllWorkspacesParamsWithContext(ctx context.Context) *AllWorkspacesParams {
-
 	return &AllWorkspacesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllWorkspacesParamsWithHTTPClient creates a new AllWorkspacesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllWorkspacesParamsWithHTTPClient(client *http.Client) *AllWorkspacesParams {
-
 	return &AllWorkspacesParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllWorkspacesParams contains all the parameters to send to the API endpoint
-for the all workspaces operation typically these are written to a http.Request
+/* AllWorkspacesParams contains all the parameters to send to the API endpoint
+   for the all workspaces operation.
+
+   Typically these are written to a http.Request.
 */
 type AllWorkspacesParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all workspaces params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllWorkspacesParams) WithDefaults() *AllWorkspacesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all workspaces params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllWorkspacesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all workspaces params

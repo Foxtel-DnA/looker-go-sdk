@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LookWithQuery look with query
+//
 // swagger:model LookWithQuery
 type LookWithQuery struct {
 
@@ -34,7 +36,7 @@ type LookWithQuery struct {
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
-	// Whether or not the look is deleted
+	// Whether or not a look is 'soft' deleted.
 	Deleted bool `json:"deleted,omitempty"`
 
 	// Time that the Look was deleted.
@@ -61,13 +63,24 @@ type LookWithQuery struct {
 	// Read Only: true
 	FavoriteCount int64 `json:"favorite_count,omitempty"`
 
+	// Folder of this Look
+	// Read Only: true
+	Folder *FolderBase `json:"folder,omitempty"`
+
+	// Folder Id
+	FolderID string `json:"folder_id,omitempty"`
+
 	// Google Spreadsheet Formula
 	// Read Only: true
 	GoogleSpreadsheetFormula string `json:"google_spreadsheet_formula,omitempty"`
 
 	// Unique Id
 	// Read Only: true
-	ID string `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
+
+	// Image Embed Url
+	// Read Only: true
+	ImageEmbedURL string `json:"image_embed_url,omitempty"`
 
 	// auto-run query when Look viewed
 	IsRunOnLoad bool `json:"is_run_on_load,omitempty"`
@@ -91,8 +104,7 @@ type LookWithQuery struct {
 	Model *LookModel `json:"model,omitempty"`
 
 	// Is Public
-	// Read Only: true
-	Public *bool `json:"public,omitempty"`
+	Public bool `json:"public,omitempty"`
 
 	// Public Slug
 	// Read Only: true
@@ -117,8 +129,8 @@ type LookWithQuery struct {
 	// Read Only: true
 	Space *SpaceBase `json:"space,omitempty"`
 
-	// (Write-Only) Space Id
-	SpaceID int64 `json:"space_id,omitempty"`
+	// Space Id
+	SpaceID string `json:"space_id,omitempty"`
 
 	// Look Title
 	Title string `json:"title,omitempty"`
@@ -132,11 +144,11 @@ type LookWithQuery struct {
 	// Read Only: true
 	URL string `json:"url,omitempty"`
 
-	// User
+	// (DEPRECATED) User
 	// Read Only: true
 	User *UserIDOnly `json:"user,omitempty"`
 
-	// (Write-Only) User Id
+	// User Id
 	UserID int64 `json:"user_id,omitempty"`
 
 	// Number of times viewed in the Looker web UI
@@ -153,6 +165,10 @@ func (m *LookWithQuery) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFolder(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -191,7 +207,6 @@ func (m *LookWithQuery) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -204,7 +219,6 @@ func (m *LookWithQuery) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateDeletedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeletedAt) { // not required
 		return nil
 	}
@@ -216,8 +230,24 @@ func (m *LookWithQuery) validateDeletedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *LookWithQuery) validateLastAccessedAt(formats strfmt.Registry) error {
+func (m *LookWithQuery) validateFolder(formats strfmt.Registry) error {
+	if swag.IsZero(m.Folder) { // not required
+		return nil
+	}
 
+	if m.Folder != nil {
+		if err := m.Folder.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) validateLastAccessedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.LastAccessedAt) { // not required
 		return nil
 	}
@@ -230,7 +260,6 @@ func (m *LookWithQuery) validateLastAccessedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateLastViewedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastViewedAt) { // not required
 		return nil
 	}
@@ -243,7 +272,6 @@ func (m *LookWithQuery) validateLastViewedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateModel(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Model) { // not required
 		return nil
 	}
@@ -261,7 +289,6 @@ func (m *LookWithQuery) validateModel(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
@@ -279,7 +306,6 @@ func (m *LookWithQuery) validateQuery(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateSpace(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Space) { // not required
 		return nil
 	}
@@ -297,7 +323,6 @@ func (m *LookWithQuery) validateSpace(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -310,7 +335,6 @@ func (m *LookWithQuery) validateUpdatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithQuery) validateUser(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.User) { // not required
 		return nil
 	}
@@ -322,6 +346,375 @@ func (m *LookWithQuery) validateUser(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this look with query based on the context it is used
+func (m *LookWithQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentFavoriteID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeletedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleterID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmbedURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExcelFileURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFavoriteCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFolder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGoogleSpreadsheetFormula(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImageEmbedURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastAccessedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdaterID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastViewedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePublicSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePublicURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShortURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateContentFavoriteID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_favorite_id", "body", int64(m.ContentFavoriteID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateDeletedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleted_at", "body", strfmt.DateTime(m.DeletedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateDeleterID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleter_id", "body", int64(m.DeleterID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateEmbedURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "embed_url", "body", string(m.EmbedURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateExcelFileURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "excel_file_url", "body", string(m.ExcelFileURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateFavoriteCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "favorite_count", "body", int64(m.FavoriteCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateFolder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Folder != nil {
+		if err := m.Folder.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateGoogleSpreadsheetFormula(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "google_spreadsheet_formula", "body", string(m.GoogleSpreadsheetFormula)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateImageEmbedURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "image_embed_url", "body", string(m.ImageEmbedURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateLastAccessedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_accessed_at", "body", strfmt.DateTime(m.LastAccessedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateLastUpdaterID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updater_id", "body", int64(m.LastUpdaterID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateLastViewedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_viewed_at", "body", strfmt.DateTime(m.LastViewedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateModel(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Model != nil {
+		if err := m.Model.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("model")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidatePublicSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "public_slug", "body", string(m.PublicSlug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidatePublicURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "public_url", "body", string(m.PublicURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateShortURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "short_url", "body", string(m.ShortURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateSpace(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Space != nil {
+		if err := m.Space.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("space")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", string(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.User != nil {
+		if err := m.User.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("user")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithQuery) contextValidateViewCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_count", "body", int64(m.ViewCount)); err != nil {
+		return err
 	}
 
 	return nil

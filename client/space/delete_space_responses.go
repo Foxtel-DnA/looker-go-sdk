@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteSpaceReader is a Reader for the DeleteSpace structure.
@@ -24,30 +23,32 @@ type DeleteSpaceReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteSpaceReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteSpaceNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteSpaceBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteSpaceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteSpaceTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteSpaceNoContent() *DeleteSpaceNoContent {
 	return &DeleteSpaceNoContent{}
 }
 
-/*DeleteSpaceNoContent handles this case with default header values.
+/* DeleteSpaceNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteSpaceNoContent struct {
 
 func (o *DeleteSpaceNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /spaces/{space_id}][%d] deleteSpaceNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteSpaceNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteSpaceNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteSpaceBadRequest() *DeleteSpaceBadRequest {
 	return &DeleteSpaceBadRequest{}
 }
 
-/*DeleteSpaceBadRequest handles this case with default header values.
+/* DeleteSpaceBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteSpaceBadRequest struct {
 
 func (o *DeleteSpaceBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /spaces/{space_id}][%d] deleteSpaceBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteSpaceBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteSpaceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteSpaceNotFound() *DeleteSpaceNotFound {
 	return &DeleteSpaceNotFound{}
 }
 
-/*DeleteSpaceNotFound handles this case with default header values.
+/* DeleteSpaceNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteSpaceNotFound struct {
 func (o *DeleteSpaceNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /spaces/{space_id}][%d] deleteSpaceNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteSpaceNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteSpaceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteSpaceTooManyRequests creates a DeleteSpaceTooManyRequests with default headers values
+func NewDeleteSpaceTooManyRequests() *DeleteSpaceTooManyRequests {
+	return &DeleteSpaceTooManyRequests{}
+}
+
+/* DeleteSpaceTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteSpaceTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteSpaceTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /spaces/{space_id}][%d] deleteSpaceTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteSpaceTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteSpaceTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

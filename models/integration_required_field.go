@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // IntegrationRequiredField integration required field
+//
 // swagger:model IntegrationRequiredField
 type IntegrationRequiredField struct {
 
@@ -30,6 +34,55 @@ type IntegrationRequiredField struct {
 
 // Validate validates this integration required field
 func (m *IntegrationRequiredField) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this integration required field based on the context it is used
+func (m *IntegrationRequiredField) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAllTags(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAnyTag(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTag(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *IntegrationRequiredField) contextValidateAllTags(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "all_tags", "body", []string(m.AllTags)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationRequiredField) contextValidateAnyTag(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "any_tag", "body", []string(m.AnyTag)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationRequiredField) contextValidateTag(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "tag", "body", string(m.Tag)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

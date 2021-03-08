@@ -6,13 +6,14 @@ package data_action
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new data action API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,18 +25,29 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-FetchRemoteDataActionForm fetches remote data action form
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	FetchRemoteDataActionForm(params *FetchRemoteDataActionFormParams, opts ...ClientOption) (*FetchRemoteDataActionFormOK, error)
+
+	PerformDataAction(params *PerformDataActionParams, opts ...ClientOption) (*PerformDataActionOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  FetchRemoteDataActionForm fetches remote data action form
+
+  For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
 */
-func (a *Client) FetchRemoteDataActionForm(params *FetchRemoteDataActionFormParams) (*FetchRemoteDataActionFormOK, error) {
+func (a *Client) FetchRemoteDataActionForm(params *FetchRemoteDataActionFormParams, opts ...ClientOption) (*FetchRemoteDataActionFormOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFetchRemoteDataActionFormParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "fetch_remote_data_action_form",
 		Method:             "POST",
 		PathPattern:        "/data_actions/form",
@@ -46,26 +58,36 @@ func (a *Client) FetchRemoteDataActionForm(params *FetchRemoteDataActionFormPara
 		Reader:             &FetchRemoteDataActionFormReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*FetchRemoteDataActionFormOK), nil
-
+	success, ok := result.(*FetchRemoteDataActionFormOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for fetch_remote_data_action_form: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PerformDataAction sends a data action
+  PerformDataAction sends a data action
 
-Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
+  Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
 */
-func (a *Client) PerformDataAction(params *PerformDataActionParams) (*PerformDataActionOK, error) {
+func (a *Client) PerformDataAction(params *PerformDataActionParams, opts ...ClientOption) (*PerformDataActionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPerformDataActionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "perform_data_action",
 		Method:             "POST",
 		PathPattern:        "/data_actions",
@@ -76,12 +98,23 @@ func (a *Client) PerformDataAction(params *PerformDataActionParams) (*PerformDat
 		Reader:             &PerformDataActionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*PerformDataActionOK), nil
-
+	success, ok := result.(*PerformDataActionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for perform_data_action: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

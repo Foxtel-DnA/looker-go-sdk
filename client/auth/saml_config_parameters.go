@@ -13,56 +13,69 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSamlConfigParams creates a new SamlConfigParams object
-// with the default values initialized.
+// NewSamlConfigParams creates a new SamlConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSamlConfigParams() *SamlConfigParams {
-
 	return &SamlConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSamlConfigParamsWithTimeout creates a new SamlConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSamlConfigParamsWithTimeout(timeout time.Duration) *SamlConfigParams {
-
 	return &SamlConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSamlConfigParamsWithContext creates a new SamlConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSamlConfigParamsWithContext(ctx context.Context) *SamlConfigParams {
-
 	return &SamlConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSamlConfigParamsWithHTTPClient creates a new SamlConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSamlConfigParamsWithHTTPClient(client *http.Client) *SamlConfigParams {
-
 	return &SamlConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*SamlConfigParams contains all the parameters to send to the API endpoint
-for the saml config operation typically these are written to a http.Request
+/* SamlConfigParams contains all the parameters to send to the API endpoint
+   for the saml config operation.
+
+   Typically these are written to a http.Request.
 */
 type SamlConfigParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the saml config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SamlConfigParams) WithDefaults() *SamlConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the saml config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SamlConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the saml config params

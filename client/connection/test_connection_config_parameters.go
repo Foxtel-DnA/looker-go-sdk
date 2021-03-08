@@ -13,71 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewTestConnectionConfigParams creates a new TestConnectionConfigParams object
-// with the default values initialized.
+// NewTestConnectionConfigParams creates a new TestConnectionConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewTestConnectionConfigParams() *TestConnectionConfigParams {
-	var ()
 	return &TestConnectionConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewTestConnectionConfigParamsWithTimeout creates a new TestConnectionConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewTestConnectionConfigParamsWithTimeout(timeout time.Duration) *TestConnectionConfigParams {
-	var ()
 	return &TestConnectionConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewTestConnectionConfigParamsWithContext creates a new TestConnectionConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewTestConnectionConfigParamsWithContext(ctx context.Context) *TestConnectionConfigParams {
-	var ()
 	return &TestConnectionConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewTestConnectionConfigParamsWithHTTPClient creates a new TestConnectionConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewTestConnectionConfigParamsWithHTTPClient(client *http.Client) *TestConnectionConfigParams {
-	var ()
 	return &TestConnectionConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*TestConnectionConfigParams contains all the parameters to send to the API endpoint
-for the test connection config operation typically these are written to a http.Request
+/* TestConnectionConfigParams contains all the parameters to send to the API endpoint
+   for the test connection config operation.
+
+   Typically these are written to a http.Request.
 */
 type TestConnectionConfigParams struct {
 
-	/*Body
-	  Connection
+	/* Body.
 
+	   Connection
 	*/
 	Body *models.DBConnection
-	/*Tests
-	  Array of names of tests to run
 
+	/* Tests.
+
+	   Array of names of tests to run
 	*/
 	Tests []string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the test connection config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestConnectionConfigParams) WithDefaults() *TestConnectionConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the test connection config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestConnectionConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the test connection config params
@@ -142,23 +156,42 @@ func (o *TestConnectionConfigParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
 		}
 	}
 
-	valuesTests := o.Tests
+	if o.Tests != nil {
 
-	joinedTests := swag.JoinByFormat(valuesTests, "csv")
-	// query array param tests
-	if err := r.SetQueryParam("tests", joinedTests...); err != nil {
-		return err
+		// binding items for tests
+		joinedTests := o.bindParamTests(reg)
+
+		// query array param tests
+		if err := r.SetQueryParam("tests", joinedTests...); err != nil {
+			return err
+		}
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamTestConnectionConfig binds the parameter tests
+func (o *TestConnectionConfigParams) bindParamTests(formats strfmt.Registry) []string {
+	testsIR := o.Tests
+
+	var testsIC []string
+	for _, testsIIR := range testsIR { // explode []string
+
+		testsIIV := testsIIR // string as string
+		testsIC = append(testsIC, testsIIV)
+	}
+
+	// items.CollectionFormat: "csv"
+	testsIS := swag.JoinByFormat(testsIC, "csv")
+
+	return testsIS
 }

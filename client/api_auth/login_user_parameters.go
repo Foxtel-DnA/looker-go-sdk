@@ -13,64 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewLoginUserParams creates a new LoginUserParams object
-// with the default values initialized.
+// NewLoginUserParams creates a new LoginUserParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewLoginUserParams() *LoginUserParams {
-	var ()
 	return &LoginUserParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewLoginUserParamsWithTimeout creates a new LoginUserParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewLoginUserParamsWithTimeout(timeout time.Duration) *LoginUserParams {
-	var ()
 	return &LoginUserParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewLoginUserParamsWithContext creates a new LoginUserParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewLoginUserParamsWithContext(ctx context.Context) *LoginUserParams {
-	var ()
 	return &LoginUserParams{
-
 		Context: ctx,
 	}
 }
 
 // NewLoginUserParamsWithHTTPClient creates a new LoginUserParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewLoginUserParamsWithHTTPClient(client *http.Client) *LoginUserParams {
-	var ()
 	return &LoginUserParams{
 		HTTPClient: client,
 	}
 }
 
-/*LoginUserParams contains all the parameters to send to the API endpoint
-for the login user operation typically these are written to a http.Request
+/* LoginUserParams contains all the parameters to send to the API endpoint
+   for the login user operation.
+
+   Typically these are written to a http.Request.
 */
 type LoginUserParams struct {
 
-	/*UserID
-	  Id of user.
+	/* Associative.
 
+	   When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
+	*/
+	Associative *bool
+
+	/* UserID.
+
+	   Id of user.
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the login user params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LoginUserParams) WithDefaults() *LoginUserParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the login user params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LoginUserParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the login user params
@@ -106,6 +127,17 @@ func (o *LoginUserParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithAssociative adds the associative to the login user params
+func (o *LoginUserParams) WithAssociative(associative *bool) *LoginUserParams {
+	o.SetAssociative(associative)
+	return o
+}
+
+// SetAssociative adds the associative to the login user params
+func (o *LoginUserParams) SetAssociative(associative *bool) {
+	o.Associative = associative
+}
+
 // WithUserID adds the userID to the login user params
 func (o *LoginUserParams) WithUserID(userID int64) *LoginUserParams {
 	o.SetUserID(userID)
@@ -124,6 +156,23 @@ func (o *LoginUserParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 		return err
 	}
 	var res []error
+
+	if o.Associative != nil {
+
+		// query param associative
+		var qrAssociative bool
+
+		if o.Associative != nil {
+			qrAssociative = *o.Associative
+		}
+		qAssociative := swag.FormatBool(qrAssociative)
+		if qAssociative != "" {
+
+			if err := r.SetQueryParam("associative", qAssociative); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param user_id
 	if err := r.SetPathParam("user_id", swag.FormatInt64(o.UserID)); err != nil {

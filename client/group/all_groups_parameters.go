@@ -13,94 +13,119 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewAllGroupsParams creates a new AllGroupsParams object
-// with the default values initialized.
+// NewAllGroupsParams creates a new AllGroupsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllGroupsParams() *AllGroupsParams {
-	var ()
 	return &AllGroupsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllGroupsParamsWithTimeout creates a new AllGroupsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllGroupsParamsWithTimeout(timeout time.Duration) *AllGroupsParams {
-	var ()
 	return &AllGroupsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllGroupsParamsWithContext creates a new AllGroupsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllGroupsParamsWithContext(ctx context.Context) *AllGroupsParams {
-	var ()
 	return &AllGroupsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllGroupsParamsWithHTTPClient creates a new AllGroupsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllGroupsParamsWithHTTPClient(client *http.Client) *AllGroupsParams {
-	var ()
 	return &AllGroupsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllGroupsParams contains all the parameters to send to the API endpoint
-for the all groups operation typically these are written to a http.Request
+/* AllGroupsParams contains all the parameters to send to the API endpoint
+   for the all groups operation.
+
+   Typically these are written to a http.Request.
 */
 type AllGroupsParams struct {
 
-	/*CanAddToContentMetadata
-	  Select only groups that either can/cannot be given access to content.
+	/* CanAddToContentMetadata.
 
+	   Select only groups that either can/cannot be given access to content.
 	*/
 	CanAddToContentMetadata *bool
-	/*ContentMetadataID
-	  Id of content metadata to which groups must have access.
 
+	/* ContentMetadataID.
+
+	   Id of content metadata to which groups must have access.
+
+	   Format: int64
 	*/
 	ContentMetadataID *int64
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*Ids
-	  Optional of ids to get specific groups.
 
+	/* Ids.
+
+	   Optional of ids to get specific groups.
 	*/
 	Ids []int64
-	/*Page
-	  Requested page.
 
+	/* Page.
+
+	   Requested page.
+
+	   Format: int64
 	*/
 	Page *int64
-	/*PerPage
-	  Results per page.
 
+	/* PerPage.
+
+	   Results per page.
+
+	   Format: int64
 	*/
 	PerPage *int64
-	/*Sorts
-	  Fields to sort by.
 
+	/* Sorts.
+
+	   Fields to sort by.
 	*/
 	Sorts *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllGroupsParams) WithDefaults() *AllGroupsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllGroupsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all groups params
@@ -225,111 +250,134 @@ func (o *AllGroupsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 
 		// query param can_add_to_content_metadata
 		var qrCanAddToContentMetadata bool
+
 		if o.CanAddToContentMetadata != nil {
 			qrCanAddToContentMetadata = *o.CanAddToContentMetadata
 		}
 		qCanAddToContentMetadata := swag.FormatBool(qrCanAddToContentMetadata)
 		if qCanAddToContentMetadata != "" {
+
 			if err := r.SetQueryParam("can_add_to_content_metadata", qCanAddToContentMetadata); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ContentMetadataID != nil {
 
 		// query param content_metadata_id
 		var qrContentMetadataID int64
+
 		if o.ContentMetadataID != nil {
 			qrContentMetadataID = *o.ContentMetadataID
 		}
 		qContentMetadataID := swag.FormatInt64(qrContentMetadataID)
 		if qContentMetadataID != "" {
+
 			if err := r.SetQueryParam("content_metadata_id", qContentMetadataID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
-	var valuesIds []string
-	for _, v := range o.Ids {
-		valuesIds = append(valuesIds, swag.FormatInt64(v))
-	}
+	if o.Ids != nil {
 
-	joinedIds := swag.JoinByFormat(valuesIds, "csv")
-	// query array param ids
-	if err := r.SetQueryParam("ids", joinedIds...); err != nil {
-		return err
+		// binding items for ids
+		joinedIds := o.bindParamIds(reg)
+
+		// query array param ids
+		if err := r.SetQueryParam("ids", joinedIds...); err != nil {
+			return err
+		}
 	}
 
 	if o.Page != nil {
 
 		// query param page
 		var qrPage int64
+
 		if o.Page != nil {
 			qrPage = *o.Page
 		}
 		qPage := swag.FormatInt64(qrPage)
 		if qPage != "" {
+
 			if err := r.SetQueryParam("page", qPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PerPage != nil {
 
 		// query param per_page
 		var qrPerPage int64
+
 		if o.PerPage != nil {
 			qrPerPage = *o.PerPage
 		}
 		qPerPage := swag.FormatInt64(qrPerPage)
 		if qPerPage != "" {
+
 			if err := r.SetQueryParam("per_page", qPerPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
+}
+
+// bindParamAllGroups binds the parameter ids
+func (o *AllGroupsParams) bindParamIds(formats strfmt.Registry) []string {
+	idsIR := o.Ids
+
+	var idsIC []string
+	for _, idsIIR := range idsIR { // explode []int64
+
+		idsIIV := swag.FormatInt64(idsIIR) // int64 as string
+		idsIC = append(idsIC, idsIIV)
+	}
+
+	// items.CollectionFormat: "csv"
+	idsIS := swag.JoinByFormat(idsIC, "csv")
+
+	return idsIS
 }

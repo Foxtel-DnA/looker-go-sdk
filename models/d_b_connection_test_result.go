@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DBConnectionTestResult d b connection test result
+//
 // swagger:model DBConnectionTestResult
 type DBConnectionTestResult struct {
 
@@ -38,6 +42,77 @@ type DBConnectionTestResult struct {
 
 // Validate validates this d b connection test result
 func (m *DBConnectionTestResult) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this d b connection test result based on the context it is used
+func (m *DBConnectionTestResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateConnectionString(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DBConnectionTestResult) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DBConnectionTestResult) contextValidateConnectionString(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "connection_string", "body", string(m.ConnectionString)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnectionTestResult) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnectionTestResult) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnectionTestResult) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "status", "body", string(m.Status)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

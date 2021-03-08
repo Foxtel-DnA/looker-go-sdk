@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateUserReader is a Reader for the UpdateUser structure.
@@ -24,37 +23,32 @@ type UpdateUserReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateUserReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateUserOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateUserBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateUserNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateUserUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewUpdateUserOK() *UpdateUserOK {
 	return &UpdateUserOK{}
 }
 
-/*UpdateUserOK handles this case with default header values.
+/* UpdateUserOK describes a response with status code 200, with default header values.
 
 New state for specified user.
 */
@@ -73,6 +67,9 @@ type UpdateUserOK struct {
 
 func (o *UpdateUserOK) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}][%d] updateUserOK  %+v", 200, o.Payload)
+}
+func (o *UpdateUserOK) GetPayload() *models.User {
+	return o.Payload
 }
 
 func (o *UpdateUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewUpdateUserBadRequest() *UpdateUserBadRequest {
 	return &UpdateUserBadRequest{}
 }
 
-/*UpdateUserBadRequest handles this case with default header values.
+/* UpdateUserBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type UpdateUserBadRequest struct {
 
 func (o *UpdateUserBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}][%d] updateUserBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateUserBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateUserBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewUpdateUserNotFound() *UpdateUserNotFound {
 	return &UpdateUserNotFound{}
 }
 
-/*UpdateUserNotFound handles this case with default header values.
+/* UpdateUserNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type UpdateUserNotFound struct {
 
 func (o *UpdateUserNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}][%d] updateUserNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateUserNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewUpdateUserUnprocessableEntity() *UpdateUserUnprocessableEntity {
 	return &UpdateUserUnprocessableEntity{}
 }
 
-/*UpdateUserUnprocessableEntity handles this case with default header values.
+/* UpdateUserUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type UpdateUserUnprocessableEntity struct {
 
 func (o *UpdateUserUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}][%d] updateUserUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *UpdateUserUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *UpdateUserUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

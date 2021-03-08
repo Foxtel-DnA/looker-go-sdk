@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateSamlTestConfigReader is a Reader for the CreateSamlTestConfig structure.
@@ -24,37 +23,32 @@ type CreateSamlTestConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateSamlTestConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateSamlTestConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateSamlTestConfigBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateSamlTestConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateSamlTestConfigUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewCreateSamlTestConfigOK() *CreateSamlTestConfigOK {
 	return &CreateSamlTestConfigOK{}
 }
 
-/*CreateSamlTestConfigOK handles this case with default header values.
+/* CreateSamlTestConfigOK describes a response with status code 200, with default header values.
 
 SAML test config
 */
@@ -73,6 +67,9 @@ type CreateSamlTestConfigOK struct {
 
 func (o *CreateSamlTestConfigOK) Error() string {
 	return fmt.Sprintf("[POST /saml_test_configs][%d] createSamlTestConfigOK  %+v", 200, o.Payload)
+}
+func (o *CreateSamlTestConfigOK) GetPayload() *models.SamlConfig {
+	return o.Payload
 }
 
 func (o *CreateSamlTestConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewCreateSamlTestConfigBadRequest() *CreateSamlTestConfigBadRequest {
 	return &CreateSamlTestConfigBadRequest{}
 }
 
-/*CreateSamlTestConfigBadRequest handles this case with default header values.
+/* CreateSamlTestConfigBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type CreateSamlTestConfigBadRequest struct {
 
 func (o *CreateSamlTestConfigBadRequest) Error() string {
 	return fmt.Sprintf("[POST /saml_test_configs][%d] createSamlTestConfigBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateSamlTestConfigBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateSamlTestConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewCreateSamlTestConfigNotFound() *CreateSamlTestConfigNotFound {
 	return &CreateSamlTestConfigNotFound{}
 }
 
-/*CreateSamlTestConfigNotFound handles this case with default header values.
+/* CreateSamlTestConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type CreateSamlTestConfigNotFound struct {
 
 func (o *CreateSamlTestConfigNotFound) Error() string {
 	return fmt.Sprintf("[POST /saml_test_configs][%d] createSamlTestConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateSamlTestConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateSamlTestConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewCreateSamlTestConfigUnprocessableEntity() *CreateSamlTestConfigUnprocess
 	return &CreateSamlTestConfigUnprocessableEntity{}
 }
 
-/*CreateSamlTestConfigUnprocessableEntity handles this case with default header values.
+/* CreateSamlTestConfigUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type CreateSamlTestConfigUnprocessableEntity struct {
 
 func (o *CreateSamlTestConfigUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /saml_test_configs][%d] createSamlTestConfigUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *CreateSamlTestConfigUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *CreateSamlTestConfigUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

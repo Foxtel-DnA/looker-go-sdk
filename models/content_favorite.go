@@ -6,19 +6,18 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ContentFavorite content favorite
+//
 // swagger:model ContentFavorite
 type ContentFavorite struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Content Metadata Id associated with this ContentFavorite
 	ContentMetadataID int64 `json:"content_metadata_id,omitempty"`
@@ -66,7 +65,6 @@ func (m *ContentFavorite) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ContentFavorite) validateDashboard(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dashboard) { // not required
 		return nil
 	}
@@ -84,7 +82,6 @@ func (m *ContentFavorite) validateDashboard(formats strfmt.Registry) error {
 }
 
 func (m *ContentFavorite) validateLook(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Look) { // not required
 		return nil
 	}
@@ -96,6 +93,91 @@ func (m *ContentFavorite) validateLook(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this content favorite based on the context it is used
+func (m *ContentFavorite) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDashboard(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLook(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ContentFavorite) contextValidateDashboard(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Dashboard != nil {
+		if err := m.Dashboard.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("dashboard")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ContentFavorite) contextValidateDashboardID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_id", "body", int64(m.DashboardID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentFavorite) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentFavorite) contextValidateLook(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Look != nil {
+		if err := m.Look.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("look")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ContentFavorite) contextValidateLookID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "look_id", "body", int64(m.LookID)); err != nil {
+		return err
 	}
 
 	return nil

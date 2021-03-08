@@ -13,73 +13,88 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllHomepageItemsParams creates a new AllHomepageItemsParams object
-// with the default values initialized.
+// NewAllHomepageItemsParams creates a new AllHomepageItemsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllHomepageItemsParams() *AllHomepageItemsParams {
-	var ()
 	return &AllHomepageItemsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllHomepageItemsParamsWithTimeout creates a new AllHomepageItemsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllHomepageItemsParamsWithTimeout(timeout time.Duration) *AllHomepageItemsParams {
-	var ()
 	return &AllHomepageItemsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllHomepageItemsParamsWithContext creates a new AllHomepageItemsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllHomepageItemsParamsWithContext(ctx context.Context) *AllHomepageItemsParams {
-	var ()
 	return &AllHomepageItemsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllHomepageItemsParamsWithHTTPClient creates a new AllHomepageItemsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllHomepageItemsParamsWithHTTPClient(client *http.Client) *AllHomepageItemsParams {
-	var ()
 	return &AllHomepageItemsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllHomepageItemsParams contains all the parameters to send to the API endpoint
-for the all homepage items operation typically these are written to a http.Request
+/* AllHomepageItemsParams contains all the parameters to send to the API endpoint
+   for the all homepage items operation.
+
+   Typically these are written to a http.Request.
 */
 type AllHomepageItemsParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*HomepageSectionID
-	  Filter to a specific homepage section
 
+	/* HomepageSectionID.
+
+	   Filter to a specific homepage section
 	*/
 	HomepageSectionID *string
-	/*Sorts
-	  Fields to sort by.
 
+	/* Sorts.
+
+	   Fields to sort by.
 	*/
 	Sorts *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all homepage items params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllHomepageItemsParams) WithDefaults() *AllHomepageItemsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all homepage items params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllHomepageItemsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all homepage items params
@@ -160,48 +175,51 @@ func (o *AllHomepageItemsParams) WriteToRequest(r runtime.ClientRequest, reg str
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.HomepageSectionID != nil {
 
 		// query param homepage_section_id
 		var qrHomepageSectionID string
+
 		if o.HomepageSectionID != nil {
 			qrHomepageSectionID = *o.HomepageSectionID
 		}
 		qHomepageSectionID := qrHomepageSectionID
 		if qHomepageSectionID != "" {
+
 			if err := r.SetQueryParam("homepage_section_id", qHomepageSectionID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

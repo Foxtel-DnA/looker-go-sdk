@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // UserAttributeWithValue user attribute with value
+//
 // swagger:model UserAttributeWithValue
 type UserAttributeWithValue struct {
 
@@ -61,6 +65,142 @@ type UserAttributeWithValue struct {
 
 // Validate validates this user attribute with value
 func (m *UserAttributeWithValue) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this user attribute with value based on the context it is used
+func (m *UserAttributeWithValue) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHiddenValueDomainWhitelist(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRank(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributeID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserCanEdit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValueIsHidden(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateHiddenValueDomainWhitelist(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "hidden_value_domain_whitelist", "body", string(m.HiddenValueDomainWhitelist)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateRank(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "rank", "body", int64(m.Rank)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "source", "body", string(m.Source)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateUserAttributeID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attribute_id", "body", int64(m.UserAttributeID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateUserCanEdit(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_can_edit", "body", m.UserCanEdit); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", int64(m.UserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttributeWithValue) contextValidateValueIsHidden(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "value_is_hidden", "body", m.ValueIsHidden); err != nil {
+		return err
+	}
+
 	return nil
 }
 

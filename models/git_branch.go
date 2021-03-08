@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // GitBranch git branch
+//
 // swagger:model GitBranch
 type GitBranch struct {
 
@@ -84,6 +88,207 @@ type GitBranch struct {
 
 // Validate validates this git branch
 func (m *GitBranch) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this git branch based on the context it is used
+func (m *GitBranch) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAheadCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBehindCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCommitAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsLocal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsProduction(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsRemote(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOwnerName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePersonal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReadonly(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRemote(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRemoteName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRemoteRef(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GitBranch) contextValidateAheadCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ahead_count", "body", int64(m.AheadCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateBehindCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "behind_count", "body", int64(m.BehindCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateCommitAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "commit_at", "body", int64(m.CommitAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "error", "body", string(m.Error)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateIsLocal(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_local", "body", m.IsLocal); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateIsProduction(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_production", "body", m.IsProduction); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateIsRemote(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_remote", "body", m.IsRemote); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateOwnerName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "owner_name", "body", string(m.OwnerName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidatePersonal(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "personal", "body", m.Personal); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateReadonly(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "readonly", "body", m.Readonly); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateRemote(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "remote", "body", string(m.Remote)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateRemoteName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "remote_name", "body", string(m.RemoteName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitBranch) contextValidateRemoteRef(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "remote_ref", "body", string(m.RemoteRef)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

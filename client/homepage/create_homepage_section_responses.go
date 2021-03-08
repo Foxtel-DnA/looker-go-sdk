@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateHomepageSectionReader is a Reader for the CreateHomepageSection structure.
@@ -24,44 +23,44 @@ type CreateHomepageSectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateHomepageSectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateHomepageSectionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateHomepageSectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateHomepageSectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateHomepageSectionConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateHomepageSectionUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateHomepageSectionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateHomepageSectionOK() *CreateHomepageSectionOK {
 	return &CreateHomepageSectionOK{}
 }
 
-/*CreateHomepageSectionOK handles this case with default header values.
+/* CreateHomepageSectionOK describes a response with status code 200, with default header values.
 
 Homepage section
 */
@@ -80,6 +79,9 @@ type CreateHomepageSectionOK struct {
 
 func (o *CreateHomepageSectionOK) Error() string {
 	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionOK  %+v", 200, o.Payload)
+}
+func (o *CreateHomepageSectionOK) GetPayload() *models.HomepageSection {
+	return o.Payload
 }
 
 func (o *CreateHomepageSectionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateHomepageSectionBadRequest() *CreateHomepageSectionBadRequest {
 	return &CreateHomepageSectionBadRequest{}
 }
 
-/*CreateHomepageSectionBadRequest handles this case with default header values.
+/* CreateHomepageSectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateHomepageSectionBadRequest struct {
 
 func (o *CreateHomepageSectionBadRequest) Error() string {
 	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateHomepageSectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateHomepageSectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateHomepageSectionNotFound() *CreateHomepageSectionNotFound {
 	return &CreateHomepageSectionNotFound{}
 }
 
-/*CreateHomepageSectionNotFound handles this case with default header values.
+/* CreateHomepageSectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateHomepageSectionNotFound struct {
 
 func (o *CreateHomepageSectionNotFound) Error() string {
 	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateHomepageSectionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateHomepageSectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateHomepageSectionConflict() *CreateHomepageSectionConflict {
 	return &CreateHomepageSectionConflict{}
 }
 
-/*CreateHomepageSectionConflict handles this case with default header values.
+/* CreateHomepageSectionConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateHomepageSectionConflict struct {
 
 func (o *CreateHomepageSectionConflict) Error() string {
 	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionConflict  %+v", 409, o.Payload)
+}
+func (o *CreateHomepageSectionConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateHomepageSectionConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateHomepageSectionUnprocessableEntity() *CreateHomepageSectionUnproce
 	return &CreateHomepageSectionUnprocessableEntity{}
 }
 
-/*CreateHomepageSectionUnprocessableEntity handles this case with default header values.
+/* CreateHomepageSectionUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateHomepageSectionUnprocessableEntity struct {
 func (o *CreateHomepageSectionUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateHomepageSectionUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateHomepageSectionUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateHomepageSectionTooManyRequests creates a CreateHomepageSectionTooManyRequests with default headers values
+func NewCreateHomepageSectionTooManyRequests() *CreateHomepageSectionTooManyRequests {
+	return &CreateHomepageSectionTooManyRequests{}
+}
+
+/* CreateHomepageSectionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateHomepageSectionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateHomepageSectionTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /homepage_sections][%d] createHomepageSectionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateHomepageSectionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateHomepageSectionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

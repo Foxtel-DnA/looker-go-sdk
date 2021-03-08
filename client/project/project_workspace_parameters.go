@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewProjectWorkspaceParams creates a new ProjectWorkspaceParams object
-// with the default values initialized.
+// NewProjectWorkspaceParams creates a new ProjectWorkspaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewProjectWorkspaceParams() *ProjectWorkspaceParams {
-	var ()
 	return &ProjectWorkspaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewProjectWorkspaceParamsWithTimeout creates a new ProjectWorkspaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewProjectWorkspaceParamsWithTimeout(timeout time.Duration) *ProjectWorkspaceParams {
-	var ()
 	return &ProjectWorkspaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewProjectWorkspaceParamsWithContext creates a new ProjectWorkspaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewProjectWorkspaceParamsWithContext(ctx context.Context) *ProjectWorkspaceParams {
-	var ()
 	return &ProjectWorkspaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewProjectWorkspaceParamsWithHTTPClient creates a new ProjectWorkspaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewProjectWorkspaceParamsWithHTTPClient(client *http.Client) *ProjectWorkspaceParams {
-	var ()
 	return &ProjectWorkspaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*ProjectWorkspaceParams contains all the parameters to send to the API endpoint
-for the project workspace operation typically these are written to a http.Request
+/* ProjectWorkspaceParams contains all the parameters to send to the API endpoint
+   for the project workspace operation.
+
+   Typically these are written to a http.Request.
 */
 type ProjectWorkspaceParams struct {
 
-	/*Fields
-	  Requested fields
+	/* Fields.
 
+	   Requested fields
 	*/
 	Fields *string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the project workspace params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectWorkspaceParams) WithDefaults() *ProjectWorkspaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the project workspace params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectWorkspaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the project workspace params
@@ -144,16 +158,17 @@ func (o *ProjectWorkspaceParams) WriteToRequest(r runtime.ClientRequest, reg str
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param project_id

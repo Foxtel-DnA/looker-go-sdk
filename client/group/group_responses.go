@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // GroupReader is a Reader for the Group structure.
@@ -24,30 +23,26 @@ type GroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *GroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewGroupOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewGroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewGroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewGroupOK() *GroupOK {
 	return &GroupOK{}
 }
 
-/*GroupOK handles this case with default header values.
+/* GroupOK describes a response with status code 200, with default header values.
 
 Group
 */
@@ -66,6 +61,9 @@ type GroupOK struct {
 
 func (o *GroupOK) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}][%d] groupOK  %+v", 200, o.Payload)
+}
+func (o *GroupOK) GetPayload() *models.Group {
+	return o.Payload
 }
 
 func (o *GroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewGroupBadRequest() *GroupBadRequest {
 	return &GroupBadRequest{}
 }
 
-/*GroupBadRequest handles this case with default header values.
+/* GroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type GroupBadRequest struct {
 
 func (o *GroupBadRequest) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}][%d] groupBadRequest  %+v", 400, o.Payload)
+}
+func (o *GroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *GroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewGroupNotFound() *GroupNotFound {
 	return &GroupNotFound{}
 }
 
-/*GroupNotFound handles this case with default header values.
+/* GroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type GroupNotFound struct {
 
 func (o *GroupNotFound) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}][%d] groupNotFound  %+v", 404, o.Payload)
+}
+func (o *GroupNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *GroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // AllContentMetadatasReader is a Reader for the AllContentMetadatas structure.
@@ -24,30 +23,26 @@ type AllContentMetadatasReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllContentMetadatasReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllContentMetadatasOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllContentMetadatasBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllContentMetadatasNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllContentMetadatasOK() *AllContentMetadatasOK {
 	return &AllContentMetadatasOK{}
 }
 
-/*AllContentMetadatasOK handles this case with default header values.
+/* AllContentMetadatasOK describes a response with status code 200, with default header values.
 
 Content Metadata
 */
@@ -66,6 +61,9 @@ type AllContentMetadatasOK struct {
 
 func (o *AllContentMetadatasOK) Error() string {
 	return fmt.Sprintf("[GET /content_metadata][%d] allContentMetadatasOK  %+v", 200, o.Payload)
+}
+func (o *AllContentMetadatasOK) GetPayload() []*models.ContentMeta {
+	return o.Payload
 }
 
 func (o *AllContentMetadatasOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllContentMetadatasBadRequest() *AllContentMetadatasBadRequest {
 	return &AllContentMetadatasBadRequest{}
 }
 
-/*AllContentMetadatasBadRequest handles this case with default header values.
+/* AllContentMetadatasBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllContentMetadatasBadRequest struct {
 
 func (o *AllContentMetadatasBadRequest) Error() string {
 	return fmt.Sprintf("[GET /content_metadata][%d] allContentMetadatasBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllContentMetadatasBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllContentMetadatasBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllContentMetadatasNotFound() *AllContentMetadatasNotFound {
 	return &AllContentMetadatasNotFound{}
 }
 
-/*AllContentMetadatasNotFound handles this case with default header values.
+/* AllContentMetadatasNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllContentMetadatasNotFound struct {
 
 func (o *AllContentMetadatasNotFound) Error() string {
 	return fmt.Sprintf("[GET /content_metadata][%d] allContentMetadatasNotFound  %+v", 404, o.Payload)
+}
+func (o *AllContentMetadatasNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllContentMetadatasNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Permission permission
+//
 // swagger:model Permission
 type Permission struct {
 
@@ -34,6 +38,64 @@ type Permission struct {
 
 // Validate validates this permission
 func (m *Permission) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this permission based on the context it is used
+func (m *Permission) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermission(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Permission) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Permission) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Permission) contextValidateParent(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "parent", "body", string(m.Parent)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Permission) contextValidatePermission(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "permission", "body", string(m.Permission)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateUserCredentialsTotpReader is a Reader for the CreateUserCredentialsTotp structure.
@@ -24,44 +23,44 @@ type CreateUserCredentialsTotpReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateUserCredentialsTotpReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateUserCredentialsTotpOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateUserCredentialsTotpBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateUserCredentialsTotpNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateUserCredentialsTotpConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateUserCredentialsTotpUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateUserCredentialsTotpTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateUserCredentialsTotpOK() *CreateUserCredentialsTotpOK {
 	return &CreateUserCredentialsTotpOK{}
 }
 
-/*CreateUserCredentialsTotpOK handles this case with default header values.
+/* CreateUserCredentialsTotpOK describes a response with status code 200, with default header values.
 
 Two-Factor Credential
 */
@@ -80,6 +79,9 @@ type CreateUserCredentialsTotpOK struct {
 
 func (o *CreateUserCredentialsTotpOK) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpOK  %+v", 200, o.Payload)
+}
+func (o *CreateUserCredentialsTotpOK) GetPayload() *models.CredentialsTotp {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsTotpOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateUserCredentialsTotpBadRequest() *CreateUserCredentialsTotpBadReque
 	return &CreateUserCredentialsTotpBadRequest{}
 }
 
-/*CreateUserCredentialsTotpBadRequest handles this case with default header values.
+/* CreateUserCredentialsTotpBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateUserCredentialsTotpBadRequest struct {
 
 func (o *CreateUserCredentialsTotpBadRequest) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateUserCredentialsTotpBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsTotpBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateUserCredentialsTotpNotFound() *CreateUserCredentialsTotpNotFound {
 	return &CreateUserCredentialsTotpNotFound{}
 }
 
-/*CreateUserCredentialsTotpNotFound handles this case with default header values.
+/* CreateUserCredentialsTotpNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateUserCredentialsTotpNotFound struct {
 
 func (o *CreateUserCredentialsTotpNotFound) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateUserCredentialsTotpNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsTotpNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateUserCredentialsTotpConflict() *CreateUserCredentialsTotpConflict {
 	return &CreateUserCredentialsTotpConflict{}
 }
 
-/*CreateUserCredentialsTotpConflict handles this case with default header values.
+/* CreateUserCredentialsTotpConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateUserCredentialsTotpConflict struct {
 
 func (o *CreateUserCredentialsTotpConflict) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpConflict  %+v", 409, o.Payload)
+}
+func (o *CreateUserCredentialsTotpConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsTotpConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateUserCredentialsTotpUnprocessableEntity() *CreateUserCredentialsTot
 	return &CreateUserCredentialsTotpUnprocessableEntity{}
 }
 
-/*CreateUserCredentialsTotpUnprocessableEntity handles this case with default header values.
+/* CreateUserCredentialsTotpUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateUserCredentialsTotpUnprocessableEntity struct {
 func (o *CreateUserCredentialsTotpUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateUserCredentialsTotpUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateUserCredentialsTotpUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateUserCredentialsTotpTooManyRequests creates a CreateUserCredentialsTotpTooManyRequests with default headers values
+func NewCreateUserCredentialsTotpTooManyRequests() *CreateUserCredentialsTotpTooManyRequests {
+	return &CreateUserCredentialsTotpTooManyRequests{}
+}
+
+/* CreateUserCredentialsTotpTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateUserCredentialsTotpTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateUserCredentialsTotpTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /users/{user_id}/credentials_totp][%d] createUserCredentialsTotpTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateUserCredentialsTotpTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateUserCredentialsTotpTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

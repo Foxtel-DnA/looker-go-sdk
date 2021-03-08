@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewWhitelabelConfigurationParams creates a new WhitelabelConfigurationParams object
-// with the default values initialized.
+// NewWhitelabelConfigurationParams creates a new WhitelabelConfigurationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewWhitelabelConfigurationParams() *WhitelabelConfigurationParams {
-	var ()
 	return &WhitelabelConfigurationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewWhitelabelConfigurationParamsWithTimeout creates a new WhitelabelConfigurationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewWhitelabelConfigurationParamsWithTimeout(timeout time.Duration) *WhitelabelConfigurationParams {
-	var ()
 	return &WhitelabelConfigurationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewWhitelabelConfigurationParamsWithContext creates a new WhitelabelConfigurationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewWhitelabelConfigurationParamsWithContext(ctx context.Context) *WhitelabelConfigurationParams {
-	var ()
 	return &WhitelabelConfigurationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewWhitelabelConfigurationParamsWithHTTPClient creates a new WhitelabelConfigurationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewWhitelabelConfigurationParamsWithHTTPClient(client *http.Client) *WhitelabelConfigurationParams {
-	var ()
 	return &WhitelabelConfigurationParams{
 		HTTPClient: client,
 	}
 }
 
-/*WhitelabelConfigurationParams contains all the parameters to send to the API endpoint
-for the whitelabel configuration operation typically these are written to a http.Request
+/* WhitelabelConfigurationParams contains all the parameters to send to the API endpoint
+   for the whitelabel configuration operation.
+
+   Typically these are written to a http.Request.
 */
 type WhitelabelConfigurationParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the whitelabel configuration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *WhitelabelConfigurationParams) WithDefaults() *WhitelabelConfigurationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the whitelabel configuration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *WhitelabelConfigurationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the whitelabel configuration params
@@ -128,16 +141,17 @@ func (o *WhitelabelConfigurationParams) WriteToRequest(r runtime.ClientRequest, 
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

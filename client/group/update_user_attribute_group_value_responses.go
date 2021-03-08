@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateUserAttributeGroupValueReader is a Reader for the UpdateUserAttributeGroupValue structure.
@@ -24,30 +23,32 @@ type UpdateUserAttributeGroupValueReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateUserAttributeGroupValueReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateUserAttributeGroupValueOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateUserAttributeGroupValueBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateUserAttributeGroupValueNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 422:
+		result := NewUpdateUserAttributeGroupValueUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewUpdateUserAttributeGroupValueOK() *UpdateUserAttributeGroupValueOK {
 	return &UpdateUserAttributeGroupValueOK{}
 }
 
-/*UpdateUserAttributeGroupValueOK handles this case with default header values.
+/* UpdateUserAttributeGroupValueOK describes a response with status code 200, with default header values.
 
 Group value object.
 */
@@ -66,6 +67,9 @@ type UpdateUserAttributeGroupValueOK struct {
 
 func (o *UpdateUserAttributeGroupValueOK) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}/attribute_values/{user_attribute_id}][%d] updateUserAttributeGroupValueOK  %+v", 200, o.Payload)
+}
+func (o *UpdateUserAttributeGroupValueOK) GetPayload() *models.UserAttributeGroupValue {
+	return o.Payload
 }
 
 func (o *UpdateUserAttributeGroupValueOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +89,7 @@ func NewUpdateUserAttributeGroupValueBadRequest() *UpdateUserAttributeGroupValue
 	return &UpdateUserAttributeGroupValueBadRequest{}
 }
 
-/*UpdateUserAttributeGroupValueBadRequest handles this case with default header values.
+/* UpdateUserAttributeGroupValueBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +99,9 @@ type UpdateUserAttributeGroupValueBadRequest struct {
 
 func (o *UpdateUserAttributeGroupValueBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}/attribute_values/{user_attribute_id}][%d] updateUserAttributeGroupValueBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateUserAttributeGroupValueBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateUserAttributeGroupValueBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +121,7 @@ func NewUpdateUserAttributeGroupValueNotFound() *UpdateUserAttributeGroupValueNo
 	return &UpdateUserAttributeGroupValueNotFound{}
 }
 
-/*UpdateUserAttributeGroupValueNotFound handles this case with default header values.
+/* UpdateUserAttributeGroupValueNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -125,10 +132,45 @@ type UpdateUserAttributeGroupValueNotFound struct {
 func (o *UpdateUserAttributeGroupValueNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /groups/{group_id}/attribute_values/{user_attribute_id}][%d] updateUserAttributeGroupValueNotFound  %+v", 404, o.Payload)
 }
+func (o *UpdateUserAttributeGroupValueNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *UpdateUserAttributeGroupValueNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateUserAttributeGroupValueUnprocessableEntity creates a UpdateUserAttributeGroupValueUnprocessableEntity with default headers values
+func NewUpdateUserAttributeGroupValueUnprocessableEntity() *UpdateUserAttributeGroupValueUnprocessableEntity {
+	return &UpdateUserAttributeGroupValueUnprocessableEntity{}
+}
+
+/* UpdateUserAttributeGroupValueUnprocessableEntity describes a response with status code 422, with default header values.
+
+Validation Error
+*/
+type UpdateUserAttributeGroupValueUnprocessableEntity struct {
+	Payload *models.ValidationError
+}
+
+func (o *UpdateUserAttributeGroupValueUnprocessableEntity) Error() string {
+	return fmt.Sprintf("[PATCH /groups/{group_id}/attribute_values/{user_attribute_id}][%d] updateUserAttributeGroupValueUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *UpdateUserAttributeGroupValueUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
+
+func (o *UpdateUserAttributeGroupValueUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ValidationError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

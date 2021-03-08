@@ -6,13 +6,14 @@ package group
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new group API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,54 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AddGroupGroup adds a group to group
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Adds a new group to a group.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AddGroupGroup(params *AddGroupGroupParams, opts ...ClientOption) (*AddGroupGroupOK, error)
+
+	AddGroupUser(params *AddGroupUserParams, opts ...ClientOption) (*AddGroupUserOK, error)
+
+	AllGroupGroups(params *AllGroupGroupsParams, opts ...ClientOption) (*AllGroupGroupsOK, error)
+
+	AllGroupUsers(params *AllGroupUsersParams, opts ...ClientOption) (*AllGroupUsersOK, error)
+
+	AllGroups(params *AllGroupsParams, opts ...ClientOption) (*AllGroupsOK, error)
+
+	CreateGroup(params *CreateGroupParams, opts ...ClientOption) (*CreateGroupOK, error)
+
+	DeleteGroup(params *DeleteGroupParams, opts ...ClientOption) (*DeleteGroupNoContent, error)
+
+	DeleteGroupFromGroup(params *DeleteGroupFromGroupParams, opts ...ClientOption) (*DeleteGroupFromGroupNoContent, error)
+
+	DeleteGroupUser(params *DeleteGroupUserParams, opts ...ClientOption) (*DeleteGroupUserNoContent, error)
+
+	DeleteUserAttributeGroupValue(params *DeleteUserAttributeGroupValueParams, opts ...ClientOption) (*DeleteUserAttributeGroupValueNoContent, error)
+
+	Group(params *GroupParams, opts ...ClientOption) (*GroupOK, error)
+
+	SearchGroups(params *SearchGroupsParams, opts ...ClientOption) (*SearchGroupsOK, error)
+
+	UpdateGroup(params *UpdateGroupParams, opts ...ClientOption) (*UpdateGroupOK, error)
+
+	UpdateUserAttributeGroupValue(params *UpdateUserAttributeGroupValueParams, opts ...ClientOption) (*UpdateUserAttributeGroupValueOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AddGroupGroup adds a group to group
+
+  ### Adds a new group to a group.
 
 */
-func (a *Client) AddGroupGroup(params *AddGroupGroupParams) (*AddGroupGroupOK, error) {
+func (a *Client) AddGroupGroup(params *AddGroupGroupParams, opts ...ClientOption) (*AddGroupGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAddGroupGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "add_group_group",
 		Method:             "POST",
 		PathPattern:        "/groups/{group_id}/groups",
@@ -47,27 +83,37 @@ func (a *Client) AddGroupGroup(params *AddGroupGroupParams) (*AddGroupGroupOK, e
 		Reader:             &AddGroupGroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AddGroupGroupOK), nil
-
+	success, ok := result.(*AddGroupGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for add_group_group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AddGroupUser adds a user to group
+  AddGroupUser adds a user to group
 
-### Adds a new user to a group.
+  ### Adds a new user to a group.
 
 */
-func (a *Client) AddGroupUser(params *AddGroupUserParams) (*AddGroupUserOK, error) {
+func (a *Client) AddGroupUser(params *AddGroupUserParams, opts ...ClientOption) (*AddGroupUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAddGroupUserParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "add_group_user",
 		Method:             "POST",
 		PathPattern:        "/groups/{group_id}/users",
@@ -78,27 +124,37 @@ func (a *Client) AddGroupUser(params *AddGroupUserParams) (*AddGroupUserOK, erro
 		Reader:             &AddGroupUserReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AddGroupUserOK), nil
-
+	success, ok := result.(*AddGroupUserOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for add_group_user: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllGroupGroups gets all groups in group
+  AllGroupGroups gets all groups in group
 
-### Get information about all the groups in a group
+  ### Get information about all the groups in a group
 
 */
-func (a *Client) AllGroupGroups(params *AllGroupGroupsParams) (*AllGroupGroupsOK, error) {
+func (a *Client) AllGroupGroups(params *AllGroupGroupsParams, opts ...ClientOption) (*AllGroupGroupsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllGroupGroupsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_group_groups",
 		Method:             "GET",
 		PathPattern:        "/groups/{group_id}/groups",
@@ -109,27 +165,37 @@ func (a *Client) AllGroupGroups(params *AllGroupGroupsParams) (*AllGroupGroupsOK
 		Reader:             &AllGroupGroupsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllGroupGroupsOK), nil
-
+	success, ok := result.(*AllGroupGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_group_groups: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllGroupUsers gets all users in group
+  AllGroupUsers gets all users in group
 
-### Get information about all the users directly included in a group.
+  ### Get information about all the users directly included in a group.
 
 */
-func (a *Client) AllGroupUsers(params *AllGroupUsersParams) (*AllGroupUsersOK, error) {
+func (a *Client) AllGroupUsers(params *AllGroupUsersParams, opts ...ClientOption) (*AllGroupUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllGroupUsersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_group_users",
 		Method:             "GET",
 		PathPattern:        "/groups/{group_id}/users",
@@ -140,27 +206,37 @@ func (a *Client) AllGroupUsers(params *AllGroupUsersParams) (*AllGroupUsersOK, e
 		Reader:             &AllGroupUsersReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllGroupUsersOK), nil
-
+	success, ok := result.(*AllGroupUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_group_users: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllGroups gets all groups
+  AllGroups gets all groups
 
-### Get information about all groups.
+  ### Get information about all groups.
 
 */
-func (a *Client) AllGroups(params *AllGroupsParams) (*AllGroupsOK, error) {
+func (a *Client) AllGroups(params *AllGroupsParams, opts ...ClientOption) (*AllGroupsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllGroupsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_groups",
 		Method:             "GET",
 		PathPattern:        "/groups",
@@ -171,27 +247,37 @@ func (a *Client) AllGroups(params *AllGroupsParams) (*AllGroupsOK, error) {
 		Reader:             &AllGroupsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllGroupsOK), nil
-
+	success, ok := result.(*AllGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_groups: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateGroup creates group
+  CreateGroup creates group
 
-### Creates a new group (admin only).
+  ### Creates a new group (admin only).
 
 */
-func (a *Client) CreateGroup(params *CreateGroupParams) (*CreateGroupOK, error) {
+func (a *Client) CreateGroup(params *CreateGroupParams, opts ...ClientOption) (*CreateGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_group",
 		Method:             "POST",
 		PathPattern:        "/groups",
@@ -202,27 +288,37 @@ func (a *Client) CreateGroup(params *CreateGroupParams) (*CreateGroupOK, error) 
 		Reader:             &CreateGroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateGroupOK), nil
-
+	success, ok := result.(*CreateGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteGroup deletes group
+  DeleteGroup deletes group
 
-### Deletes a group (admin only).
+  ### Deletes a group (admin only).
 
 */
-func (a *Client) DeleteGroup(params *DeleteGroupParams) (*DeleteGroupNoContent, error) {
+func (a *Client) DeleteGroup(params *DeleteGroupParams, opts ...ClientOption) (*DeleteGroupNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_group",
 		Method:             "DELETE",
 		PathPattern:        "/groups/{group_id}",
@@ -233,27 +329,37 @@ func (a *Client) DeleteGroup(params *DeleteGroupParams) (*DeleteGroupNoContent, 
 		Reader:             &DeleteGroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteGroupNoContent), nil
-
+	success, ok := result.(*DeleteGroupNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteGroupFromGroup deletes a group from group
+  DeleteGroupFromGroup deletes a group from group
 
-### Removes a group from a group.
+  ### Removes a group from a group.
 
 */
-func (a *Client) DeleteGroupFromGroup(params *DeleteGroupFromGroupParams) (*DeleteGroupFromGroupNoContent, error) {
+func (a *Client) DeleteGroupFromGroup(params *DeleteGroupFromGroupParams, opts ...ClientOption) (*DeleteGroupFromGroupNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteGroupFromGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_group_from_group",
 		Method:             "DELETE",
 		PathPattern:        "/groups/{group_id}/groups/{deleting_group_id}",
@@ -264,27 +370,37 @@ func (a *Client) DeleteGroupFromGroup(params *DeleteGroupFromGroupParams) (*Dele
 		Reader:             &DeleteGroupFromGroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteGroupFromGroupNoContent), nil
-
+	success, ok := result.(*DeleteGroupFromGroupNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_group_from_group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteGroupUser removes a user from group
+  DeleteGroupUser removes a user from group
 
-### Removes a user from a group.
+  ### Removes a user from a group.
 
 */
-func (a *Client) DeleteGroupUser(params *DeleteGroupUserParams) (*DeleteGroupUserNoContent, error) {
+func (a *Client) DeleteGroupUser(params *DeleteGroupUserParams, opts ...ClientOption) (*DeleteGroupUserNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteGroupUserParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_group_user",
 		Method:             "DELETE",
 		PathPattern:        "/groups/{group_id}/users/{user_id}",
@@ -295,27 +411,37 @@ func (a *Client) DeleteGroupUser(params *DeleteGroupUserParams) (*DeleteGroupUse
 		Reader:             &DeleteGroupUserReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteGroupUserNoContent), nil
-
+	success, ok := result.(*DeleteGroupUserNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_group_user: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteUserAttributeGroupValue deletes user attribute group value
+  DeleteUserAttributeGroupValue deletes user attribute group value
 
-### Remove a user attribute value from a group.
+  ### Remove a user attribute value from a group.
 
 */
-func (a *Client) DeleteUserAttributeGroupValue(params *DeleteUserAttributeGroupValueParams) (*DeleteUserAttributeGroupValueNoContent, error) {
+func (a *Client) DeleteUserAttributeGroupValue(params *DeleteUserAttributeGroupValueParams, opts ...ClientOption) (*DeleteUserAttributeGroupValueNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteUserAttributeGroupValueParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_user_attribute_group_value",
 		Method:             "DELETE",
 		PathPattern:        "/groups/{group_id}/attribute_values/{user_attribute_id}",
@@ -326,27 +452,37 @@ func (a *Client) DeleteUserAttributeGroupValue(params *DeleteUserAttributeGroupV
 		Reader:             &DeleteUserAttributeGroupValueReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteUserAttributeGroupValueNoContent), nil
-
+	success, ok := result.(*DeleteUserAttributeGroupValueNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_user_attribute_group_value: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Group gets group
+  Group gets group
 
-### Get information about a group.
+  ### Get information about a group.
 
 */
-func (a *Client) Group(params *GroupParams) (*GroupOK, error) {
+func (a *Client) Group(params *GroupParams, opts ...ClientOption) (*GroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "group",
 		Method:             "GET",
 		PathPattern:        "/groups/{group_id}",
@@ -357,26 +493,101 @@ func (a *Client) Group(params *GroupParams) (*GroupOK, error) {
 		Reader:             &GroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*GroupOK), nil
-
+	success, ok := result.(*GroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateGroup updates group
+  SearchGroups searches groups
 
-### Updates the a group (admin only).
+  ### Search groups
+
+Returns all group records that match the given search criteria.
+
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
+
 */
-func (a *Client) UpdateGroup(params *UpdateGroupParams) (*UpdateGroupOK, error) {
+func (a *Client) SearchGroups(params *SearchGroupsParams, opts ...ClientOption) (*SearchGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_groups",
+		Method:             "GET",
+		PathPattern:        "/groups/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchGroupsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_groups: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateGroup updates group
+
+  ### Updates the a group (admin only).
+*/
+func (a *Client) UpdateGroup(params *UpdateGroupParams, opts ...ClientOption) (*UpdateGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_group",
 		Method:             "PATCH",
 		PathPattern:        "/groups/{group_id}",
@@ -387,29 +598,39 @@ func (a *Client) UpdateGroup(params *UpdateGroupParams) (*UpdateGroupOK, error) 
 		Reader:             &UpdateGroupReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateGroupOK), nil
-
+	success, ok := result.(*UpdateGroupOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_group: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateUserAttributeGroupValue sets user attribute group value
+  UpdateUserAttributeGroupValue sets user attribute group value
 
-### Set the value of a user attribute for a group.
+  ### Set the value of a user attribute for a group.
 
 For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
 
 */
-func (a *Client) UpdateUserAttributeGroupValue(params *UpdateUserAttributeGroupValueParams) (*UpdateUserAttributeGroupValueOK, error) {
+func (a *Client) UpdateUserAttributeGroupValue(params *UpdateUserAttributeGroupValueParams, opts ...ClientOption) (*UpdateUserAttributeGroupValueOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateUserAttributeGroupValueParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_user_attribute_group_value",
 		Method:             "PATCH",
 		PathPattern:        "/groups/{group_id}/attribute_values/{user_attribute_id}",
@@ -420,12 +641,23 @@ func (a *Client) UpdateUserAttributeGroupValue(params *UpdateUserAttributeGroupV
 		Reader:             &UpdateUserAttributeGroupValueReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateUserAttributeGroupValueOK), nil
-
+	success, ok := result.(*UpdateUserAttributeGroupValueOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_user_attribute_group_value: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

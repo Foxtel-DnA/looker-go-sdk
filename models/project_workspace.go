@@ -6,19 +6,26 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ProjectWorkspace project workspace
+//
 // swagger:model ProjectWorkspace
 type ProjectWorkspace struct {
 
 	// Operations the current user is able to perform on this object
 	// Read Only: true
 	Can map[string]bool `json:"can,omitempty"`
+
+	// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+	// Read Only: true
+	DependencyStatus string `json:"dependency_status,omitempty"`
 
 	// GitBranch
 	// Read Only: true
@@ -60,7 +67,6 @@ func (m *ProjectWorkspace) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ProjectWorkspace) validateGitBranch(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GitBranch) { // not required
 		return nil
 	}
@@ -72,6 +78,121 @@ func (m *ProjectWorkspace) validateGitBranch(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this project workspace based on the context it is used
+func (m *ProjectWorkspace) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDependencyStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGitBranch(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGitHead(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGitStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookmlType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjectID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWorkspaceID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateDependencyStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dependency_status", "body", string(m.DependencyStatus)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateGitBranch(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GitBranch != nil {
+		if err := m.GitBranch.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("git_branch")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateGitHead(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "git_head", "body", string(m.GitHead)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateGitStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "git_status", "body", string(m.GitStatus)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateLookmlType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "lookml_type", "body", string(m.LookmlType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateProjectID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "project_id", "body", string(m.ProjectID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectWorkspace) contextValidateWorkspaceID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "workspace_id", "body", string(m.WorkspaceID)); err != nil {
+		return err
 	}
 
 	return nil

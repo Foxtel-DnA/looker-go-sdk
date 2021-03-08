@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateWhitelabelConfigurationReader is a Reader for the UpdateWhitelabelConfiguration structure.
@@ -24,37 +23,38 @@ type UpdateWhitelabelConfigurationReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateWhitelabelConfigurationReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateWhitelabelConfigurationOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateWhitelabelConfigurationBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateWhitelabelConfigurationNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateWhitelabelConfigurationUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateWhitelabelConfigurationTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateWhitelabelConfigurationOK() *UpdateWhitelabelConfigurationOK {
 	return &UpdateWhitelabelConfigurationOK{}
 }
 
-/*UpdateWhitelabelConfigurationOK handles this case with default header values.
+/* UpdateWhitelabelConfigurationOK describes a response with status code 200, with default header values.
 
 Whitelabel configuration
 */
@@ -73,6 +73,9 @@ type UpdateWhitelabelConfigurationOK struct {
 
 func (o *UpdateWhitelabelConfigurationOK) Error() string {
 	return fmt.Sprintf("[PUT /whitelabel_configuration][%d] updateWhitelabelConfigurationOK  %+v", 200, o.Payload)
+}
+func (o *UpdateWhitelabelConfigurationOK) GetPayload() *models.WhitelabelConfiguration {
+	return o.Payload
 }
 
 func (o *UpdateWhitelabelConfigurationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateWhitelabelConfigurationBadRequest() *UpdateWhitelabelConfiguration
 	return &UpdateWhitelabelConfigurationBadRequest{}
 }
 
-/*UpdateWhitelabelConfigurationBadRequest handles this case with default header values.
+/* UpdateWhitelabelConfigurationBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateWhitelabelConfigurationBadRequest struct {
 
 func (o *UpdateWhitelabelConfigurationBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /whitelabel_configuration][%d] updateWhitelabelConfigurationBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateWhitelabelConfigurationBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateWhitelabelConfigurationBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateWhitelabelConfigurationNotFound() *UpdateWhitelabelConfigurationNo
 	return &UpdateWhitelabelConfigurationNotFound{}
 }
 
-/*UpdateWhitelabelConfigurationNotFound handles this case with default header values.
+/* UpdateWhitelabelConfigurationNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateWhitelabelConfigurationNotFound struct {
 
 func (o *UpdateWhitelabelConfigurationNotFound) Error() string {
 	return fmt.Sprintf("[PUT /whitelabel_configuration][%d] updateWhitelabelConfigurationNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateWhitelabelConfigurationNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateWhitelabelConfigurationNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateWhitelabelConfigurationUnprocessableEntity() *UpdateWhitelabelConf
 	return &UpdateWhitelabelConfigurationUnprocessableEntity{}
 }
 
-/*UpdateWhitelabelConfigurationUnprocessableEntity handles this case with default header values.
+/* UpdateWhitelabelConfigurationUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateWhitelabelConfigurationUnprocessableEntity struct {
 func (o *UpdateWhitelabelConfigurationUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PUT /whitelabel_configuration][%d] updateWhitelabelConfigurationUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateWhitelabelConfigurationUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateWhitelabelConfigurationUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateWhitelabelConfigurationTooManyRequests creates a UpdateWhitelabelConfigurationTooManyRequests with default headers values
+func NewUpdateWhitelabelConfigurationTooManyRequests() *UpdateWhitelabelConfigurationTooManyRequests {
+	return &UpdateWhitelabelConfigurationTooManyRequests{}
+}
+
+/* UpdateWhitelabelConfigurationTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateWhitelabelConfigurationTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateWhitelabelConfigurationTooManyRequests) Error() string {
+	return fmt.Sprintf("[PUT /whitelabel_configuration][%d] updateWhitelabelConfigurationTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateWhitelabelConfigurationTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateWhitelabelConfigurationTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

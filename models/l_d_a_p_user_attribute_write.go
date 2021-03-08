@@ -6,20 +6,18 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LDAPUserAttributeWrite l d a p user attribute write
+//
 // swagger:model LDAPUserAttributeWrite
 type LDAPUserAttributeWrite struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Name of User Attribute in LDAP
 	Name string `json:"name,omitempty"`
@@ -51,12 +49,34 @@ func (m *LDAPUserAttributeWrite) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LDAPUserAttributeWrite) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this l d a p user attribute write based on the context it is used
+func (m *LDAPUserAttributeWrite) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LDAPUserAttributeWrite) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

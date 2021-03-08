@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllSpacesParams creates a new AllSpacesParams object
-// with the default values initialized.
+// NewAllSpacesParams creates a new AllSpacesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllSpacesParams() *AllSpacesParams {
-	var ()
 	return &AllSpacesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllSpacesParamsWithTimeout creates a new AllSpacesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllSpacesParamsWithTimeout(timeout time.Duration) *AllSpacesParams {
-	var ()
 	return &AllSpacesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllSpacesParamsWithContext creates a new AllSpacesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllSpacesParamsWithContext(ctx context.Context) *AllSpacesParams {
-	var ()
 	return &AllSpacesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllSpacesParamsWithHTTPClient creates a new AllSpacesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllSpacesParamsWithHTTPClient(client *http.Client) *AllSpacesParams {
-	var ()
 	return &AllSpacesParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllSpacesParams contains all the parameters to send to the API endpoint
-for the all spaces operation typically these are written to a http.Request
+/* AllSpacesParams contains all the parameters to send to the API endpoint
+   for the all spaces operation.
+
+   Typically these are written to a http.Request.
 */
 type AllSpacesParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all spaces params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllSpacesParams) WithDefaults() *AllSpacesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all spaces params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllSpacesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all spaces params
@@ -128,16 +141,17 @@ func (o *AllSpacesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

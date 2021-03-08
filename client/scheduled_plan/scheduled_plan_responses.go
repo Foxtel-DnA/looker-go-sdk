@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ScheduledPlanReader is a Reader for the ScheduledPlan structure.
@@ -24,30 +23,26 @@ type ScheduledPlanReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ScheduledPlanReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewScheduledPlanOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewScheduledPlanBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewScheduledPlanNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewScheduledPlanOK() *ScheduledPlanOK {
 	return &ScheduledPlanOK{}
 }
 
-/*ScheduledPlanOK handles this case with default header values.
+/* ScheduledPlanOK describes a response with status code 200, with default header values.
 
 Scheduled Plan
 */
@@ -66,6 +61,9 @@ type ScheduledPlanOK struct {
 
 func (o *ScheduledPlanOK) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/{scheduled_plan_id}][%d] scheduledPlanOK  %+v", 200, o.Payload)
+}
+func (o *ScheduledPlanOK) GetPayload() *models.ScheduledPlan {
+	return o.Payload
 }
 
 func (o *ScheduledPlanOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewScheduledPlanBadRequest() *ScheduledPlanBadRequest {
 	return &ScheduledPlanBadRequest{}
 }
 
-/*ScheduledPlanBadRequest handles this case with default header values.
+/* ScheduledPlanBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ScheduledPlanBadRequest struct {
 
 func (o *ScheduledPlanBadRequest) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/{scheduled_plan_id}][%d] scheduledPlanBadRequest  %+v", 400, o.Payload)
+}
+func (o *ScheduledPlanBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlanBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewScheduledPlanNotFound() *ScheduledPlanNotFound {
 	return &ScheduledPlanNotFound{}
 }
 
-/*ScheduledPlanNotFound handles this case with default header values.
+/* ScheduledPlanNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ScheduledPlanNotFound struct {
 
 func (o *ScheduledPlanNotFound) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/{scheduled_plan_id}][%d] scheduledPlanNotFound  %+v", 404, o.Payload)
+}
+func (o *ScheduledPlanNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlanNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Timezone timezone
+//
 // swagger:model Timezone
 type Timezone struct {
 
@@ -30,6 +34,55 @@ type Timezone struct {
 
 // Validate validates this timezone
 func (m *Timezone) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this timezone based on the context it is used
+func (m *Timezone) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateGroup(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Timezone) contextValidateGroup(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "group", "body", string(m.Group)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Timezone) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Timezone) contextValidateValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "value", "body", string(m.Value)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

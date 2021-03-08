@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UserCredentialsTotpReader is a Reader for the UserCredentialsTotp structure.
@@ -24,30 +23,26 @@ type UserCredentialsTotpReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserCredentialsTotpReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserCredentialsTotpOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserCredentialsTotpBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserCredentialsTotpNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserCredentialsTotpOK() *UserCredentialsTotpOK {
 	return &UserCredentialsTotpOK{}
 }
 
-/*UserCredentialsTotpOK handles this case with default header values.
+/* UserCredentialsTotpOK describes a response with status code 200, with default header values.
 
 Two-Factor Credential
 */
@@ -66,6 +61,9 @@ type UserCredentialsTotpOK struct {
 
 func (o *UserCredentialsTotpOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_totp][%d] userCredentialsTotpOK  %+v", 200, o.Payload)
+}
+func (o *UserCredentialsTotpOK) GetPayload() *models.CredentialsTotp {
+	return o.Payload
 }
 
 func (o *UserCredentialsTotpOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserCredentialsTotpBadRequest() *UserCredentialsTotpBadRequest {
 	return &UserCredentialsTotpBadRequest{}
 }
 
-/*UserCredentialsTotpBadRequest handles this case with default header values.
+/* UserCredentialsTotpBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserCredentialsTotpBadRequest struct {
 
 func (o *UserCredentialsTotpBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_totp][%d] userCredentialsTotpBadRequest  %+v", 400, o.Payload)
+}
+func (o *UserCredentialsTotpBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsTotpBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserCredentialsTotpNotFound() *UserCredentialsTotpNotFound {
 	return &UserCredentialsTotpNotFound{}
 }
 
-/*UserCredentialsTotpNotFound handles this case with default header values.
+/* UserCredentialsTotpNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserCredentialsTotpNotFound struct {
 
 func (o *UserCredentialsTotpNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_totp][%d] userCredentialsTotpNotFound  %+v", 404, o.Payload)
+}
+func (o *UserCredentialsTotpNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsTotpNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

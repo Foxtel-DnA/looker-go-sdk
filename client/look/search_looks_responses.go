@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SearchLooksReader is a Reader for the SearchLooks structure.
@@ -24,30 +23,26 @@ type SearchLooksReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SearchLooksReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSearchLooksOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSearchLooksBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSearchLooksNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSearchLooksOK() *SearchLooksOK {
 	return &SearchLooksOK{}
 }
 
-/*SearchLooksOK handles this case with default header values.
+/* SearchLooksOK describes a response with status code 200, with default header values.
 
 looks
 */
@@ -66,6 +61,9 @@ type SearchLooksOK struct {
 
 func (o *SearchLooksOK) Error() string {
 	return fmt.Sprintf("[GET /looks/search][%d] searchLooksOK  %+v", 200, o.Payload)
+}
+func (o *SearchLooksOK) GetPayload() []*models.Look {
+	return o.Payload
 }
 
 func (o *SearchLooksOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSearchLooksBadRequest() *SearchLooksBadRequest {
 	return &SearchLooksBadRequest{}
 }
 
-/*SearchLooksBadRequest handles this case with default header values.
+/* SearchLooksBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SearchLooksBadRequest struct {
 
 func (o *SearchLooksBadRequest) Error() string {
 	return fmt.Sprintf("[GET /looks/search][%d] searchLooksBadRequest  %+v", 400, o.Payload)
+}
+func (o *SearchLooksBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchLooksBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSearchLooksNotFound() *SearchLooksNotFound {
 	return &SearchLooksNotFound{}
 }
 
-/*SearchLooksNotFound handles this case with default header values.
+/* SearchLooksNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SearchLooksNotFound struct {
 
 func (o *SearchLooksNotFound) Error() string {
 	return fmt.Sprintf("[GET /looks/search][%d] searchLooksNotFound  %+v", 404, o.Payload)
+}
+func (o *SearchLooksNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchLooksNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SyncLookmlDashboardReader is a Reader for the SyncLookmlDashboard structure.
@@ -24,37 +23,38 @@ type SyncLookmlDashboardReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SyncLookmlDashboardReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSyncLookmlDashboardOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSyncLookmlDashboardBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSyncLookmlDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewSyncLookmlDashboardUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewSyncLookmlDashboardTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,9 +63,9 @@ func NewSyncLookmlDashboardOK() *SyncLookmlDashboardOK {
 	return &SyncLookmlDashboardOK{}
 }
 
-/*SyncLookmlDashboardOK handles this case with default header values.
+/* SyncLookmlDashboardOK describes a response with status code 200, with default header values.
 
-updated dashboard ids
+Ids of all the dashboards that were updated by this operation
 */
 type SyncLookmlDashboardOK struct {
 	Payload []int64
@@ -73,6 +73,9 @@ type SyncLookmlDashboardOK struct {
 
 func (o *SyncLookmlDashboardOK) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{lookml_dashboard_id}/sync][%d] syncLookmlDashboardOK  %+v", 200, o.Payload)
+}
+func (o *SyncLookmlDashboardOK) GetPayload() []int64 {
+	return o.Payload
 }
 
 func (o *SyncLookmlDashboardOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewSyncLookmlDashboardBadRequest() *SyncLookmlDashboardBadRequest {
 	return &SyncLookmlDashboardBadRequest{}
 }
 
-/*SyncLookmlDashboardBadRequest handles this case with default header values.
+/* SyncLookmlDashboardBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type SyncLookmlDashboardBadRequest struct {
 
 func (o *SyncLookmlDashboardBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{lookml_dashboard_id}/sync][%d] syncLookmlDashboardBadRequest  %+v", 400, o.Payload)
+}
+func (o *SyncLookmlDashboardBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SyncLookmlDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewSyncLookmlDashboardNotFound() *SyncLookmlDashboardNotFound {
 	return &SyncLookmlDashboardNotFound{}
 }
 
-/*SyncLookmlDashboardNotFound handles this case with default header values.
+/* SyncLookmlDashboardNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type SyncLookmlDashboardNotFound struct {
 
 func (o *SyncLookmlDashboardNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{lookml_dashboard_id}/sync][%d] syncLookmlDashboardNotFound  %+v", 404, o.Payload)
+}
+func (o *SyncLookmlDashboardNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SyncLookmlDashboardNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewSyncLookmlDashboardUnprocessableEntity() *SyncLookmlDashboardUnprocessab
 	return &SyncLookmlDashboardUnprocessableEntity{}
 }
 
-/*SyncLookmlDashboardUnprocessableEntity handles this case with default header values.
+/* SyncLookmlDashboardUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -159,10 +168,45 @@ type SyncLookmlDashboardUnprocessableEntity struct {
 func (o *SyncLookmlDashboardUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{lookml_dashboard_id}/sync][%d] syncLookmlDashboardUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *SyncLookmlDashboardUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *SyncLookmlDashboardUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewSyncLookmlDashboardTooManyRequests creates a SyncLookmlDashboardTooManyRequests with default headers values
+func NewSyncLookmlDashboardTooManyRequests() *SyncLookmlDashboardTooManyRequests {
+	return &SyncLookmlDashboardTooManyRequests{}
+}
+
+/* SyncLookmlDashboardTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type SyncLookmlDashboardTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *SyncLookmlDashboardTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /dashboards/{lookml_dashboard_id}/sync][%d] syncLookmlDashboardTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *SyncLookmlDashboardTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *SyncLookmlDashboardTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

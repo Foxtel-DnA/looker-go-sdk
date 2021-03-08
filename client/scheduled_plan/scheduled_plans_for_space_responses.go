@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ScheduledPlansForSpaceReader is a Reader for the ScheduledPlansForSpace structure.
@@ -24,30 +23,26 @@ type ScheduledPlansForSpaceReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ScheduledPlansForSpaceReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewScheduledPlansForSpaceOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewScheduledPlansForSpaceBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewScheduledPlansForSpaceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewScheduledPlansForSpaceOK() *ScheduledPlansForSpaceOK {
 	return &ScheduledPlansForSpaceOK{}
 }
 
-/*ScheduledPlansForSpaceOK handles this case with default header values.
+/* ScheduledPlansForSpaceOK describes a response with status code 200, with default header values.
 
 Scheduled Plan
 */
@@ -66,6 +61,9 @@ type ScheduledPlansForSpaceOK struct {
 
 func (o *ScheduledPlansForSpaceOK) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/space/{space_id}][%d] scheduledPlansForSpaceOK  %+v", 200, o.Payload)
+}
+func (o *ScheduledPlansForSpaceOK) GetPayload() []*models.ScheduledPlan {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForSpaceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewScheduledPlansForSpaceBadRequest() *ScheduledPlansForSpaceBadRequest {
 	return &ScheduledPlansForSpaceBadRequest{}
 }
 
-/*ScheduledPlansForSpaceBadRequest handles this case with default header values.
+/* ScheduledPlansForSpaceBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type ScheduledPlansForSpaceBadRequest struct {
 
 func (o *ScheduledPlansForSpaceBadRequest) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/space/{space_id}][%d] scheduledPlansForSpaceBadRequest  %+v", 400, o.Payload)
+}
+func (o *ScheduledPlansForSpaceBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForSpaceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewScheduledPlansForSpaceNotFound() *ScheduledPlansForSpaceNotFound {
 	return &ScheduledPlansForSpaceNotFound{}
 }
 
-/*ScheduledPlansForSpaceNotFound handles this case with default header values.
+/* ScheduledPlansForSpaceNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type ScheduledPlansForSpaceNotFound struct {
 
 func (o *ScheduledPlansForSpaceNotFound) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/space/{space_id}][%d] scheduledPlansForSpaceNotFound  %+v", 404, o.Payload)
+}
+func (o *ScheduledPlansForSpaceNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForSpaceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -6,18 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // CreateDashboardRenderTask create dashboard render task
+//
 // swagger:model CreateDashboardRenderTask
 type CreateDashboardRenderTask struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Filter values to apply to the dashboard queries, in URL query format
 	DashboardFilters string `json:"dashboard_filters,omitempty"`
@@ -28,6 +26,11 @@ type CreateDashboardRenderTask struct {
 
 // Validate validates this create dashboard render task
 func (m *CreateDashboardRenderTask) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this create dashboard render task based on context it is used
+func (m *CreateDashboardRenderTask) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

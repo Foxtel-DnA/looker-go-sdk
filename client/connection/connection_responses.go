@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ConnectionReader is a Reader for the Connection structure.
@@ -24,30 +23,26 @@ type ConnectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ConnectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewConnectionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewConnectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewConnectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewConnectionOK() *ConnectionOK {
 	return &ConnectionOK{}
 }
 
-/*ConnectionOK handles this case with default header values.
+/* ConnectionOK describes a response with status code 200, with default header values.
 
 Connection
 */
@@ -66,6 +61,9 @@ type ConnectionOK struct {
 
 func (o *ConnectionOK) Error() string {
 	return fmt.Sprintf("[GET /connections/{connection_name}][%d] connectionOK  %+v", 200, o.Payload)
+}
+func (o *ConnectionOK) GetPayload() *models.DBConnection {
+	return o.Payload
 }
 
 func (o *ConnectionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewConnectionBadRequest() *ConnectionBadRequest {
 	return &ConnectionBadRequest{}
 }
 
-/*ConnectionBadRequest handles this case with default header values.
+/* ConnectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ConnectionBadRequest struct {
 
 func (o *ConnectionBadRequest) Error() string {
 	return fmt.Sprintf("[GET /connections/{connection_name}][%d] connectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *ConnectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ConnectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewConnectionNotFound() *ConnectionNotFound {
 	return &ConnectionNotFound{}
 }
 
-/*ConnectionNotFound handles this case with default header values.
+/* ConnectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ConnectionNotFound struct {
 
 func (o *ConnectionNotFound) Error() string {
 	return fmt.Sprintf("[GET /connections/{connection_name}][%d] connectionNotFound  %+v", 404, o.Payload)
+}
+func (o *ConnectionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ConnectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

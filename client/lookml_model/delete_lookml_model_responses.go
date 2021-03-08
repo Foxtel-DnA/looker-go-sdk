@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteLookmlModelReader is a Reader for the DeleteLookmlModel structure.
@@ -24,30 +23,32 @@ type DeleteLookmlModelReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteLookmlModelReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteLookmlModelNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteLookmlModelBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteLookmlModelNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteLookmlModelTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteLookmlModelNoContent() *DeleteLookmlModelNoContent {
 	return &DeleteLookmlModelNoContent{}
 }
 
-/*DeleteLookmlModelNoContent handles this case with default header values.
+/* DeleteLookmlModelNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteLookmlModelNoContent struct {
 
 func (o *DeleteLookmlModelNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /lookml_models/{lookml_model_name}][%d] deleteLookmlModelNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteLookmlModelNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteLookmlModelNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteLookmlModelBadRequest() *DeleteLookmlModelBadRequest {
 	return &DeleteLookmlModelBadRequest{}
 }
 
-/*DeleteLookmlModelBadRequest handles this case with default header values.
+/* DeleteLookmlModelBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteLookmlModelBadRequest struct {
 
 func (o *DeleteLookmlModelBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /lookml_models/{lookml_model_name}][%d] deleteLookmlModelBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteLookmlModelBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteLookmlModelBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteLookmlModelNotFound() *DeleteLookmlModelNotFound {
 	return &DeleteLookmlModelNotFound{}
 }
 
-/*DeleteLookmlModelNotFound handles this case with default header values.
+/* DeleteLookmlModelNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteLookmlModelNotFound struct {
 func (o *DeleteLookmlModelNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /lookml_models/{lookml_model_name}][%d] deleteLookmlModelNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteLookmlModelNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteLookmlModelNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteLookmlModelTooManyRequests creates a DeleteLookmlModelTooManyRequests with default headers values
+func NewDeleteLookmlModelTooManyRequests() *DeleteLookmlModelTooManyRequests {
+	return &DeleteLookmlModelTooManyRequests{}
+}
+
+/* DeleteLookmlModelTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteLookmlModelTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteLookmlModelTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /lookml_models/{lookml_model_name}][%d] deleteLookmlModelTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteLookmlModelTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteLookmlModelTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

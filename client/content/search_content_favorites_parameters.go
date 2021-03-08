@@ -13,84 +13,145 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSearchContentFavoritesParams creates a new SearchContentFavoritesParams object
-// with the default values initialized.
+// NewSearchContentFavoritesParams creates a new SearchContentFavoritesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchContentFavoritesParams() *SearchContentFavoritesParams {
-	var ()
 	return &SearchContentFavoritesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchContentFavoritesParamsWithTimeout creates a new SearchContentFavoritesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchContentFavoritesParamsWithTimeout(timeout time.Duration) *SearchContentFavoritesParams {
-	var ()
 	return &SearchContentFavoritesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchContentFavoritesParamsWithContext creates a new SearchContentFavoritesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchContentFavoritesParamsWithContext(ctx context.Context) *SearchContentFavoritesParams {
-	var ()
 	return &SearchContentFavoritesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchContentFavoritesParamsWithHTTPClient creates a new SearchContentFavoritesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchContentFavoritesParamsWithHTTPClient(client *http.Client) *SearchContentFavoritesParams {
-	var ()
 	return &SearchContentFavoritesParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchContentFavoritesParams contains all the parameters to send to the API endpoint
-for the search content favorites operation typically these are written to a http.Request
+/* SearchContentFavoritesParams contains all the parameters to send to the API endpoint
+   for the search content favorites operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchContentFavoritesParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* ContentMetadataID.
 
+	   Match content metadata id(s)
+
+	   Format: int64
+	*/
+	ContentMetadataID *int64
+
+	/* DashboardID.
+
+	   Match dashboard id(s)
+
+	   Format: int64
+	*/
+	DashboardID *int64
+
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*Limit
-	  Number of results to return. (used with offset)
 
+	/* FilterOr.
+
+	   Combine given search criteria in a boolean OR expression
+	*/
+	FilterOr *bool
+
+	/* ID.
+
+	   Match content favorite id(s)
+
+	   Format: int64
+	*/
+	ID *int64
+
+	/* Limit.
+
+	   Number of results to return. (used with offset)
+
+	   Format: int64
 	*/
 	Limit *int64
-	/*Offset
-	  Number of results to skip before returning any. (used with limit)
 
+	/* LookID.
+
+	   Match look id(s)
+
+	   Format: int64
+	*/
+	LookID *int64
+
+	/* Offset.
+
+	   Number of results to skip before returning any. (used with limit)
+
+	   Format: int64
 	*/
 	Offset *int64
-	/*Sorts
-	  Fields to sort by.
 
+	/* Sorts.
+
+	   Fields to sort by.
 	*/
 	Sorts *string
-	/*UserID
-	  Match User Id
 
+	/* UserID.
+
+	   Match user id(s)
+
+	   Format: int64
 	*/
 	UserID *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search content favorites params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchContentFavoritesParams) WithDefaults() *SearchContentFavoritesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search content favorites params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchContentFavoritesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search content favorites params
@@ -126,6 +187,28 @@ func (o *SearchContentFavoritesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithContentMetadataID adds the contentMetadataID to the search content favorites params
+func (o *SearchContentFavoritesParams) WithContentMetadataID(contentMetadataID *int64) *SearchContentFavoritesParams {
+	o.SetContentMetadataID(contentMetadataID)
+	return o
+}
+
+// SetContentMetadataID adds the contentMetadataId to the search content favorites params
+func (o *SearchContentFavoritesParams) SetContentMetadataID(contentMetadataID *int64) {
+	o.ContentMetadataID = contentMetadataID
+}
+
+// WithDashboardID adds the dashboardID to the search content favorites params
+func (o *SearchContentFavoritesParams) WithDashboardID(dashboardID *int64) *SearchContentFavoritesParams {
+	o.SetDashboardID(dashboardID)
+	return o
+}
+
+// SetDashboardID adds the dashboardId to the search content favorites params
+func (o *SearchContentFavoritesParams) SetDashboardID(dashboardID *int64) {
+	o.DashboardID = dashboardID
+}
+
 // WithFields adds the fields to the search content favorites params
 func (o *SearchContentFavoritesParams) WithFields(fields *string) *SearchContentFavoritesParams {
 	o.SetFields(fields)
@@ -137,6 +220,28 @@ func (o *SearchContentFavoritesParams) SetFields(fields *string) {
 	o.Fields = fields
 }
 
+// WithFilterOr adds the filterOr to the search content favorites params
+func (o *SearchContentFavoritesParams) WithFilterOr(filterOr *bool) *SearchContentFavoritesParams {
+	o.SetFilterOr(filterOr)
+	return o
+}
+
+// SetFilterOr adds the filterOr to the search content favorites params
+func (o *SearchContentFavoritesParams) SetFilterOr(filterOr *bool) {
+	o.FilterOr = filterOr
+}
+
+// WithID adds the id to the search content favorites params
+func (o *SearchContentFavoritesParams) WithID(id *int64) *SearchContentFavoritesParams {
+	o.SetID(id)
+	return o
+}
+
+// SetID adds the id to the search content favorites params
+func (o *SearchContentFavoritesParams) SetID(id *int64) {
+	o.ID = id
+}
+
 // WithLimit adds the limit to the search content favorites params
 func (o *SearchContentFavoritesParams) WithLimit(limit *int64) *SearchContentFavoritesParams {
 	o.SetLimit(limit)
@@ -146,6 +251,17 @@ func (o *SearchContentFavoritesParams) WithLimit(limit *int64) *SearchContentFav
 // SetLimit adds the limit to the search content favorites params
 func (o *SearchContentFavoritesParams) SetLimit(limit *int64) {
 	o.Limit = limit
+}
+
+// WithLookID adds the lookID to the search content favorites params
+func (o *SearchContentFavoritesParams) WithLookID(lookID *int64) *SearchContentFavoritesParams {
+	o.SetLookID(lookID)
+	return o
+}
+
+// SetLookID adds the lookId to the search content favorites params
+func (o *SearchContentFavoritesParams) SetLookID(lookID *int64) {
+	o.LookID = lookID
 }
 
 // WithOffset adds the offset to the search content favorites params
@@ -189,84 +305,174 @@ func (o *SearchContentFavoritesParams) WriteToRequest(r runtime.ClientRequest, r
 	}
 	var res []error
 
+	if o.ContentMetadataID != nil {
+
+		// query param content_metadata_id
+		var qrContentMetadataID int64
+
+		if o.ContentMetadataID != nil {
+			qrContentMetadataID = *o.ContentMetadataID
+		}
+		qContentMetadataID := swag.FormatInt64(qrContentMetadataID)
+		if qContentMetadataID != "" {
+
+			if err := r.SetQueryParam("content_metadata_id", qContentMetadataID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.DashboardID != nil {
+
+		// query param dashboard_id
+		var qrDashboardID int64
+
+		if o.DashboardID != nil {
+			qrDashboardID = *o.DashboardID
+		}
+		qDashboardID := swag.FormatInt64(qrDashboardID)
+		if qDashboardID != "" {
+
+			if err := r.SetQueryParam("dashboard_id", qDashboardID); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.FilterOr != nil {
+
+		// query param filter_or
+		var qrFilterOr bool
+
+		if o.FilterOr != nil {
+			qrFilterOr = *o.FilterOr
+		}
+		qFilterOr := swag.FormatBool(qrFilterOr)
+		if qFilterOr != "" {
+
+			if err := r.SetQueryParam("filter_or", qFilterOr); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.ID != nil {
+
+		// query param id
+		var qrID int64
+
+		if o.ID != nil {
+			qrID = *o.ID
+		}
+		qID := swag.FormatInt64(qrID)
+		if qID != "" {
+
+			if err := r.SetQueryParam("id", qID); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.LookID != nil {
+
+		// query param look_id
+		var qrLookID int64
+
+		if o.LookID != nil {
+			qrLookID = *o.LookID
+		}
+		qLookID := swag.FormatInt64(qrLookID)
+		if qLookID != "" {
+
+			if err := r.SetQueryParam("look_id", qLookID); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Offset != nil {
 
 		// query param offset
 		var qrOffset int64
+
 		if o.Offset != nil {
 			qrOffset = *o.Offset
 		}
 		qOffset := swag.FormatInt64(qrOffset)
 		if qOffset != "" {
+
 			if err := r.SetQueryParam("offset", qOffset); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.UserID != nil {
 
 		// query param user_id
 		var qrUserID int64
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := swag.FormatInt64(qrUserID)
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

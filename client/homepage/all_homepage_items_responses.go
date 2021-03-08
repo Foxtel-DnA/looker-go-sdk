@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // AllHomepageItemsReader is a Reader for the AllHomepageItems structure.
@@ -24,30 +23,26 @@ type AllHomepageItemsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllHomepageItemsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllHomepageItemsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllHomepageItemsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllHomepageItemsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllHomepageItemsOK() *AllHomepageItemsOK {
 	return &AllHomepageItemsOK{}
 }
 
-/*AllHomepageItemsOK handles this case with default header values.
+/* AllHomepageItemsOK describes a response with status code 200, with default header values.
 
 Homepage Item
 */
@@ -66,6 +61,9 @@ type AllHomepageItemsOK struct {
 
 func (o *AllHomepageItemsOK) Error() string {
 	return fmt.Sprintf("[GET /homepage_items][%d] allHomepageItemsOK  %+v", 200, o.Payload)
+}
+func (o *AllHomepageItemsOK) GetPayload() []*models.HomepageItem {
+	return o.Payload
 }
 
 func (o *AllHomepageItemsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllHomepageItemsBadRequest() *AllHomepageItemsBadRequest {
 	return &AllHomepageItemsBadRequest{}
 }
 
-/*AllHomepageItemsBadRequest handles this case with default header values.
+/* AllHomepageItemsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllHomepageItemsBadRequest struct {
 
 func (o *AllHomepageItemsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /homepage_items][%d] allHomepageItemsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllHomepageItemsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllHomepageItemsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllHomepageItemsNotFound() *AllHomepageItemsNotFound {
 	return &AllHomepageItemsNotFound{}
 }
 
-/*AllHomepageItemsNotFound handles this case with default header values.
+/* AllHomepageItemsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllHomepageItemsNotFound struct {
 
 func (o *AllHomepageItemsNotFound) Error() string {
 	return fmt.Sprintf("[GET /homepage_items][%d] allHomepageItemsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllHomepageItemsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllHomepageItemsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

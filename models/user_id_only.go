@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // UserIDOnly user Id only
+//
 // swagger:model UserIdOnly
 type UserIDOnly struct {
 
@@ -22,6 +26,29 @@ type UserIDOnly struct {
 
 // Validate validates this user Id only
 func (m *UserIDOnly) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this user Id only based on the context it is used
+func (m *UserIDOnly) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UserIDOnly) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

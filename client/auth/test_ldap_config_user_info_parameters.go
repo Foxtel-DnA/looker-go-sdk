@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewTestLdapConfigUserInfoParams creates a new TestLdapConfigUserInfoParams object
-// with the default values initialized.
+// NewTestLdapConfigUserInfoParams creates a new TestLdapConfigUserInfoParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewTestLdapConfigUserInfoParams() *TestLdapConfigUserInfoParams {
-	var ()
 	return &TestLdapConfigUserInfoParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewTestLdapConfigUserInfoParamsWithTimeout creates a new TestLdapConfigUserInfoParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewTestLdapConfigUserInfoParamsWithTimeout(timeout time.Duration) *TestLdapConfigUserInfoParams {
-	var ()
 	return &TestLdapConfigUserInfoParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewTestLdapConfigUserInfoParamsWithContext creates a new TestLdapConfigUserInfoParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewTestLdapConfigUserInfoParamsWithContext(ctx context.Context) *TestLdapConfigUserInfoParams {
-	var ()
 	return &TestLdapConfigUserInfoParams{
-
 		Context: ctx,
 	}
 }
 
 // NewTestLdapConfigUserInfoParamsWithHTTPClient creates a new TestLdapConfigUserInfoParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewTestLdapConfigUserInfoParamsWithHTTPClient(client *http.Client) *TestLdapConfigUserInfoParams {
-	var ()
 	return &TestLdapConfigUserInfoParams{
 		HTTPClient: client,
 	}
 }
 
-/*TestLdapConfigUserInfoParams contains all the parameters to send to the API endpoint
-for the test ldap config user info operation typically these are written to a http.Request
+/* TestLdapConfigUserInfoParams contains all the parameters to send to the API endpoint
+   for the test ldap config user info operation.
+
+   Typically these are written to a http.Request.
 */
 type TestLdapConfigUserInfoParams struct {
 
-	/*Body
-	  LDAP Config
+	/* Body.
 
+	   LDAP Config
 	*/
 	Body *models.LDAPConfig
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the test ldap config user info params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestLdapConfigUserInfoParams) WithDefaults() *TestLdapConfigUserInfoParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the test ldap config user info params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *TestLdapConfigUserInfoParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the test ldap config user info params
@@ -125,7 +138,6 @@ func (o *TestLdapConfigUserInfoParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

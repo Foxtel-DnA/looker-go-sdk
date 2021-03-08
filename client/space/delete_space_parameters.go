@@ -13,64 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewDeleteSpaceParams creates a new DeleteSpaceParams object
-// with the default values initialized.
+// NewDeleteSpaceParams creates a new DeleteSpaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteSpaceParams() *DeleteSpaceParams {
-	var ()
 	return &DeleteSpaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteSpaceParamsWithTimeout creates a new DeleteSpaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteSpaceParamsWithTimeout(timeout time.Duration) *DeleteSpaceParams {
-	var ()
 	return &DeleteSpaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteSpaceParamsWithContext creates a new DeleteSpaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteSpaceParamsWithContext(ctx context.Context) *DeleteSpaceParams {
-	var ()
 	return &DeleteSpaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteSpaceParamsWithHTTPClient creates a new DeleteSpaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteSpaceParamsWithHTTPClient(client *http.Client) *DeleteSpaceParams {
-	var ()
 	return &DeleteSpaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteSpaceParams contains all the parameters to send to the API endpoint
-for the delete space operation typically these are written to a http.Request
+/* DeleteSpaceParams contains all the parameters to send to the API endpoint
+   for the delete space operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteSpaceParams struct {
 
-	/*SpaceID
-	  Id of space
+	/* SpaceID.
 
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteSpaceParams) WithDefaults() *DeleteSpaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteSpaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete space params
@@ -107,13 +119,13 @@ func (o *DeleteSpaceParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithSpaceID adds the spaceID to the delete space params
-func (o *DeleteSpaceParams) WithSpaceID(spaceID int64) *DeleteSpaceParams {
+func (o *DeleteSpaceParams) WithSpaceID(spaceID string) *DeleteSpaceParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the delete space params
-func (o *DeleteSpaceParams) SetSpaceID(spaceID int64) {
+func (o *DeleteSpaceParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -126,7 +138,7 @@ func (o *DeleteSpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	var res []error
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

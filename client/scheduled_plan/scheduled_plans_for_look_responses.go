@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // ScheduledPlansForLookReader is a Reader for the ScheduledPlansForLook structure.
@@ -24,30 +23,26 @@ type ScheduledPlansForLookReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ScheduledPlansForLookReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewScheduledPlansForLookOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewScheduledPlansForLookBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewScheduledPlansForLookNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewScheduledPlansForLookOK() *ScheduledPlansForLookOK {
 	return &ScheduledPlansForLookOK{}
 }
 
-/*ScheduledPlansForLookOK handles this case with default header values.
+/* ScheduledPlansForLookOK describes a response with status code 200, with default header values.
 
 Scheduled Plan
 */
@@ -66,6 +61,9 @@ type ScheduledPlansForLookOK struct {
 
 func (o *ScheduledPlansForLookOK) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/look/{look_id}][%d] scheduledPlansForLookOK  %+v", 200, o.Payload)
+}
+func (o *ScheduledPlansForLookOK) GetPayload() []*models.ScheduledPlan {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewScheduledPlansForLookBadRequest() *ScheduledPlansForLookBadRequest {
 	return &ScheduledPlansForLookBadRequest{}
 }
 
-/*ScheduledPlansForLookBadRequest handles this case with default header values.
+/* ScheduledPlansForLookBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type ScheduledPlansForLookBadRequest struct {
 
 func (o *ScheduledPlansForLookBadRequest) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/look/{look_id}][%d] scheduledPlansForLookBadRequest  %+v", 400, o.Payload)
+}
+func (o *ScheduledPlansForLookBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewScheduledPlansForLookNotFound() *ScheduledPlansForLookNotFound {
 	return &ScheduledPlansForLookNotFound{}
 }
 
-/*ScheduledPlansForLookNotFound handles this case with default header values.
+/* ScheduledPlansForLookNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type ScheduledPlansForLookNotFound struct {
 
 func (o *ScheduledPlansForLookNotFound) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/look/{look_id}][%d] scheduledPlansForLookNotFound  %+v", 404, o.Payload)
+}
+func (o *ScheduledPlansForLookNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

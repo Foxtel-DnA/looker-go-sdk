@@ -6,16 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LookWithDashboards look with dashboards
+//
 // swagger:model LookWithDashboards
 type LookWithDashboards struct {
 
@@ -34,19 +35,19 @@ type LookWithDashboards struct {
 	// Time that the Look was created.
 	// Read Only: true
 	// Format: date-time
-	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
+	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
 	// Dashboards
 	// Read Only: true
 	Dashboards []*DashboardBase `json:"dashboards"`
 
-	// Whether or not the look is deleted
+	// Whether or not a look is 'soft' deleted.
 	Deleted bool `json:"deleted,omitempty"`
 
 	// Time that the Look was deleted.
 	// Read Only: true
 	// Format: date-time
-	DeletedAt *strfmt.DateTime `json:"deleted_at,omitempty"`
+	DeletedAt strfmt.DateTime `json:"deleted_at,omitempty"`
 
 	// Id of User that deleted the look.
 	// Read Only: true
@@ -67,6 +68,13 @@ type LookWithDashboards struct {
 	// Read Only: true
 	FavoriteCount int64 `json:"favorite_count,omitempty"`
 
+	// Folder of this Look
+	// Read Only: true
+	Folder *FolderBase `json:"folder,omitempty"`
+
+	// Folder Id
+	FolderID string `json:"folder_id,omitempty"`
+
 	// Google Spreadsheet Formula
 	// Read Only: true
 	GoogleSpreadsheetFormula string `json:"google_spreadsheet_formula,omitempty"`
@@ -75,29 +83,33 @@ type LookWithDashboards struct {
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
 
+	// Image Embed Url
+	// Read Only: true
+	ImageEmbedURL string `json:"image_embed_url,omitempty"`
+
 	// auto-run query when Look viewed
 	IsRunOnLoad bool `json:"is_run_on_load,omitempty"`
 
 	// Time that the Look was last accessed by any user
 	// Read Only: true
 	// Format: date-time
-	LastAccessedAt *strfmt.DateTime `json:"last_accessed_at,omitempty"`
+	LastAccessedAt strfmt.DateTime `json:"last_accessed_at,omitempty"`
 
-	// (Write-Only) Id of User that last updated the look.
+	// Id of User that last updated the look.
+	// Read Only: true
 	LastUpdaterID int64 `json:"last_updater_id,omitempty"`
 
 	// Time last viewed in the Looker web UI
 	// Read Only: true
 	// Format: date-time
-	LastViewedAt *strfmt.DateTime `json:"last_viewed_at,omitempty"`
+	LastViewedAt strfmt.DateTime `json:"last_viewed_at,omitempty"`
 
 	// Model
 	// Read Only: true
 	Model *LookModel `json:"model,omitempty"`
 
 	// Is Public
-	// Read Only: true
-	Public *bool `json:"public,omitempty"`
+	Public bool `json:"public,omitempty"`
 
 	// Public Slug
 	// Read Only: true
@@ -118,8 +130,8 @@ type LookWithDashboards struct {
 	// Read Only: true
 	Space *SpaceBase `json:"space,omitempty"`
 
-	// (Write-Only) Space Id
-	SpaceID int64 `json:"space_id,omitempty"`
+	// Space Id
+	SpaceID string `json:"space_id,omitempty"`
 
 	// Look Title
 	Title string `json:"title,omitempty"`
@@ -127,13 +139,13 @@ type LookWithDashboards struct {
 	// Time that the Look was updated.
 	// Read Only: true
 	// Format: date-time
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+	UpdatedAt strfmt.DateTime `json:"updated_at,omitempty"`
 
-	// User
+	// (DEPRECATED) User
 	// Read Only: true
 	User *UserIDOnly `json:"user,omitempty"`
 
-	// (Write-Only) User Id
+	// User Id
 	UserID int64 `json:"user_id,omitempty"`
 
 	// Number of times viewed in the Looker web UI
@@ -154,6 +166,10 @@ func (m *LookWithDashboards) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFolder(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -188,7 +204,6 @@ func (m *LookWithDashboards) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -201,7 +216,6 @@ func (m *LookWithDashboards) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateDashboards(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dashboards) { // not required
 		return nil
 	}
@@ -226,7 +240,6 @@ func (m *LookWithDashboards) validateDashboards(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateDeletedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeletedAt) { // not required
 		return nil
 	}
@@ -238,8 +251,24 @@ func (m *LookWithDashboards) validateDeletedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *LookWithDashboards) validateLastAccessedAt(formats strfmt.Registry) error {
+func (m *LookWithDashboards) validateFolder(formats strfmt.Registry) error {
+	if swag.IsZero(m.Folder) { // not required
+		return nil
+	}
 
+	if m.Folder != nil {
+		if err := m.Folder.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) validateLastAccessedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.LastAccessedAt) { // not required
 		return nil
 	}
@@ -252,7 +281,6 @@ func (m *LookWithDashboards) validateLastAccessedAt(formats strfmt.Registry) err
 }
 
 func (m *LookWithDashboards) validateLastViewedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastViewedAt) { // not required
 		return nil
 	}
@@ -265,7 +293,6 @@ func (m *LookWithDashboards) validateLastViewedAt(formats strfmt.Registry) error
 }
 
 func (m *LookWithDashboards) validateModel(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Model) { // not required
 		return nil
 	}
@@ -283,7 +310,6 @@ func (m *LookWithDashboards) validateModel(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateSpace(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Space) { // not required
 		return nil
 	}
@@ -301,7 +327,6 @@ func (m *LookWithDashboards) validateSpace(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -314,7 +339,6 @@ func (m *LookWithDashboards) validateUpdatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LookWithDashboards) validateUser(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.User) { // not required
 		return nil
 	}
@@ -326,6 +350,370 @@ func (m *LookWithDashboards) validateUser(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this look with dashboards based on the context it is used
+func (m *LookWithDashboards) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentFavoriteID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboards(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeletedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleterID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmbedURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExcelFileURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFavoriteCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFolder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGoogleSpreadsheetFormula(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImageEmbedURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastAccessedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastUpdaterID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastViewedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePublicSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePublicURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShortURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateContentFavoriteID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_favorite_id", "body", int64(m.ContentFavoriteID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateDashboards(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboards", "body", []*DashboardBase(m.Dashboards)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Dashboards); i++ {
+
+		if m.Dashboards[i] != nil {
+			if err := m.Dashboards[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dashboards" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateDeletedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleted_at", "body", strfmt.DateTime(m.DeletedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateDeleterID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleter_id", "body", int64(m.DeleterID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateEmbedURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "embed_url", "body", string(m.EmbedURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateExcelFileURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "excel_file_url", "body", string(m.ExcelFileURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateFavoriteCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "favorite_count", "body", int64(m.FavoriteCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateFolder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Folder != nil {
+		if err := m.Folder.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateGoogleSpreadsheetFormula(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "google_spreadsheet_formula", "body", string(m.GoogleSpreadsheetFormula)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateImageEmbedURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "image_embed_url", "body", string(m.ImageEmbedURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateLastAccessedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_accessed_at", "body", strfmt.DateTime(m.LastAccessedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateLastUpdaterID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_updater_id", "body", int64(m.LastUpdaterID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateLastViewedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_viewed_at", "body", strfmt.DateTime(m.LastViewedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateModel(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Model != nil {
+		if err := m.Model.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("model")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidatePublicSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "public_slug", "body", string(m.PublicSlug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidatePublicURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "public_url", "body", string(m.PublicURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateShortURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "short_url", "body", string(m.ShortURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateSpace(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Space != nil {
+		if err := m.Space.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("space")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.User != nil {
+		if err := m.User.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("user")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LookWithDashboards) contextValidateViewCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_count", "body", int64(m.ViewCount)); err != nil {
+		return err
 	}
 
 	return nil

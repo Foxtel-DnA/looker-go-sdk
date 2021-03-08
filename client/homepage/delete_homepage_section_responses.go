@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteHomepageSectionReader is a Reader for the DeleteHomepageSection structure.
@@ -24,30 +23,32 @@ type DeleteHomepageSectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteHomepageSectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteHomepageSectionNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteHomepageSectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteHomepageSectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteHomepageSectionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteHomepageSectionNoContent() *DeleteHomepageSectionNoContent {
 	return &DeleteHomepageSectionNoContent{}
 }
 
-/*DeleteHomepageSectionNoContent handles this case with default header values.
+/* DeleteHomepageSectionNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteHomepageSectionNoContent struct {
 
 func (o *DeleteHomepageSectionNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /homepage_sections/{homepage_section_id}][%d] deleteHomepageSectionNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteHomepageSectionNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteHomepageSectionNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteHomepageSectionBadRequest() *DeleteHomepageSectionBadRequest {
 	return &DeleteHomepageSectionBadRequest{}
 }
 
-/*DeleteHomepageSectionBadRequest handles this case with default header values.
+/* DeleteHomepageSectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteHomepageSectionBadRequest struct {
 
 func (o *DeleteHomepageSectionBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /homepage_sections/{homepage_section_id}][%d] deleteHomepageSectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteHomepageSectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteHomepageSectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteHomepageSectionNotFound() *DeleteHomepageSectionNotFound {
 	return &DeleteHomepageSectionNotFound{}
 }
 
-/*DeleteHomepageSectionNotFound handles this case with default header values.
+/* DeleteHomepageSectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteHomepageSectionNotFound struct {
 func (o *DeleteHomepageSectionNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /homepage_sections/{homepage_section_id}][%d] deleteHomepageSectionNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteHomepageSectionNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteHomepageSectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteHomepageSectionTooManyRequests creates a DeleteHomepageSectionTooManyRequests with default headers values
+func NewDeleteHomepageSectionTooManyRequests() *DeleteHomepageSectionTooManyRequests {
+	return &DeleteHomepageSectionTooManyRequests{}
+}
+
+/* DeleteHomepageSectionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteHomepageSectionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteHomepageSectionTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /homepage_sections/{homepage_section_id}][%d] deleteHomepageSectionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteHomepageSectionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteHomepageSectionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

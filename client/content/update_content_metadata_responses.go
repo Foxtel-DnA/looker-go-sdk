@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateContentMetadataReader is a Reader for the UpdateContentMetadata structure.
@@ -24,37 +23,38 @@ type UpdateContentMetadataReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateContentMetadataReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateContentMetadataOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateContentMetadataBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateContentMetadataNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateContentMetadataUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateContentMetadataTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateContentMetadataOK() *UpdateContentMetadataOK {
 	return &UpdateContentMetadataOK{}
 }
 
-/*UpdateContentMetadataOK handles this case with default header values.
+/* UpdateContentMetadataOK describes a response with status code 200, with default header values.
 
 Content Metadata
 */
@@ -73,6 +73,9 @@ type UpdateContentMetadataOK struct {
 
 func (o *UpdateContentMetadataOK) Error() string {
 	return fmt.Sprintf("[PATCH /content_metadata/{content_metadata_id}][%d] updateContentMetadataOK  %+v", 200, o.Payload)
+}
+func (o *UpdateContentMetadataOK) GetPayload() *models.ContentMeta {
+	return o.Payload
 }
 
 func (o *UpdateContentMetadataOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateContentMetadataBadRequest() *UpdateContentMetadataBadRequest {
 	return &UpdateContentMetadataBadRequest{}
 }
 
-/*UpdateContentMetadataBadRequest handles this case with default header values.
+/* UpdateContentMetadataBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateContentMetadataBadRequest struct {
 
 func (o *UpdateContentMetadataBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /content_metadata/{content_metadata_id}][%d] updateContentMetadataBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateContentMetadataBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateContentMetadataBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateContentMetadataNotFound() *UpdateContentMetadataNotFound {
 	return &UpdateContentMetadataNotFound{}
 }
 
-/*UpdateContentMetadataNotFound handles this case with default header values.
+/* UpdateContentMetadataNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateContentMetadataNotFound struct {
 
 func (o *UpdateContentMetadataNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /content_metadata/{content_metadata_id}][%d] updateContentMetadataNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateContentMetadataNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateContentMetadataNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateContentMetadataUnprocessableEntity() *UpdateContentMetadataUnproce
 	return &UpdateContentMetadataUnprocessableEntity{}
 }
 
-/*UpdateContentMetadataUnprocessableEntity handles this case with default header values.
+/* UpdateContentMetadataUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateContentMetadataUnprocessableEntity struct {
 func (o *UpdateContentMetadataUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /content_metadata/{content_metadata_id}][%d] updateContentMetadataUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateContentMetadataUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateContentMetadataUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateContentMetadataTooManyRequests creates a UpdateContentMetadataTooManyRequests with default headers values
+func NewUpdateContentMetadataTooManyRequests() *UpdateContentMetadataTooManyRequests {
+	return &UpdateContentMetadataTooManyRequests{}
+}
+
+/* UpdateContentMetadataTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateContentMetadataTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateContentMetadataTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /content_metadata/{content_metadata_id}][%d] updateContentMetadataTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateContentMetadataTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateContentMetadataTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

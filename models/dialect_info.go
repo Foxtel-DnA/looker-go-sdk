@@ -6,13 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DialectInfo dialect info
+//
 // swagger:model DialectInfo
 type DialectInfo struct {
 
@@ -64,13 +67,127 @@ func (m *DialectInfo) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DialectInfo) validateSupportedOptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SupportedOptions) { // not required
 		return nil
 	}
 
 	if m.SupportedOptions != nil {
 		if err := m.SupportedOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("supported_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dialect info based on the context it is used
+func (m *DialectInfo) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultMaxConnections(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultPort(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInstalled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabelForDatabaseEquivalent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DialectInfo) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateDefaultMaxConnections(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_max_connections", "body", string(m.DefaultMaxConnections)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateDefaultPort(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_port", "body", string(m.DefaultPort)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateInstalled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "installed", "body", m.Installed); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateLabelForDatabaseEquivalent(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label_for_database_equivalent", "body", string(m.LabelForDatabaseEquivalent)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfo) contextValidateSupportedOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SupportedOptions != nil {
+		if err := m.SupportedOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("supported_options")
 			}

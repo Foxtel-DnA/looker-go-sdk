@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ScheduledPlanDestination scheduled plan destination
+//
 // swagger:model ScheduledPlanDestination
 type ScheduledPlanDestination struct {
 
@@ -23,10 +27,6 @@ type ScheduledPlanDestination struct {
 
 	// Whether visualization options are applied to the results.
 	ApplyVis bool `json:"apply_vis,omitempty"`
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
 	Format string `json:"format,omitempty"`
@@ -57,6 +57,42 @@ type ScheduledPlanDestination struct {
 
 // Validate validates this scheduled plan destination
 func (m *ScheduledPlanDestination) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this scheduled plan destination based on the context it is used
+func (m *ScheduledPlanDestination) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookerRecipient(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ScheduledPlanDestination) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlanDestination) contextValidateLookerRecipient(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "looker_recipient", "body", m.LookerRecipient); err != nil {
+		return err
+	}
+
 	return nil
 }
 

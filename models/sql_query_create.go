@@ -6,31 +6,40 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // SQLQueryCreate Sql query create
+//
 // swagger:model SqlQueryCreate
 type SQLQueryCreate struct {
 
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
-
-	// Id of Connection (this or "model_name" required)
+	// (DEPRECATED) Use `connection_name` instead
 	ConnectionID string `json:"connection_id,omitempty"`
 
-	// Name of LookML Model (this or "connection_id" required)
+	// Name of the db connection on which to run this query
+	ConnectionName string `json:"connection_name,omitempty"`
+
+	// Name of LookML Model (this or `connection_id` required)
 	ModelName string `json:"model_name,omitempty"`
 
 	// SQL query
 	SQL string `json:"sql,omitempty"`
+
+	// Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+	VisConfig map[string]string `json:"vis_config,omitempty"`
 }
 
 // Validate validates this Sql query create
 func (m *SQLQueryCreate) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this Sql query create based on context it is used
+func (m *SQLQueryCreate) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

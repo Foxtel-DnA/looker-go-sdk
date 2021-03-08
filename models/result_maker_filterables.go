@@ -6,21 +6,19 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ResultMakerFilterables result maker filterables
+//
 // swagger:model ResultMakerFilterables
 type ResultMakerFilterables struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// array of dashboard_filter_name: and field: objects.
 	// Read Only: true
@@ -54,7 +52,6 @@ func (m *ResultMakerFilterables) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ResultMakerFilterables) validateListen(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Listen) { // not required
 		return nil
 	}
@@ -73,6 +70,81 @@ func (m *ResultMakerFilterables) validateListen(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+// ContextValidate validate this result maker filterables based on the context it is used
+func (m *ResultMakerFilterables) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateListen(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateView(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ResultMakerFilterables) contextValidateListen(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "listen", "body", []*ResultMakerFilterablesListen(m.Listen)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Listen); i++ {
+
+		if m.Listen[i] != nil {
+			if err := m.Listen[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("listen" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ResultMakerFilterables) contextValidateModel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "model", "body", string(m.Model)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerFilterables) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerFilterables) contextValidateView(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view", "body", string(m.View)); err != nil {
+		return err
 	}
 
 	return nil

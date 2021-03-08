@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteScheduledPlanReader is a Reader for the DeleteScheduledPlan structure.
@@ -24,30 +23,32 @@ type DeleteScheduledPlanReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteScheduledPlanReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteScheduledPlanNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteScheduledPlanBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteScheduledPlanNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteScheduledPlanTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteScheduledPlanNoContent() *DeleteScheduledPlanNoContent {
 	return &DeleteScheduledPlanNoContent{}
 }
 
-/*DeleteScheduledPlanNoContent handles this case with default header values.
+/* DeleteScheduledPlanNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteScheduledPlanNoContent struct {
 
 func (o *DeleteScheduledPlanNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /scheduled_plans/{scheduled_plan_id}][%d] deleteScheduledPlanNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteScheduledPlanNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteScheduledPlanNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteScheduledPlanBadRequest() *DeleteScheduledPlanBadRequest {
 	return &DeleteScheduledPlanBadRequest{}
 }
 
-/*DeleteScheduledPlanBadRequest handles this case with default header values.
+/* DeleteScheduledPlanBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteScheduledPlanBadRequest struct {
 
 func (o *DeleteScheduledPlanBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /scheduled_plans/{scheduled_plan_id}][%d] deleteScheduledPlanBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteScheduledPlanBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteScheduledPlanBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteScheduledPlanNotFound() *DeleteScheduledPlanNotFound {
 	return &DeleteScheduledPlanNotFound{}
 }
 
-/*DeleteScheduledPlanNotFound handles this case with default header values.
+/* DeleteScheduledPlanNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteScheduledPlanNotFound struct {
 func (o *DeleteScheduledPlanNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /scheduled_plans/{scheduled_plan_id}][%d] deleteScheduledPlanNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteScheduledPlanNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteScheduledPlanNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteScheduledPlanTooManyRequests creates a DeleteScheduledPlanTooManyRequests with default headers values
+func NewDeleteScheduledPlanTooManyRequests() *DeleteScheduledPlanTooManyRequests {
+	return &DeleteScheduledPlanTooManyRequests{}
+}
+
+/* DeleteScheduledPlanTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteScheduledPlanTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteScheduledPlanTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /scheduled_plans/{scheduled_plan_id}][%d] deleteScheduledPlanTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteScheduledPlanTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteScheduledPlanTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

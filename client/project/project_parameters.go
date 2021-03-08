@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewProjectParams creates a new ProjectParams object
-// with the default values initialized.
+// NewProjectParams creates a new ProjectParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewProjectParams() *ProjectParams {
-	var ()
 	return &ProjectParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewProjectParamsWithTimeout creates a new ProjectParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewProjectParamsWithTimeout(timeout time.Duration) *ProjectParams {
-	var ()
 	return &ProjectParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewProjectParamsWithContext creates a new ProjectParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewProjectParamsWithContext(ctx context.Context) *ProjectParams {
-	var ()
 	return &ProjectParams{
-
 		Context: ctx,
 	}
 }
 
 // NewProjectParamsWithHTTPClient creates a new ProjectParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewProjectParamsWithHTTPClient(client *http.Client) *ProjectParams {
-	var ()
 	return &ProjectParams{
 		HTTPClient: client,
 	}
 }
 
-/*ProjectParams contains all the parameters to send to the API endpoint
-for the project operation typically these are written to a http.Request
+/* ProjectParams contains all the parameters to send to the API endpoint
+   for the project operation.
+
+   Typically these are written to a http.Request.
 */
 type ProjectParams struct {
 
-	/*Fields
-	  Requested fields
+	/* Fields.
 
+	   Requested fields
 	*/
 	Fields *string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the project params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectParams) WithDefaults() *ProjectParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the project params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the project params
@@ -144,16 +158,17 @@ func (o *ProjectParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regis
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param project_id

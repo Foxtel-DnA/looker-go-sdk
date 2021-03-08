@@ -6,13 +6,14 @@ package session
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new session API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,21 +25,32 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-Session gets session
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get API Session
+// ClientService is the interface for Client methods
+type ClientService interface {
+	Session(params *SessionParams, opts ...ClientOption) (*SessionOK, error)
+
+	UpdateSession(params *UpdateSessionParams, opts ...ClientOption) (*UpdateSessionOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  Session gets session
+
+  ### Get API Session
 
 Returns information about the current API session, such as which workspace is selected for the session.
 
 */
-func (a *Client) Session(params *SessionParams) (*SessionOK, error) {
+func (a *Client) Session(params *SessionParams, opts ...ClientOption) (*SessionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSessionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "session",
 		Method:             "GET",
 		PathPattern:        "/session",
@@ -49,18 +61,29 @@ func (a *Client) Session(params *SessionParams) (*SessionOK, error) {
 		Reader:             &SessionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SessionOK), nil
-
+	success, ok := result.(*SessionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for session: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateSession updates session
+  UpdateSession updates session
 
-### Update API Session
+  ### Update API Session
 
 #### API Session Workspace
 
@@ -82,13 +105,12 @@ If your Looker API client application needs to work in a dev workspace across mu
 API sessions, be sure to select the dev workspace after each login.
 
 */
-func (a *Client) UpdateSession(params *UpdateSessionParams) (*UpdateSessionOK, error) {
+func (a *Client) UpdateSession(params *UpdateSessionParams, opts ...ClientOption) (*UpdateSessionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateSessionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_session",
 		Method:             "PATCH",
 		PathPattern:        "/session",
@@ -99,12 +121,23 @@ func (a *Client) UpdateSession(params *UpdateSessionParams) (*UpdateSessionOK, e
 		Reader:             &UpdateSessionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateSessionOK), nil
-
+	success, ok := result.(*UpdateSessionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_session: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

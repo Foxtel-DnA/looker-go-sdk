@@ -13,129 +13,163 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewRunQueryParams creates a new RunQueryParams object
-// with the default values initialized.
+// NewRunQueryParams creates a new RunQueryParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRunQueryParams() *RunQueryParams {
-	var ()
 	return &RunQueryParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRunQueryParamsWithTimeout creates a new RunQueryParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRunQueryParamsWithTimeout(timeout time.Duration) *RunQueryParams {
-	var ()
 	return &RunQueryParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRunQueryParamsWithContext creates a new RunQueryParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRunQueryParamsWithContext(ctx context.Context) *RunQueryParams {
-	var ()
 	return &RunQueryParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRunQueryParamsWithHTTPClient creates a new RunQueryParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRunQueryParamsWithHTTPClient(client *http.Client) *RunQueryParams {
-	var ()
 	return &RunQueryParams{
 		HTTPClient: client,
 	}
 }
 
-/*RunQueryParams contains all the parameters to send to the API endpoint
-for the run query operation typically these are written to a http.Request
+/* RunQueryParams contains all the parameters to send to the API endpoint
+   for the run query operation.
+
+   Typically these are written to a http.Request.
 */
 type RunQueryParams struct {
 
-	/*ApplyFormatting
-	  Apply model-specified formatting to each result.
+	/* ApplyFormatting.
 
+	   Apply model-specified formatting to each result.
 	*/
 	ApplyFormatting *bool
-	/*ApplyVis
-	  Apply visualization options to results.
 
+	/* ApplyVis.
+
+	   Apply visualization options to results.
 	*/
 	ApplyVis *bool
-	/*Cache
-	  Get results from cache if available.
 
+	/* Cache.
+
+	   Get results from cache if available.
 	*/
 	Cache *bool
-	/*CacheOnly
-	  Retrieve any results from cache even if the results have expired.
 
+	/* CacheOnly.
+
+	   Retrieve any results from cache even if the results have expired.
 	*/
 	CacheOnly *bool
-	/*ForceProduction
-	  Force use of production models even if the user is in development mode.
 
+	/* ForceProduction.
+
+	   Force use of production models even if the user is in development mode.
 	*/
 	ForceProduction *bool
-	/*GenerateDrillLinks
-	  Generate drill links (only applicable to 'json_detail' format.
 
+	/* GenerateDrillLinks.
+
+	   Generate drill links (only applicable to 'json_detail' format.
 	*/
 	GenerateDrillLinks *bool
-	/*ImageHeight
-	  Render height for image formats.
 
+	/* ImageHeight.
+
+	   Render height for image formats.
+
+	   Format: int64
 	*/
 	ImageHeight *int64
-	/*ImageWidth
-	  Render width for image formats.
 
+	/* ImageWidth.
+
+	   Render width for image formats.
+
+	   Format: int64
 	*/
 	ImageWidth *int64
-	/*Limit
-	  Row limit (may override the limit in the saved query).
 
+	/* Limit.
+
+	   Row limit (may override the limit in the saved query).
+
+	   Format: int64
 	*/
 	Limit *int64
-	/*PathPrefix
-	  Prefix to use for drill links (url encoded).
 
+	/* PathPrefix.
+
+	   Prefix to use for drill links (url encoded).
 	*/
 	PathPrefix *string
-	/*QueryID
-	  Id of query
 
+	/* QueryID.
+
+	   Id of query
+
+	   Format: int64
 	*/
 	QueryID int64
-	/*RebuildPdts
-	  Rebuild PDTS used in query.
 
+	/* RebuildPdts.
+
+	   Rebuild PDTS used in query.
 	*/
 	RebuildPdts *bool
-	/*ResultFormat
-	  Format of result
 
+	/* ResultFormat.
+
+	   Format of result
 	*/
 	ResultFormat string
-	/*ServerTableCalcs
-	  Perform table calculations on query results
 
+	/* ServerTableCalcs.
+
+	   Perform table calculations on query results
 	*/
 	ServerTableCalcs *bool
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the run query params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RunQueryParams) WithDefaults() *RunQueryParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the run query params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RunQueryParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the run query params
@@ -337,160 +371,170 @@ func (o *RunQueryParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 
 		// query param apply_formatting
 		var qrApplyFormatting bool
+
 		if o.ApplyFormatting != nil {
 			qrApplyFormatting = *o.ApplyFormatting
 		}
 		qApplyFormatting := swag.FormatBool(qrApplyFormatting)
 		if qApplyFormatting != "" {
+
 			if err := r.SetQueryParam("apply_formatting", qApplyFormatting); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ApplyVis != nil {
 
 		// query param apply_vis
 		var qrApplyVis bool
+
 		if o.ApplyVis != nil {
 			qrApplyVis = *o.ApplyVis
 		}
 		qApplyVis := swag.FormatBool(qrApplyVis)
 		if qApplyVis != "" {
+
 			if err := r.SetQueryParam("apply_vis", qApplyVis); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Cache != nil {
 
 		// query param cache
 		var qrCache bool
+
 		if o.Cache != nil {
 			qrCache = *o.Cache
 		}
 		qCache := swag.FormatBool(qrCache)
 		if qCache != "" {
+
 			if err := r.SetQueryParam("cache", qCache); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.CacheOnly != nil {
 
 		// query param cache_only
 		var qrCacheOnly bool
+
 		if o.CacheOnly != nil {
 			qrCacheOnly = *o.CacheOnly
 		}
 		qCacheOnly := swag.FormatBool(qrCacheOnly)
 		if qCacheOnly != "" {
+
 			if err := r.SetQueryParam("cache_only", qCacheOnly); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ForceProduction != nil {
 
 		// query param force_production
 		var qrForceProduction bool
+
 		if o.ForceProduction != nil {
 			qrForceProduction = *o.ForceProduction
 		}
 		qForceProduction := swag.FormatBool(qrForceProduction)
 		if qForceProduction != "" {
+
 			if err := r.SetQueryParam("force_production", qForceProduction); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.GenerateDrillLinks != nil {
 
 		// query param generate_drill_links
 		var qrGenerateDrillLinks bool
+
 		if o.GenerateDrillLinks != nil {
 			qrGenerateDrillLinks = *o.GenerateDrillLinks
 		}
 		qGenerateDrillLinks := swag.FormatBool(qrGenerateDrillLinks)
 		if qGenerateDrillLinks != "" {
+
 			if err := r.SetQueryParam("generate_drill_links", qGenerateDrillLinks); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ImageHeight != nil {
 
 		// query param image_height
 		var qrImageHeight int64
+
 		if o.ImageHeight != nil {
 			qrImageHeight = *o.ImageHeight
 		}
 		qImageHeight := swag.FormatInt64(qrImageHeight)
 		if qImageHeight != "" {
+
 			if err := r.SetQueryParam("image_height", qImageHeight); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ImageWidth != nil {
 
 		// query param image_width
 		var qrImageWidth int64
+
 		if o.ImageWidth != nil {
 			qrImageWidth = *o.ImageWidth
 		}
 		qImageWidth := swag.FormatInt64(qrImageWidth)
 		if qImageWidth != "" {
+
 			if err := r.SetQueryParam("image_width", qImageWidth); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PathPrefix != nil {
 
 		// query param path_prefix
 		var qrPathPrefix string
+
 		if o.PathPrefix != nil {
 			qrPathPrefix = *o.PathPrefix
 		}
 		qPathPrefix := qrPathPrefix
 		if qPathPrefix != "" {
+
 			if err := r.SetQueryParam("path_prefix", qPathPrefix); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param query_id
@@ -502,16 +546,17 @@ func (o *RunQueryParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 
 		// query param rebuild_pdts
 		var qrRebuildPdts bool
+
 		if o.RebuildPdts != nil {
 			qrRebuildPdts = *o.RebuildPdts
 		}
 		qRebuildPdts := swag.FormatBool(qrRebuildPdts)
 		if qRebuildPdts != "" {
+
 			if err := r.SetQueryParam("rebuild_pdts", qRebuildPdts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param result_format
@@ -523,16 +568,17 @@ func (o *RunQueryParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 
 		// query param server_table_calcs
 		var qrServerTableCalcs bool
+
 		if o.ServerTableCalcs != nil {
 			qrServerTableCalcs = *o.ServerTableCalcs
 		}
 		qServerTableCalcs := swag.FormatBool(qrServerTableCalcs)
 		if qServerTableCalcs != "" {
+
 			if err := r.SetQueryParam("server_table_calcs", qServerTableCalcs); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

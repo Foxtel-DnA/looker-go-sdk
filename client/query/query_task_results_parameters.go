@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewQueryTaskResultsParams creates a new QueryTaskResultsParams object
-// with the default values initialized.
+// NewQueryTaskResultsParams creates a new QueryTaskResultsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewQueryTaskResultsParams() *QueryTaskResultsParams {
-	var ()
 	return &QueryTaskResultsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewQueryTaskResultsParamsWithTimeout creates a new QueryTaskResultsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewQueryTaskResultsParamsWithTimeout(timeout time.Duration) *QueryTaskResultsParams {
-	var ()
 	return &QueryTaskResultsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewQueryTaskResultsParamsWithContext creates a new QueryTaskResultsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewQueryTaskResultsParamsWithContext(ctx context.Context) *QueryTaskResultsParams {
-	var ()
 	return &QueryTaskResultsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewQueryTaskResultsParamsWithHTTPClient creates a new QueryTaskResultsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewQueryTaskResultsParamsWithHTTPClient(client *http.Client) *QueryTaskResultsParams {
-	var ()
 	return &QueryTaskResultsParams{
 		HTTPClient: client,
 	}
 }
 
-/*QueryTaskResultsParams contains all the parameters to send to the API endpoint
-for the query task results operation typically these are written to a http.Request
+/* QueryTaskResultsParams contains all the parameters to send to the API endpoint
+   for the query task results operation.
+
+   Typically these are written to a http.Request.
 */
 type QueryTaskResultsParams struct {
 
-	/*QueryTaskID
-	  ID of the Query Task
+	/* QueryTaskID.
 
+	   ID of the Query Task
 	*/
 	QueryTaskID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the query task results params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryTaskResultsParams) WithDefaults() *QueryTaskResultsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the query task results params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryTaskResultsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the query task results params

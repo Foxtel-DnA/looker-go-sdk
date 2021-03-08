@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteUserAttributeUserValueReader is a Reader for the DeleteUserAttributeUserValue structure.
@@ -24,30 +23,26 @@ type DeleteUserAttributeUserValueReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteUserAttributeUserValueReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteUserAttributeUserValueNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteUserAttributeUserValueBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteUserAttributeUserValueNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewDeleteUserAttributeUserValueNoContent() *DeleteUserAttributeUserValueNoC
 	return &DeleteUserAttributeUserValueNoContent{}
 }
 
-/*DeleteUserAttributeUserValueNoContent handles this case with default header values.
+/* DeleteUserAttributeUserValueNoContent describes a response with status code 204, with default header values.
 
 Deleted
 */
@@ -77,7 +72,7 @@ func NewDeleteUserAttributeUserValueBadRequest() *DeleteUserAttributeUserValueBa
 	return &DeleteUserAttributeUserValueBadRequest{}
 }
 
-/*DeleteUserAttributeUserValueBadRequest handles this case with default header values.
+/* DeleteUserAttributeUserValueBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -87,6 +82,9 @@ type DeleteUserAttributeUserValueBadRequest struct {
 
 func (o *DeleteUserAttributeUserValueBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /users/{user_id}/attribute_values/{user_attribute_id}][%d] deleteUserAttributeUserValueBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteUserAttributeUserValueBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteUserAttributeUserValueBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -106,7 +104,7 @@ func NewDeleteUserAttributeUserValueNotFound() *DeleteUserAttributeUserValueNotF
 	return &DeleteUserAttributeUserValueNotFound{}
 }
 
-/*DeleteUserAttributeUserValueNotFound handles this case with default header values.
+/* DeleteUserAttributeUserValueNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -116,6 +114,9 @@ type DeleteUserAttributeUserValueNotFound struct {
 
 func (o *DeleteUserAttributeUserValueNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /users/{user_id}/attribute_values/{user_attribute_id}][%d] deleteUserAttributeUserValueNotFound  %+v", 404, o.Payload)
+}
+func (o *DeleteUserAttributeUserValueNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteUserAttributeUserValueNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

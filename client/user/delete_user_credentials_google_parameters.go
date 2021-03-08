@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteUserCredentialsGoogleParams creates a new DeleteUserCredentialsGoogleParams object
-// with the default values initialized.
+// NewDeleteUserCredentialsGoogleParams creates a new DeleteUserCredentialsGoogleParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteUserCredentialsGoogleParams() *DeleteUserCredentialsGoogleParams {
-	var ()
 	return &DeleteUserCredentialsGoogleParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteUserCredentialsGoogleParamsWithTimeout creates a new DeleteUserCredentialsGoogleParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteUserCredentialsGoogleParamsWithTimeout(timeout time.Duration) *DeleteUserCredentialsGoogleParams {
-	var ()
 	return &DeleteUserCredentialsGoogleParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteUserCredentialsGoogleParamsWithContext creates a new DeleteUserCredentialsGoogleParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteUserCredentialsGoogleParamsWithContext(ctx context.Context) *DeleteUserCredentialsGoogleParams {
-	var ()
 	return &DeleteUserCredentialsGoogleParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteUserCredentialsGoogleParamsWithHTTPClient creates a new DeleteUserCredentialsGoogleParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteUserCredentialsGoogleParamsWithHTTPClient(client *http.Client) *DeleteUserCredentialsGoogleParams {
-	var ()
 	return &DeleteUserCredentialsGoogleParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteUserCredentialsGoogleParams contains all the parameters to send to the API endpoint
-for the delete user credentials google operation typically these are written to a http.Request
+/* DeleteUserCredentialsGoogleParams contains all the parameters to send to the API endpoint
+   for the delete user credentials google operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteUserCredentialsGoogleParams struct {
 
-	/*UserID
-	  id of user
+	/* UserID.
 
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete user credentials google params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsGoogleParams) WithDefaults() *DeleteUserCredentialsGoogleParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete user credentials google params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsGoogleParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete user credentials google params

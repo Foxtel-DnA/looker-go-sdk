@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateModelSetReader is a Reader for the CreateModelSet structure.
@@ -24,44 +23,38 @@ type CreateModelSetReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateModelSetReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateModelSetOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateModelSetBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateModelSetNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateModelSetConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateModelSetUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +63,7 @@ func NewCreateModelSetOK() *CreateModelSetOK {
 	return &CreateModelSetOK{}
 }
 
-/*CreateModelSetOK handles this case with default header values.
+/* CreateModelSetOK describes a response with status code 200, with default header values.
 
 Newly created ModelSet
 */
@@ -80,6 +73,9 @@ type CreateModelSetOK struct {
 
 func (o *CreateModelSetOK) Error() string {
 	return fmt.Sprintf("[POST /model_sets][%d] createModelSetOK  %+v", 200, o.Payload)
+}
+func (o *CreateModelSetOK) GetPayload() *models.ModelSet {
+	return o.Payload
 }
 
 func (o *CreateModelSetOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +95,7 @@ func NewCreateModelSetBadRequest() *CreateModelSetBadRequest {
 	return &CreateModelSetBadRequest{}
 }
 
-/*CreateModelSetBadRequest handles this case with default header values.
+/* CreateModelSetBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +105,9 @@ type CreateModelSetBadRequest struct {
 
 func (o *CreateModelSetBadRequest) Error() string {
 	return fmt.Sprintf("[POST /model_sets][%d] createModelSetBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateModelSetBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateModelSetBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +127,7 @@ func NewCreateModelSetNotFound() *CreateModelSetNotFound {
 	return &CreateModelSetNotFound{}
 }
 
-/*CreateModelSetNotFound handles this case with default header values.
+/* CreateModelSetNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +137,9 @@ type CreateModelSetNotFound struct {
 
 func (o *CreateModelSetNotFound) Error() string {
 	return fmt.Sprintf("[POST /model_sets][%d] createModelSetNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateModelSetNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateModelSetNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +159,7 @@ func NewCreateModelSetConflict() *CreateModelSetConflict {
 	return &CreateModelSetConflict{}
 }
 
-/*CreateModelSetConflict handles this case with default header values.
+/* CreateModelSetConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +169,9 @@ type CreateModelSetConflict struct {
 
 func (o *CreateModelSetConflict) Error() string {
 	return fmt.Sprintf("[POST /model_sets][%d] createModelSetConflict  %+v", 409, o.Payload)
+}
+func (o *CreateModelSetConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateModelSetConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +191,7 @@ func NewCreateModelSetUnprocessableEntity() *CreateModelSetUnprocessableEntity {
 	return &CreateModelSetUnprocessableEntity{}
 }
 
-/*CreateModelSetUnprocessableEntity handles this case with default header values.
+/* CreateModelSetUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -196,6 +201,9 @@ type CreateModelSetUnprocessableEntity struct {
 
 func (o *CreateModelSetUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /model_sets][%d] createModelSetUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *CreateModelSetUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *CreateModelSetUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

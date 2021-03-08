@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // Role role
+//
 // swagger:model Role
 type Role struct {
 
@@ -80,7 +82,6 @@ func (m *Role) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Role) validateModelSet(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModelSet) { // not required
 		return nil
 	}
@@ -98,7 +99,6 @@ func (m *Role) validateModelSet(formats strfmt.Registry) error {
 }
 
 func (m *Role) validatePermissionSet(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PermissionSet) { // not required
 		return nil
 	}
@@ -116,7 +116,6 @@ func (m *Role) validatePermissionSet(formats strfmt.Registry) error {
 }
 
 func (m *Role) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
@@ -129,12 +128,105 @@ func (m *Role) validateURL(formats strfmt.Registry) error {
 }
 
 func (m *Role) validateUsersURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UsersURL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("users_url", "body", "uri", m.UsersURL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this role based on the context it is used
+func (m *Role) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModelSet(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermissionSet(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUsersURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Role) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Role) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Role) contextValidateModelSet(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ModelSet != nil {
+		if err := m.ModelSet.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("model_set")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Role) contextValidatePermissionSet(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PermissionSet != nil {
+		if err := m.PermissionSet.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("permission_set")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Role) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Role) contextValidateUsersURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "users_url", "body", strfmt.URI(m.UsersURL)); err != nil {
 		return err
 	}
 

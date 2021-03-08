@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllLookmlModelsParams creates a new AllLookmlModelsParams object
-// with the default values initialized.
+// NewAllLookmlModelsParams creates a new AllLookmlModelsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllLookmlModelsParams() *AllLookmlModelsParams {
-	var ()
 	return &AllLookmlModelsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllLookmlModelsParamsWithTimeout creates a new AllLookmlModelsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllLookmlModelsParamsWithTimeout(timeout time.Duration) *AllLookmlModelsParams {
-	var ()
 	return &AllLookmlModelsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllLookmlModelsParamsWithContext creates a new AllLookmlModelsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllLookmlModelsParamsWithContext(ctx context.Context) *AllLookmlModelsParams {
-	var ()
 	return &AllLookmlModelsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllLookmlModelsParamsWithHTTPClient creates a new AllLookmlModelsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllLookmlModelsParamsWithHTTPClient(client *http.Client) *AllLookmlModelsParams {
-	var ()
 	return &AllLookmlModelsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllLookmlModelsParams contains all the parameters to send to the API endpoint
-for the all lookml models operation typically these are written to a http.Request
+/* AllLookmlModelsParams contains all the parameters to send to the API endpoint
+   for the all lookml models operation.
+
+   Typically these are written to a http.Request.
 */
 type AllLookmlModelsParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all lookml models params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllLookmlModelsParams) WithDefaults() *AllLookmlModelsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all lookml models params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllLookmlModelsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all lookml models params
@@ -128,16 +141,17 @@ func (o *AllLookmlModelsParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // CredentialsGoogle credentials google
+//
 // swagger:model CredentialsGoogle
 type CredentialsGoogle struct {
 
@@ -70,12 +72,134 @@ func (m *CredentialsGoogle) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CredentialsGoogle) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this credentials google based on the context it is used
+func (m *CredentialsGoogle) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDomain(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmail(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGoogleUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsDisabled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLoggedInAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateDomain(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "domain", "body", string(m.Domain)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateEmail(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "email", "body", string(m.Email)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateGoogleUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "google_user_id", "body", string(m.GoogleUserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateIsDisabled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_disabled", "body", m.IsDisabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateLoggedInAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "logged_in_at", "body", string(m.LoggedInAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "type", "body", string(m.Type)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CredentialsGoogle) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

@@ -6,15 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DBConnection d b connection
+//
 // swagger:model DBConnection
 type DBConnection struct {
 
@@ -45,7 +47,7 @@ type DBConnection struct {
 	// (Read/Write) SQL Dialect name
 	DialectName string `json:"dialect_name,omitempty"`
 
-	// Is this an example connection
+	// Is this an example connection?
 	// Read Only: true
 	Example *bool `json:"example,omitempty"`
 
@@ -64,10 +66,14 @@ type DBConnection struct {
 
 	// Unix timestamp at start of last completed PDT trigger check process
 	// Read Only: true
-	LastRegenAt int64 `json:"last_regen_at,omitempty"`
+	LastRegenAt string `json:"last_regen_at,omitempty"`
 
 	// Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
 	MaintenanceCron string `json:"maintenance_cron,omitempty"`
+
+	// Is this connection created and managed by Looker
+	// Read Only: true
+	Managed *bool `json:"managed,omitempty"`
 
 	// Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
 	MaxBillingGigabytes string `json:"max_billing_gigabytes,omitempty"`
@@ -84,7 +90,11 @@ type DBConnection struct {
 	// db_connection_override for this connection in the `pdt` maintenance context
 	PdtContextOverride *DBConnectionOverride `json:"pdt_context_override,omitempty"`
 
-	// Pool Timeout
+	// True if PDTs are enabled on this connection
+	// Read Only: true
+	PdtsEnabled *bool `json:"pdts_enabled,omitempty"`
+
+	// Connection Pool Timeout, in seconds
 	PoolTimeout int64 `json:"pool_timeout,omitempty"`
 
 	// Port number on server
@@ -117,10 +127,14 @@ type DBConnection struct {
 
 	// Id of user who last modified this connection configuration
 	// Read Only: true
-	UserID int64 `json:"user_id,omitempty"`
+	UserID string `json:"user_id,omitempty"`
 
 	// Username for server authentication
 	Username string `json:"username,omitempty"`
+
+	// Whether the connection uses OAuth for authentication.
+	// Read Only: true
+	UsesOauth *bool `json:"uses_oauth,omitempty"`
 
 	// Verify the SSL
 	VerifySsl bool `json:"verify_ssl,omitempty"`
@@ -149,7 +163,6 @@ func (m *DBConnection) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DBConnection) validateDialect(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dialect) { // not required
 		return nil
 	}
@@ -167,7 +180,6 @@ func (m *DBConnection) validateDialect(formats strfmt.Registry) error {
 }
 
 func (m *DBConnection) validatePdtContextOverride(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PdtContextOverride) { // not required
 		return nil
 	}
@@ -185,7 +197,6 @@ func (m *DBConnection) validatePdtContextOverride(formats strfmt.Registry) error
 }
 
 func (m *DBConnection) validateSnippets(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Snippets) { // not required
 		return nil
 	}
@@ -204,6 +215,191 @@ func (m *DBConnection) validateSnippets(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+// ContextValidate validate this d b connection based on the context it is used
+func (m *DBConnection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDialect(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExample(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastReapAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastRegenAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateManaged(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePdtContextOverride(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePdtsEnabled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSnippets(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUsesOauth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DBConnection) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateDialect(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Dialect != nil {
+		if err := m.Dialect.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("dialect")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateExample(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "example", "body", m.Example); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateLastReapAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_reap_at", "body", string(m.LastReapAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateLastRegenAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_regen_at", "body", string(m.LastRegenAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateManaged(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "managed", "body", m.Managed); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidatePdtContextOverride(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PdtContextOverride != nil {
+		if err := m.PdtContextOverride.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pdt_context_override")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidatePdtsEnabled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "pdts_enabled", "body", m.PdtsEnabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateSnippets(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "snippets", "body", []*Snippet(m.Snippets)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Snippets); i++ {
+
+		if m.Snippets[i] != nil {
+			if err := m.Snippets[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("snippets" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", string(m.UserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnection) contextValidateUsesOauth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "uses_oauth", "body", m.UsesOauth); err != nil {
+		return err
 	}
 
 	return nil

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // LogoutReader is a Reader for the Logout structure.
@@ -24,30 +23,26 @@ type LogoutReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *LogoutReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewLogoutNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewLogoutBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewLogoutNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewLogoutNoContent() *LogoutNoContent {
 	return &LogoutNoContent{}
 }
 
-/*LogoutNoContent handles this case with default header values.
+/* LogoutNoContent describes a response with status code 204, with default header values.
 
 Logged out successfully.
 */
@@ -66,6 +61,9 @@ type LogoutNoContent struct {
 
 func (o *LogoutNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /logout][%d] logoutNoContent  %+v", 204, o.Payload)
+}
+func (o *LogoutNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *LogoutNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewLogoutBadRequest() *LogoutBadRequest {
 	return &LogoutBadRequest{}
 }
 
-/*LogoutBadRequest handles this case with default header values.
+/* LogoutBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type LogoutBadRequest struct {
 
 func (o *LogoutBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /logout][%d] logoutBadRequest  %+v", 400, o.Payload)
+}
+func (o *LogoutBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LogoutBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewLogoutNotFound() *LogoutNotFound {
 	return &LogoutNotFound{}
 }
 
-/*LogoutNotFound handles this case with default header values.
+/* LogoutNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type LogoutNotFound struct {
 
 func (o *LogoutNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /logout][%d] logoutNotFound  %+v", 404, o.Payload)
+}
+func (o *LogoutNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LogoutNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

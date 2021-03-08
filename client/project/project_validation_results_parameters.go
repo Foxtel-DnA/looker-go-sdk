@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewProjectValidationResultsParams creates a new ProjectValidationResultsParams object
-// with the default values initialized.
+// NewProjectValidationResultsParams creates a new ProjectValidationResultsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewProjectValidationResultsParams() *ProjectValidationResultsParams {
-	var ()
 	return &ProjectValidationResultsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewProjectValidationResultsParamsWithTimeout creates a new ProjectValidationResultsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewProjectValidationResultsParamsWithTimeout(timeout time.Duration) *ProjectValidationResultsParams {
-	var ()
 	return &ProjectValidationResultsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewProjectValidationResultsParamsWithContext creates a new ProjectValidationResultsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewProjectValidationResultsParamsWithContext(ctx context.Context) *ProjectValidationResultsParams {
-	var ()
 	return &ProjectValidationResultsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewProjectValidationResultsParamsWithHTTPClient creates a new ProjectValidationResultsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewProjectValidationResultsParamsWithHTTPClient(client *http.Client) *ProjectValidationResultsParams {
-	var ()
 	return &ProjectValidationResultsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ProjectValidationResultsParams contains all the parameters to send to the API endpoint
-for the project validation results operation typically these are written to a http.Request
+/* ProjectValidationResultsParams contains all the parameters to send to the API endpoint
+   for the project validation results operation.
+
+   Typically these are written to a http.Request.
 */
 type ProjectValidationResultsParams struct {
 
-	/*Fields
-	  Requested fields
+	/* Fields.
 
+	   Requested fields
 	*/
 	Fields *string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the project validation results params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectValidationResultsParams) WithDefaults() *ProjectValidationResultsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the project validation results params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ProjectValidationResultsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the project validation results params
@@ -144,16 +158,17 @@ func (o *ProjectValidationResultsParams) WriteToRequest(r runtime.ClientRequest,
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param project_id

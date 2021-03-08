@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteOidcTestConfigReader is a Reader for the DeleteOidcTestConfig structure.
@@ -24,30 +23,26 @@ type DeleteOidcTestConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteOidcTestConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteOidcTestConfigNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteOidcTestConfigBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteOidcTestConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewDeleteOidcTestConfigNoContent() *DeleteOidcTestConfigNoContent {
 	return &DeleteOidcTestConfigNoContent{}
 }
 
-/*DeleteOidcTestConfigNoContent handles this case with default header values.
+/* DeleteOidcTestConfigNoContent describes a response with status code 204, with default header values.
 
 Test config succssfully deleted.
 */
@@ -66,6 +61,9 @@ type DeleteOidcTestConfigNoContent struct {
 
 func (o *DeleteOidcTestConfigNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /oidc_test_configs/{test_slug}][%d] deleteOidcTestConfigNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteOidcTestConfigNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteOidcTestConfigNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewDeleteOidcTestConfigBadRequest() *DeleteOidcTestConfigBadRequest {
 	return &DeleteOidcTestConfigBadRequest{}
 }
 
-/*DeleteOidcTestConfigBadRequest handles this case with default header values.
+/* DeleteOidcTestConfigBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type DeleteOidcTestConfigBadRequest struct {
 
 func (o *DeleteOidcTestConfigBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /oidc_test_configs/{test_slug}][%d] deleteOidcTestConfigBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteOidcTestConfigBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteOidcTestConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewDeleteOidcTestConfigNotFound() *DeleteOidcTestConfigNotFound {
 	return &DeleteOidcTestConfigNotFound{}
 }
 
-/*DeleteOidcTestConfigNotFound handles this case with default header values.
+/* DeleteOidcTestConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type DeleteOidcTestConfigNotFound struct {
 
 func (o *DeleteOidcTestConfigNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /oidc_test_configs/{test_slug}][%d] deleteOidcTestConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *DeleteOidcTestConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteOidcTestConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

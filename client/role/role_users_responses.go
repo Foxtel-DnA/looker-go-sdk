@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // RoleUsersReader is a Reader for the RoleUsers structure.
@@ -24,30 +23,26 @@ type RoleUsersReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *RoleUsersReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewRoleUsersOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewRoleUsersBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewRoleUsersNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewRoleUsersOK() *RoleUsersOK {
 	return &RoleUsersOK{}
 }
 
-/*RoleUsersOK handles this case with default header values.
+/* RoleUsersOK describes a response with status code 200, with default header values.
 
 Users with role.
 */
@@ -66,6 +61,9 @@ type RoleUsersOK struct {
 
 func (o *RoleUsersOK) Error() string {
 	return fmt.Sprintf("[GET /roles/{role_id}/users][%d] roleUsersOK  %+v", 200, o.Payload)
+}
+func (o *RoleUsersOK) GetPayload() []*models.User {
+	return o.Payload
 }
 
 func (o *RoleUsersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewRoleUsersBadRequest() *RoleUsersBadRequest {
 	return &RoleUsersBadRequest{}
 }
 
-/*RoleUsersBadRequest handles this case with default header values.
+/* RoleUsersBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type RoleUsersBadRequest struct {
 
 func (o *RoleUsersBadRequest) Error() string {
 	return fmt.Sprintf("[GET /roles/{role_id}/users][%d] roleUsersBadRequest  %+v", 400, o.Payload)
+}
+func (o *RoleUsersBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RoleUsersBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewRoleUsersNotFound() *RoleUsersNotFound {
 	return &RoleUsersNotFound{}
 }
 
-/*RoleUsersNotFound handles this case with default header values.
+/* RoleUsersNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type RoleUsersNotFound struct {
 
 func (o *RoleUsersNotFound) Error() string {
 	return fmt.Sprintf("[GET /roles/{role_id}/users][%d] roleUsersNotFound  %+v", 404, o.Payload)
+}
+func (o *RoleUsersNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RoleUsersNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

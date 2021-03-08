@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewIntegrationHubParams creates a new IntegrationHubParams object
-// with the default values initialized.
+// NewIntegrationHubParams creates a new IntegrationHubParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewIntegrationHubParams() *IntegrationHubParams {
-	var ()
 	return &IntegrationHubParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewIntegrationHubParamsWithTimeout creates a new IntegrationHubParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewIntegrationHubParamsWithTimeout(timeout time.Duration) *IntegrationHubParams {
-	var ()
 	return &IntegrationHubParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewIntegrationHubParamsWithContext creates a new IntegrationHubParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewIntegrationHubParamsWithContext(ctx context.Context) *IntegrationHubParams {
-	var ()
 	return &IntegrationHubParams{
-
 		Context: ctx,
 	}
 }
 
 // NewIntegrationHubParamsWithHTTPClient creates a new IntegrationHubParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewIntegrationHubParamsWithHTTPClient(client *http.Client) *IntegrationHubParams {
-	var ()
 	return &IntegrationHubParams{
 		HTTPClient: client,
 	}
 }
 
-/*IntegrationHubParams contains all the parameters to send to the API endpoint
-for the integration hub operation typically these are written to a http.Request
+/* IntegrationHubParams contains all the parameters to send to the API endpoint
+   for the integration hub operation.
+
+   Typically these are written to a http.Request.
 */
 type IntegrationHubParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*IntegrationHubID
-	  Id of Integration Hub
 
+	/* IntegrationHubID.
+
+	   Id of Integration Hub
+
+	   Format: int64
 	*/
 	IntegrationHubID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *IntegrationHubParams) WithDefaults() *IntegrationHubParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *IntegrationHubParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the integration hub params
@@ -145,16 +161,17 @@ func (o *IntegrationHubParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param integration_hub_id

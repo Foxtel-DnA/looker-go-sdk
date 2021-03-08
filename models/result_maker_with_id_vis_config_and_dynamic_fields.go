@@ -6,21 +6,19 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ResultMakerWithIDVisConfigAndDynamicFields result maker with Id vis config and dynamic fields
+//
 // swagger:model ResultMakerWithIdVisConfigAndDynamicFields
 type ResultMakerWithIDVisConfigAndDynamicFields struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// JSON string of dynamic field information.
 	// Read Only: true
@@ -48,7 +46,11 @@ type ResultMakerWithIDVisConfigAndDynamicFields struct {
 
 	// Sorts of the constituent Look, Query, or Merge Query
 	// Read Only: true
-	Sorts string `json:"sorts,omitempty"`
+	Sorts []string `json:"sorts"`
+
+	// ID of SQL Query if this is a SQL Runner Query
+	// Read Only: true
+	SQLQueryID string `json:"sql_query_id,omitempty"`
 
 	// Total of the constituent Look, Query, or Merge Query
 	// Read Only: true
@@ -56,7 +58,7 @@ type ResultMakerWithIDVisConfigAndDynamicFields struct {
 
 	// Vis config of the constituent Query, or Merge Query.
 	// Read Only: true
-	VisConfig string `json:"vis_config,omitempty"`
+	VisConfig map[string]string `json:"vis_config,omitempty"`
 }
 
 // Validate validates this result maker with Id vis config and dynamic fields
@@ -78,7 +80,6 @@ func (m *ResultMakerWithIDVisConfigAndDynamicFields) Validate(formats strfmt.Reg
 }
 
 func (m *ResultMakerWithIDVisConfigAndDynamicFields) validateFilterables(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Filterables) { // not required
 		return nil
 	}
@@ -103,7 +104,6 @@ func (m *ResultMakerWithIDVisConfigAndDynamicFields) validateFilterables(formats
 }
 
 func (m *ResultMakerWithIDVisConfigAndDynamicFields) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
@@ -116,6 +116,160 @@ func (m *ResultMakerWithIDVisConfigAndDynamicFields) validateQuery(formats strfm
 			return err
 		}
 	}
+
+	return nil
+}
+
+// ContextValidate validate this result maker with Id vis config and dynamic fields based on the context it is used
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDynamicFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFilterables(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMergeResultID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSorts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLQueryID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVisConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateDynamicFields(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dynamic_fields", "body", string(m.DynamicFields)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateFilterables(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "filterables", "body", []*ResultMakerFilterables(m.Filterables)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Filterables); i++ {
+
+		if m.Filterables[i] != nil {
+			if err := m.Filterables[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("filterables" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateMergeResultID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "merge_result_id", "body", string(m.MergeResultID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateQueryID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_id", "body", int64(m.QueryID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateSorts(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sorts", "body", []string(m.Sorts)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateSQLQueryID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql_query_id", "body", string(m.SQLQueryID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateTotal(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "total", "body", m.Total); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ResultMakerWithIDVisConfigAndDynamicFields) contextValidateVisConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	return nil
 }

@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewContentMetadataParams creates a new ContentMetadataParams object
-// with the default values initialized.
+// NewContentMetadataParams creates a new ContentMetadataParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewContentMetadataParams() *ContentMetadataParams {
-	var ()
 	return &ContentMetadataParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewContentMetadataParamsWithTimeout creates a new ContentMetadataParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewContentMetadataParamsWithTimeout(timeout time.Duration) *ContentMetadataParams {
-	var ()
 	return &ContentMetadataParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewContentMetadataParamsWithContext creates a new ContentMetadataParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewContentMetadataParamsWithContext(ctx context.Context) *ContentMetadataParams {
-	var ()
 	return &ContentMetadataParams{
-
 		Context: ctx,
 	}
 }
 
 // NewContentMetadataParamsWithHTTPClient creates a new ContentMetadataParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewContentMetadataParamsWithHTTPClient(client *http.Client) *ContentMetadataParams {
-	var ()
 	return &ContentMetadataParams{
 		HTTPClient: client,
 	}
 }
 
-/*ContentMetadataParams contains all the parameters to send to the API endpoint
-for the content metadata operation typically these are written to a http.Request
+/* ContentMetadataParams contains all the parameters to send to the API endpoint
+   for the content metadata operation.
+
+   Typically these are written to a http.Request.
 */
 type ContentMetadataParams struct {
 
-	/*ContentMetadataID
-	  Id of content metadata
+	/* ContentMetadataID.
 
+	   Id of content metadata
+
+	   Format: int64
 	*/
 	ContentMetadataID int64
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the content metadata params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ContentMetadataParams) WithDefaults() *ContentMetadataParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the content metadata params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ContentMetadataParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the content metadata params
@@ -150,16 +166,17 @@ func (o *ContentMetadataParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

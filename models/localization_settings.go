@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LocalizationSettings localization settings
+//
 // swagger:model LocalizationSettings
 type LocalizationSettings struct {
 
@@ -30,6 +34,51 @@ type LocalizationSettings struct {
 
 // Validate validates this localization settings
 func (m *LocalizationSettings) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this localization settings based on the context it is used
+func (m *LocalizationSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultLocale(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocalizationLevel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LocalizationSettings) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LocalizationSettings) contextValidateDefaultLocale(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_locale", "body", string(m.DefaultLocale)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LocalizationSettings) contextValidateLocalizationLevel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "localization_level", "body", string(m.LocalizationLevel)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

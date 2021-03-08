@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateGitBranchReader is a Reader for the CreateGitBranch structure.
@@ -24,44 +23,44 @@ type CreateGitBranchReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateGitBranchReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateGitBranchOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateGitBranchBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateGitBranchNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateGitBranchConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateGitBranchUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateGitBranchTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateGitBranchOK() *CreateGitBranchOK {
 	return &CreateGitBranchOK{}
 }
 
-/*CreateGitBranchOK handles this case with default header values.
+/* CreateGitBranchOK describes a response with status code 200, with default header values.
 
 Git Branch
 */
@@ -80,6 +79,9 @@ type CreateGitBranchOK struct {
 
 func (o *CreateGitBranchOK) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchOK  %+v", 200, o.Payload)
+}
+func (o *CreateGitBranchOK) GetPayload() *models.GitBranch {
+	return o.Payload
 }
 
 func (o *CreateGitBranchOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateGitBranchBadRequest() *CreateGitBranchBadRequest {
 	return &CreateGitBranchBadRequest{}
 }
 
-/*CreateGitBranchBadRequest handles this case with default header values.
+/* CreateGitBranchBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateGitBranchBadRequest struct {
 
 func (o *CreateGitBranchBadRequest) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateGitBranchBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGitBranchBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateGitBranchNotFound() *CreateGitBranchNotFound {
 	return &CreateGitBranchNotFound{}
 }
 
-/*CreateGitBranchNotFound handles this case with default header values.
+/* CreateGitBranchNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateGitBranchNotFound struct {
 
 func (o *CreateGitBranchNotFound) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateGitBranchNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGitBranchNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateGitBranchConflict() *CreateGitBranchConflict {
 	return &CreateGitBranchConflict{}
 }
 
-/*CreateGitBranchConflict handles this case with default header values.
+/* CreateGitBranchConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateGitBranchConflict struct {
 
 func (o *CreateGitBranchConflict) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchConflict  %+v", 409, o.Payload)
+}
+func (o *CreateGitBranchConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGitBranchConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateGitBranchUnprocessableEntity() *CreateGitBranchUnprocessableEntity
 	return &CreateGitBranchUnprocessableEntity{}
 }
 
-/*CreateGitBranchUnprocessableEntity handles this case with default header values.
+/* CreateGitBranchUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateGitBranchUnprocessableEntity struct {
 func (o *CreateGitBranchUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateGitBranchUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateGitBranchUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateGitBranchTooManyRequests creates a CreateGitBranchTooManyRequests with default headers values
+func NewCreateGitBranchTooManyRequests() *CreateGitBranchTooManyRequests {
+	return &CreateGitBranchTooManyRequests{}
+}
+
+/* CreateGitBranchTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateGitBranchTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateGitBranchTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /projects/{project_id}/git_branch][%d] createGitBranchTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateGitBranchTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateGitBranchTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

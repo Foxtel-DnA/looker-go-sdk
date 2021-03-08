@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewScheduledPlanRunOnceParams creates a new ScheduledPlanRunOnceParams object
-// with the default values initialized.
+// NewScheduledPlanRunOnceParams creates a new ScheduledPlanRunOnceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewScheduledPlanRunOnceParams() *ScheduledPlanRunOnceParams {
-	var ()
 	return &ScheduledPlanRunOnceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewScheduledPlanRunOnceParamsWithTimeout creates a new ScheduledPlanRunOnceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewScheduledPlanRunOnceParamsWithTimeout(timeout time.Duration) *ScheduledPlanRunOnceParams {
-	var ()
 	return &ScheduledPlanRunOnceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewScheduledPlanRunOnceParamsWithContext creates a new ScheduledPlanRunOnceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewScheduledPlanRunOnceParamsWithContext(ctx context.Context) *ScheduledPlanRunOnceParams {
-	var ()
 	return &ScheduledPlanRunOnceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewScheduledPlanRunOnceParamsWithHTTPClient creates a new ScheduledPlanRunOnceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewScheduledPlanRunOnceParamsWithHTTPClient(client *http.Client) *ScheduledPlanRunOnceParams {
-	var ()
 	return &ScheduledPlanRunOnceParams{
 		HTTPClient: client,
 	}
 }
 
-/*ScheduledPlanRunOnceParams contains all the parameters to send to the API endpoint
-for the scheduled plan run once operation typically these are written to a http.Request
+/* ScheduledPlanRunOnceParams contains all the parameters to send to the API endpoint
+   for the scheduled plan run once operation.
+
+   Typically these are written to a http.Request.
 */
 type ScheduledPlanRunOnceParams struct {
 
-	/*Body
-	  Scheduled Plan
+	/* Body.
 
+	   Scheduled Plan
 	*/
 	Body *models.ScheduledPlan
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the scheduled plan run once params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlanRunOnceParams) WithDefaults() *ScheduledPlanRunOnceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the scheduled plan run once params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlanRunOnceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the scheduled plan run once params
@@ -125,7 +138,6 @@ func (o *ScheduledPlanRunOnceParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

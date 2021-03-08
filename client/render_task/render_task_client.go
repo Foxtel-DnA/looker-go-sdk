@@ -6,13 +6,14 @@ package render_task
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new render task API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,10 +25,30 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-CreateDashboardRenderTask creates dashboard render task
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Create a new task to render a dashboard to a document or image.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	CreateDashboardRenderTask(params *CreateDashboardRenderTaskParams, opts ...ClientOption) (*CreateDashboardRenderTaskOK, error)
+
+	CreateLookRenderTask(params *CreateLookRenderTaskParams, opts ...ClientOption) (*CreateLookRenderTaskOK, error)
+
+	CreateLookmlDashboardRenderTask(params *CreateLookmlDashboardRenderTaskParams, opts ...ClientOption) (*CreateLookmlDashboardRenderTaskOK, error)
+
+	CreateQueryRenderTask(params *CreateQueryRenderTaskParams, opts ...ClientOption) (*CreateQueryRenderTaskOK, error)
+
+	RenderTask(params *RenderTaskParams, opts ...ClientOption) (*RenderTaskOK, error)
+
+	RenderTaskResults(params *RenderTaskResultsParams, opts ...ClientOption) (*RenderTaskResultsOK, *RenderTaskResultsAccepted, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  CreateDashboardRenderTask creates dashboard render task
+
+  ### Create a new task to render a dashboard to a document or image.
 
 Returns a render task object.
 To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
@@ -35,13 +56,12 @@ Once the render task is complete, you can download the resulting document or ima
 
 
 */
-func (a *Client) CreateDashboardRenderTask(params *CreateDashboardRenderTaskParams) (*CreateDashboardRenderTaskOK, error) {
+func (a *Client) CreateDashboardRenderTask(params *CreateDashboardRenderTaskParams, opts ...ClientOption) (*CreateDashboardRenderTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateDashboardRenderTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_dashboard_render_task",
 		Method:             "POST",
 		PathPattern:        "/render_tasks/dashboards/{dashboard_id}/{result_format}",
@@ -52,18 +72,29 @@ func (a *Client) CreateDashboardRenderTask(params *CreateDashboardRenderTaskPara
 		Reader:             &CreateDashboardRenderTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateDashboardRenderTaskOK), nil
-
+	success, ok := result.(*CreateDashboardRenderTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_dashboard_render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateLookRenderTask creates look render task
+  CreateLookRenderTask creates look render task
 
-### Create a new task to render a look to an image.
+  ### Create a new task to render a look to an image.
 
 Returns a render task object.
 To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
@@ -71,13 +102,12 @@ Once the render task is complete, you can download the resulting document or ima
 
 
 */
-func (a *Client) CreateLookRenderTask(params *CreateLookRenderTaskParams) (*CreateLookRenderTaskOK, error) {
+func (a *Client) CreateLookRenderTask(params *CreateLookRenderTaskParams, opts ...ClientOption) (*CreateLookRenderTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLookRenderTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_look_render_task",
 		Method:             "POST",
 		PathPattern:        "/render_tasks/looks/{look_id}/{result_format}",
@@ -88,18 +118,31 @@ func (a *Client) CreateLookRenderTask(params *CreateLookRenderTaskParams) (*Crea
 		Reader:             &CreateLookRenderTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateLookRenderTaskOK), nil
-
+	success, ok := result.(*CreateLookRenderTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_look_render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateLookmlDashboardRenderTask creates lookml dashboard render task
+  CreateLookmlDashboardRenderTask creates lookml dashboard render task
 
-### Create a new task to render a lookml dashboard to a document or image.
+  ### Create a new task to render a lookml dashboard to a document or image.
+
+# DEPRECATED:  Use [create_dashboard_render_task()](#!/RenderTask/create_dashboard_render_task) in API 4.0+
 
 Returns a render task object.
 To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
@@ -107,13 +150,12 @@ Once the render task is complete, you can download the resulting document or ima
 
 
 */
-func (a *Client) CreateLookmlDashboardRenderTask(params *CreateLookmlDashboardRenderTaskParams) (*CreateLookmlDashboardRenderTaskOK, error) {
+func (a *Client) CreateLookmlDashboardRenderTask(params *CreateLookmlDashboardRenderTaskParams, opts ...ClientOption) (*CreateLookmlDashboardRenderTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLookmlDashboardRenderTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_lookml_dashboard_render_task",
 		Method:             "POST",
 		PathPattern:        "/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}",
@@ -124,18 +166,29 @@ func (a *Client) CreateLookmlDashboardRenderTask(params *CreateLookmlDashboardRe
 		Reader:             &CreateLookmlDashboardRenderTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateLookmlDashboardRenderTaskOK), nil
-
+	success, ok := result.(*CreateLookmlDashboardRenderTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_lookml_dashboard_render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateQueryRenderTask creates query render task
+  CreateQueryRenderTask creates query render task
 
-### Create a new task to render an existing query to an image.
+  ### Create a new task to render an existing query to an image.
 
 Returns a render task object.
 To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
@@ -143,13 +196,12 @@ Once the render task is complete, you can download the resulting document or ima
 
 
 */
-func (a *Client) CreateQueryRenderTask(params *CreateQueryRenderTaskParams) (*CreateQueryRenderTaskOK, error) {
+func (a *Client) CreateQueryRenderTask(params *CreateQueryRenderTaskParams, opts ...ClientOption) (*CreateQueryRenderTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateQueryRenderTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_query_render_task",
 		Method:             "POST",
 		PathPattern:        "/render_tasks/queries/{query_id}/{result_format}",
@@ -160,18 +212,29 @@ func (a *Client) CreateQueryRenderTask(params *CreateQueryRenderTaskParams) (*Cr
 		Reader:             &CreateQueryRenderTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateQueryRenderTaskOK), nil
-
+	success, ok := result.(*CreateQueryRenderTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_query_render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RenderTask gets render task
+  RenderTask gets render task
 
-### Get information about a render task.
+  ### Get information about a render task.
 
 Returns a render task object.
 To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
@@ -179,13 +242,12 @@ Once the render task is complete, you can download the resulting document or ima
 
 
 */
-func (a *Client) RenderTask(params *RenderTaskParams) (*RenderTaskOK, error) {
+func (a *Client) RenderTask(params *RenderTaskParams, opts ...ClientOption) (*RenderTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRenderTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "render_task",
 		Method:             "GET",
 		PathPattern:        "/render_tasks/{render_task_id}",
@@ -196,29 +258,53 @@ func (a *Client) RenderTask(params *RenderTaskParams) (*RenderTaskOK, error) {
 		Reader:             &RenderTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RenderTaskOK), nil
-
+	success, ok := result.(*RenderTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RenderTaskResults renders task results
+  RenderTaskResults renders task results
 
-### Get the document or image produced by a completed render task.
+  ### Get the document or image produced by a completed render task.
 
-Returns `102 Processing` if the render task has not completed.
+Note that the PDF or image result will be a binary blob in the HTTP response, as indicated by the
+Content-Type in the response headers. This may require specialized (or at least different) handling than text
+responses such as JSON. You may need to tell your HTTP client that the response is binary so that it does not
+attempt to parse the binary data as text.
+
+If the render task exists but has not finished rendering the results, the response HTTP status will be
+**202 Accepted**, the response body will be empty, and the response will have a Retry-After header indicating
+that the caller should repeat the request at a later time.
+
+Returns 404 if the render task cannot be found, if the cached result has expired, or if the caller
+does not have permission to view the results.
+
+For detailed information about the status of the render task, use [Render Task](#!/RenderTask/render_task).
+Polling loops waiting for completion of a render task would be better served by polling **render_task(id)** until
+the task status reaches completion (or error) instead of polling **render_task_results(id)** alone.
 
 */
-func (a *Client) RenderTaskResults(params *RenderTaskResultsParams) (*RenderTaskResultsOK, error) {
+func (a *Client) RenderTaskResults(params *RenderTaskResultsParams, opts ...ClientOption) (*RenderTaskResultsOK, *RenderTaskResultsAccepted, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRenderTaskResultsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "render_task_results",
 		Method:             "GET",
 		PathPattern:        "/render_tasks/{render_task_id}/results",
@@ -229,12 +315,24 @@ func (a *Client) RenderTaskResults(params *RenderTaskResultsParams) (*RenderTask
 		Reader:             &RenderTaskResultsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
 	}
-	return result.(*RenderTaskResultsOK), nil
+	for _, opt := range opts {
+		opt(op)
+	}
 
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, nil, err
+	}
+	switch value := result.(type) {
+	case *RenderTaskResultsOK:
+		return value, nil, nil
+	case *RenderTaskResultsAccepted:
+		return nil, value, nil
+	}
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for render_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

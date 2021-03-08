@@ -6,13 +6,14 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new project API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,21 +25,86 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllGitBranches gets all git branches
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get All Git Branches
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllGitBranches(params *AllGitBranchesParams, opts ...ClientOption) (*AllGitBranchesOK, error)
+
+	AllGitConnectionTests(params *AllGitConnectionTestsParams, opts ...ClientOption) (*AllGitConnectionTestsOK, error)
+
+	AllLookmlTests(params *AllLookmlTestsParams, opts ...ClientOption) (*AllLookmlTestsOK, error)
+
+	AllProjectFiles(params *AllProjectFilesParams, opts ...ClientOption) (*AllProjectFilesOK, error)
+
+	AllProjects(params *AllProjectsParams, opts ...ClientOption) (*AllProjectsOK, error)
+
+	CreateGitBranch(params *CreateGitBranchParams, opts ...ClientOption) (*CreateGitBranchOK, error)
+
+	CreateGitDeployKey(params *CreateGitDeployKeyParams, opts ...ClientOption) (*CreateGitDeployKeyOK, error)
+
+	CreateProject(params *CreateProjectParams, opts ...ClientOption) (*CreateProjectOK, error)
+
+	DeleteGitBranch(params *DeleteGitBranchParams, opts ...ClientOption) (*DeleteGitBranchNoContent, error)
+
+	DeleteRepositoryCredential(params *DeleteRepositoryCredentialParams, opts ...ClientOption) (*DeleteRepositoryCredentialNoContent, error)
+
+	DeployRefToProduction(params *DeployRefToProductionParams, opts ...ClientOption) (*DeployRefToProductionOK, *DeployRefToProductionNoContent, error)
+
+	DeployToProduction(params *DeployToProductionParams, opts ...ClientOption) (*DeployToProductionOK, *DeployToProductionNoContent, error)
+
+	FindGitBranch(params *FindGitBranchParams, opts ...ClientOption) (*FindGitBranchOK, error)
+
+	GetAllRepositoryCredentials(params *GetAllRepositoryCredentialsParams, opts ...ClientOption) (*GetAllRepositoryCredentialsOK, error)
+
+	GitBranch(params *GitBranchParams, opts ...ClientOption) (*GitBranchOK, error)
+
+	GitDeployKey(params *GitDeployKeyParams, opts ...ClientOption) (*GitDeployKeyOK, error)
+
+	Manifest(params *ManifestParams, opts ...ClientOption) (*ManifestOK, error)
+
+	Project(params *ProjectParams, opts ...ClientOption) (*ProjectOK, error)
+
+	ProjectFile(params *ProjectFileParams, opts ...ClientOption) (*ProjectFileOK, error)
+
+	ProjectValidationResults(params *ProjectValidationResultsParams, opts ...ClientOption) (*ProjectValidationResultsOK, *ProjectValidationResultsNoContent, error)
+
+	ProjectWorkspace(params *ProjectWorkspaceParams, opts ...ClientOption) (*ProjectWorkspaceOK, error)
+
+	ResetProjectToProduction(params *ResetProjectToProductionParams, opts ...ClientOption) (*ResetProjectToProductionOK, *ResetProjectToProductionNoContent, error)
+
+	ResetProjectToRemote(params *ResetProjectToRemoteParams, opts ...ClientOption) (*ResetProjectToRemoteOK, *ResetProjectToRemoteNoContent, error)
+
+	RunGitConnectionTest(params *RunGitConnectionTestParams, opts ...ClientOption) (*RunGitConnectionTestOK, error)
+
+	RunLookmlTest(params *RunLookmlTestParams, opts ...ClientOption) (*RunLookmlTestOK, error)
+
+	UpdateGitBranch(params *UpdateGitBranchParams, opts ...ClientOption) (*UpdateGitBranchOK, error)
+
+	UpdateProject(params *UpdateProjectParams, opts ...ClientOption) (*UpdateProjectOK, error)
+
+	UpdateRepositoryCredential(params *UpdateRepositoryCredentialParams, opts ...ClientOption) (*UpdateRepositoryCredentialOK, error)
+
+	ValidateProject(params *ValidateProjectParams, opts ...ClientOption) (*ValidateProjectOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllGitBranches gets all git branches
+
+  ### Get All Git Branches
 
 Returns a list of git branches in the project repository
 
 */
-func (a *Client) AllGitBranches(params *AllGitBranchesParams) (*AllGitBranchesOK, error) {
+func (a *Client) AllGitBranches(params *AllGitBranchesParams, opts ...ClientOption) (*AllGitBranchesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllGitBranchesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_git_branches",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git_branches",
@@ -49,33 +115,46 @@ func (a *Client) AllGitBranches(params *AllGitBranchesParams) (*AllGitBranchesOK
 		Reader:             &AllGitBranchesReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllGitBranchesOK), nil
-
+	success, ok := result.(*AllGitBranchesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_git_branches: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllGitConnectionTests gets all git connection tests
+  AllGitConnectionTests gets all git connection tests
 
-### Get All Git Connection Tests
+  ### Get All Git Connection Tests
 
-Returns a list of tests which can be run against a project's git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
+dev mode required.
+  - Call `update_session` to select the 'dev' workspace.
+
+Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
 
 Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
 
 For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
 
 */
-func (a *Client) AllGitConnectionTests(params *AllGitConnectionTestsParams) (*AllGitConnectionTestsOK, error) {
+func (a *Client) AllGitConnectionTests(params *AllGitConnectionTestsParams, opts ...ClientOption) (*AllGitConnectionTestsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllGitConnectionTestsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_git_connection_tests",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git_connection_tests",
@@ -86,29 +165,84 @@ func (a *Client) AllGitConnectionTests(params *AllGitConnectionTestsParams) (*Al
 		Reader:             &AllGitConnectionTestsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllGitConnectionTestsOK), nil
-
+	success, ok := result.(*AllGitConnectionTestsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_git_connection_tests: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllProjectFiles gets all project files
+  AllLookmlTests gets all look m l tests
 
-### Get All Project Files
+  ### Get All LookML Tests
+
+Returns a list of tests which can be run to validate a project's LookML code and/or the underlying data,
+optionally filtered by the file id.
+Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
+
+*/
+func (a *Client) AllLookmlTests(params *AllLookmlTestsParams, opts ...ClientOption) (*AllLookmlTestsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAllLookmlTestsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "all_lookml_tests",
+		Method:             "GET",
+		PathPattern:        "/projects/{project_id}/lookml_tests",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AllLookmlTestsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AllLookmlTestsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_lookml_tests: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  AllProjectFiles gets all project files
+
+  ### Get All Project Files
 
 Returns a list of the files in the project
 
 */
-func (a *Client) AllProjectFiles(params *AllProjectFilesParams) (*AllProjectFilesOK, error) {
+func (a *Client) AllProjectFiles(params *AllProjectFilesParams, opts ...ClientOption) (*AllProjectFilesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllProjectFilesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_project_files",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/files",
@@ -119,29 +253,39 @@ func (a *Client) AllProjectFiles(params *AllProjectFilesParams) (*AllProjectFile
 		Reader:             &AllProjectFilesReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllProjectFilesOK), nil
-
+	success, ok := result.(*AllProjectFilesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_project_files: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllProjects gets all projects
+  AllProjects gets all projects
 
-### Get All Projects
+  ### Get All Projects
 
 Returns all projects visible to the current user
 
 */
-func (a *Client) AllProjects(params *AllProjectsParams) (*AllProjectsOK, error) {
+func (a *Client) AllProjects(params *AllProjectsParams, opts ...ClientOption) (*AllProjectsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllProjectsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_projects",
 		Method:             "GET",
 		PathPattern:        "/projects",
@@ -152,18 +296,29 @@ func (a *Client) AllProjects(params *AllProjectsParams) (*AllProjectsOK, error) 
 		Reader:             &AllProjectsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllProjectsOK), nil
-
+	success, ok := result.(*AllProjectsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_projects: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateGitBranch checkouts new git branch
+  CreateGitBranch checkouts new git branch
 
-### Create and Checkout a Git Branch
+  ### Create and Checkout a Git Branch
 
 Creates and checks out a new branch in the given project repository
 Only allowed in development mode
@@ -174,13 +329,12 @@ Optionally specify a branch name, tag name or commit SHA as the start point in t
 
 
 */
-func (a *Client) CreateGitBranch(params *CreateGitBranchParams) (*CreateGitBranchOK, error) {
+func (a *Client) CreateGitBranch(params *CreateGitBranchParams, opts ...ClientOption) (*CreateGitBranchOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateGitBranchParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_git_branch",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/git_branch",
@@ -191,18 +345,29 @@ func (a *Client) CreateGitBranch(params *CreateGitBranchParams) (*CreateGitBranc
 		Reader:             &CreateGitBranchReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateGitBranchOK), nil
-
+	success, ok := result.(*CreateGitBranchOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_git_branch: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateGitDeployKey creates deploy key
+  CreateGitDeployKey creates deploy key
 
-### Create Git Deploy Key
+  ### Create Git Deploy Key
 
 Create a public/private key pair for authenticating ssh git requests from Looker to a remote git repository
 for a particular Looker project.
@@ -213,13 +378,12 @@ Copy this public key to your remote git repository's ssh keys configuration so t
 validate and accept git requests from the Looker server.
 
 */
-func (a *Client) CreateGitDeployKey(params *CreateGitDeployKeyParams) (*CreateGitDeployKeyOK, error) {
+func (a *Client) CreateGitDeployKey(params *CreateGitDeployKeyParams, opts ...ClientOption) (*CreateGitDeployKeyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateGitDeployKeyParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_git_deploy_key",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/git/deploy_key",
@@ -230,18 +394,29 @@ func (a *Client) CreateGitDeployKey(params *CreateGitDeployKeyParams) (*CreateGi
 		Reader:             &CreateGitDeployKeyReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateGitDeployKeyOK), nil
-
+	success, ok := result.(*CreateGitDeployKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_git_deploy_key: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateProject creates project
+  CreateProject creates project
 
-### Create A Project
+  ### Create A Project
 
 dev mode required.
 - Call `update_session` to select the 'dev' workspace.
@@ -251,13 +426,12 @@ dev mode required.
 
 
 */
-func (a *Client) CreateProject(params *CreateProjectParams) (*CreateProjectOK, error) {
+func (a *Client) CreateProject(params *CreateProjectParams, opts ...ClientOption) (*CreateProjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateProjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_project",
 		Method:             "POST",
 		PathPattern:        "/projects",
@@ -268,29 +442,39 @@ func (a *Client) CreateProject(params *CreateProjectParams) (*CreateProjectOK, e
 		Reader:             &CreateProjectReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateProjectOK), nil
-
+	success, ok := result.(*CreateProjectOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteGitBranch deletes a git branch
+  DeleteGitBranch deletes a git branch
 
-### Delete the specified Git Branch
+  ### Delete the specified Git Branch
 
 Delete git branch specified in branch_name path param from local and remote of specified project repository
 
 */
-func (a *Client) DeleteGitBranch(params *DeleteGitBranchParams) (*DeleteGitBranchNoContent, error) {
+func (a *Client) DeleteGitBranch(params *DeleteGitBranchParams, opts ...ClientOption) (*DeleteGitBranchNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteGitBranchParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_git_branch",
 		Method:             "DELETE",
 		PathPattern:        "/projects/{project_id}/git_branch/{branch_name}",
@@ -301,22 +485,131 @@ func (a *Client) DeleteGitBranch(params *DeleteGitBranchParams) (*DeleteGitBranc
 		Reader:             &DeleteGitBranchReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteGitBranchNoContent), nil
-
+	success, ok := result.(*DeleteGitBranchNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_git_branch: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeployToProduction deploys to production
+  DeleteRepositoryCredential deletes repository credential
 
-### Deploy LookML from this Development Mode Project to Production
+  ### Repository Credential for a remote dependency
+
+Admin required.
+
+`root_project_id` is required.
+`credential_id` is required.
+
+*/
+func (a *Client) DeleteRepositoryCredential(params *DeleteRepositoryCredentialParams, opts ...ClientOption) (*DeleteRepositoryCredentialNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteRepositoryCredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_repository_credential",
+		Method:             "DELETE",
+		PathPattern:        "/projects/{root_project_id}/credential/{credential_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteRepositoryCredentialReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteRepositoryCredentialNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_repository_credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeployRefToProduction deploys remote branch or ref to production
+
+  ### Deploy a Remote Branch or Ref to Production
+
+Git must have been configured and deploy permission required.
+
+Deploy is a one/two step process
+1. If this is the first deploy of this project, create the production project with git repository.
+2. Pull the branch or ref into the production project.
+
+Can only specify either a branch or a ref.
+
+
+*/
+func (a *Client) DeployRefToProduction(params *DeployRefToProductionParams, opts ...ClientOption) (*DeployRefToProductionOK, *DeployRefToProductionNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeployRefToProductionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "deploy_ref_to_production",
+		Method:             "POST",
+		PathPattern:        "/projects/{project_id}/deploy_ref_to_production",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeployRefToProductionReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, nil, err
+	}
+	switch value := result.(type) {
+	case *DeployRefToProductionOK:
+		return value, nil, nil
+	case *DeployRefToProductionNoContent:
+		return nil, value, nil
+	}
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeployToProduction deploys to production
+
+  ### Deploy LookML from this Development Mode Project to Production
 
 Git must have been configured, must be in dev mode and deploy permission required
 
-Deploy is a two / three step process
+Deploy is a two / three step process:
+
 1. Push commits in current branch of dev mode project to the production branch (origin/master).
    Note a. This step is skipped in read-only projects.
    Note b. If this step is unsuccessful for any reason (e.g. rejected non-fastforward because production branch has
@@ -326,13 +619,12 @@ Deploy is a two / three step process
 
 
 */
-func (a *Client) DeployToProduction(params *DeployToProductionParams) (*DeployToProductionOK, *DeployToProductionNoContent, error) {
+func (a *Client) DeployToProduction(params *DeployToProductionParams, opts ...ClientOption) (*DeployToProductionOK, *DeployToProductionNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeployToProductionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "deploy_to_production",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/deploy_to_production",
@@ -343,7 +635,12 @@ func (a *Client) DeployToProduction(params *DeployToProductionParams) (*DeployTo
 		Reader:             &DeployToProductionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -353,25 +650,25 @@ func (a *Client) DeployToProduction(params *DeployToProductionParams) (*DeployTo
 	case *DeployToProductionNoContent:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-FindGitBranch finds a git branch
+  FindGitBranch finds a git branch
 
-### Get the specified Git Branch
+  ### Get the specified Git Branch
 
 Returns the git branch specified in branch_name path param if it exists in the given project repository
 
 */
-func (a *Client) FindGitBranch(params *FindGitBranchParams) (*FindGitBranchOK, error) {
+func (a *Client) FindGitBranch(params *FindGitBranchParams, opts ...ClientOption) (*FindGitBranchOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFindGitBranchParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "find_git_branch",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git_branch/{branch_name}",
@@ -382,29 +679,82 @@ func (a *Client) FindGitBranch(params *FindGitBranchParams) (*FindGitBranchOK, e
 		Reader:             &FindGitBranchReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*FindGitBranchOK), nil
-
+	success, ok := result.(*FindGitBranchOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for find_git_branch: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-GitBranch gets active git branch
+  GetAllRepositoryCredentials gets all repository credentials
 
-### Get the Current Git Branch
+  ### Get all Repository Credentials for a project
+
+`root_project_id` is required.
+
+*/
+func (a *Client) GetAllRepositoryCredentials(params *GetAllRepositoryCredentialsParams, opts ...ClientOption) (*GetAllRepositoryCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetAllRepositoryCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "get_all_repository_credentials",
+		Method:             "GET",
+		PathPattern:        "/projects/{root_project_id}/credentials",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetAllRepositoryCredentialsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetAllRepositoryCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for get_all_repository_credentials: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  GitBranch gets active git branch
+
+  ### Get the Current Git Branch
 
 Returns the git branch currently checked out in the given project repository
 
 */
-func (a *Client) GitBranch(params *GitBranchParams) (*GitBranchOK, error) {
+func (a *Client) GitBranch(params *GitBranchParams, opts ...ClientOption) (*GitBranchOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGitBranchParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "git_branch",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git_branch",
@@ -415,29 +765,39 @@ func (a *Client) GitBranch(params *GitBranchParams) (*GitBranchOK, error) {
 		Reader:             &GitBranchReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*GitBranchOK), nil
-
+	success, ok := result.(*GitBranchOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for git_branch: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-GitDeployKey gits deploy key
+  GitDeployKey gits deploy key
 
-### Git Deploy Key
+  ### Git Deploy Key
 
 Returns the ssh public key previously created for a project's git repository.
 
 */
-func (a *Client) GitDeployKey(params *GitDeployKeyParams) (*GitDeployKeyOK, error) {
+func (a *Client) GitDeployKey(params *GitDeployKeyParams, opts ...ClientOption) (*GitDeployKeyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGitDeployKeyParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "git_deploy_key",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git/deploy_key",
@@ -448,29 +808,39 @@ func (a *Client) GitDeployKey(params *GitDeployKeyParams) (*GitDeployKeyOK, erro
 		Reader:             &GitDeployKeyReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*GitDeployKeyOK), nil
-
+	success, ok := result.(*GitDeployKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for git_deploy_key: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Manifest gets manifest
+  Manifest gets manifest
 
-### Get A Projects Manifest object
+  ### Get A Projects Manifest object
 
 Returns the project with the given project id
 
 */
-func (a *Client) Manifest(params *ManifestParams) (*ManifestOK, error) {
+func (a *Client) Manifest(params *ManifestParams, opts ...ClientOption) (*ManifestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewManifestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "manifest",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/manifest",
@@ -481,29 +851,39 @@ func (a *Client) Manifest(params *ManifestParams) (*ManifestOK, error) {
 		Reader:             &ManifestReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ManifestOK), nil
-
+	success, ok := result.(*ManifestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for manifest: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Project gets project
+  Project gets project
 
-### Get A Project
+  ### Get A Project
 
 Returns the project with the given project id
 
 */
-func (a *Client) Project(params *ProjectParams) (*ProjectOK, error) {
+func (a *Client) Project(params *ProjectParams, opts ...ClientOption) (*ProjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewProjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "project",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}",
@@ -514,29 +894,39 @@ func (a *Client) Project(params *ProjectParams) (*ProjectOK, error) {
 		Reader:             &ProjectReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ProjectOK), nil
-
+	success, ok := result.(*ProjectOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ProjectFile gets project file
+  ProjectFile gets project file
 
-### Get Project File Info
+  ### Get Project File Info
 
 Returns information about a file in the project
 
 */
-func (a *Client) ProjectFile(params *ProjectFileParams) (*ProjectFileOK, error) {
+func (a *Client) ProjectFile(params *ProjectFileParams, opts ...ClientOption) (*ProjectFileOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewProjectFileParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "project_file",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/files/file",
@@ -547,18 +937,29 @@ func (a *Client) ProjectFile(params *ProjectFileParams) (*ProjectFileOK, error) 
 		Reader:             &ProjectFileReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ProjectFileOK), nil
-
+	success, ok := result.(*ProjectFileOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project_file: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ProjectValidationResults cacheds project validation results
+  ProjectValidationResults cacheds project validation results
 
-### Get Cached Project Validation Results
+  ### Get Cached Project Validation Results
 
 Returns the cached results of a previous project validation calculation, if any.
 Returns http status 204 No Content if no validation results exist.
@@ -572,13 +973,12 @@ the cached validation results were computed. The cached validation results may n
 reflect the current state of the project.
 
 */
-func (a *Client) ProjectValidationResults(params *ProjectValidationResultsParams) (*ProjectValidationResultsOK, *ProjectValidationResultsNoContent, error) {
+func (a *Client) ProjectValidationResults(params *ProjectValidationResultsParams, opts ...ClientOption) (*ProjectValidationResultsOK, *ProjectValidationResultsNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewProjectValidationResultsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "project_validation_results",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/validate",
@@ -589,7 +989,12 @@ func (a *Client) ProjectValidationResults(params *ProjectValidationResultsParams
 		Reader:             &ProjectValidationResultsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -599,25 +1004,25 @@ func (a *Client) ProjectValidationResults(params *ProjectValidationResultsParams
 	case *ProjectValidationResultsNoContent:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ProjectWorkspace gets project workspace
+  ProjectWorkspace gets project workspace
 
-### Get Project Workspace
+  ### Get Project Workspace
 
 Returns information about the state of the project files in the currently selected workspace
 
 */
-func (a *Client) ProjectWorkspace(params *ProjectWorkspaceParams) (*ProjectWorkspaceOK, error) {
+func (a *Client) ProjectWorkspace(params *ProjectWorkspaceParams, opts ...ClientOption) (*ProjectWorkspaceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewProjectWorkspaceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "project_workspace",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/current_workspace",
@@ -628,29 +1033,39 @@ func (a *Client) ProjectWorkspace(params *ProjectWorkspaceParams) (*ProjectWorks
 		Reader:             &ProjectWorkspaceReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ProjectWorkspaceOK), nil
-
+	success, ok := result.(*ProjectWorkspaceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project_workspace: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ResetProjectToProduction resets to production
+  ResetProjectToProduction resets to production
 
-### Reset a project to the revision of the project that is in production.
+  ### Reset a project to the revision of the project that is in production.
 
 **DANGER** this will delete any changes that have not been pushed to a remote repository.
 
 */
-func (a *Client) ResetProjectToProduction(params *ResetProjectToProductionParams) (*ResetProjectToProductionOK, *ResetProjectToProductionNoContent, error) {
+func (a *Client) ResetProjectToProduction(params *ResetProjectToProductionParams, opts ...ClientOption) (*ResetProjectToProductionOK, *ResetProjectToProductionNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewResetProjectToProductionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "reset_project_to_production",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/reset_to_production",
@@ -661,7 +1076,12 @@ func (a *Client) ResetProjectToProduction(params *ResetProjectToProductionParams
 		Reader:             &ResetProjectToProductionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -671,25 +1091,25 @@ func (a *Client) ResetProjectToProduction(params *ResetProjectToProductionParams
 	case *ResetProjectToProductionNoContent:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ResetProjectToRemote resets to remote
+  ResetProjectToRemote resets to remote
 
-### Reset a project development branch to the revision of the project that is on the remote.
+  ### Reset a project development branch to the revision of the project that is on the remote.
 
 **DANGER** this will delete any changes that have not been pushed to a remote repository.
 
 */
-func (a *Client) ResetProjectToRemote(params *ResetProjectToRemoteParams) (*ResetProjectToRemoteOK, *ResetProjectToRemoteNoContent, error) {
+func (a *Client) ResetProjectToRemote(params *ResetProjectToRemoteParams, opts ...ClientOption) (*ResetProjectToRemoteOK, *ResetProjectToRemoteNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewResetProjectToRemoteParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "reset_project_to_remote",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/reset_to_remote",
@@ -700,7 +1120,12 @@ func (a *Client) ResetProjectToRemote(params *ResetProjectToRemoteParams) (*Rese
 		Reader:             &ResetProjectToRemoteReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -710,29 +1135,29 @@ func (a *Client) ResetProjectToRemote(params *ResetProjectToRemoteParams) (*Rese
 	case *ResetProjectToRemoteNoContent:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RunGitConnectionTest runs git connection test
+  RunGitConnectionTest runs git connection test
 
-### Run a git connection test
+  ### Run a git connection test
 
-Run the named test on the git service used by this project and return the result. This
+Run the named test on the git service used by this project (or the dependency project for the provided remote_url) and return the result. This
 is intended to help debug git connections when things do not work properly, to give
 more helpful information about why a git url is not working with Looker.
 
 Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
 
 */
-func (a *Client) RunGitConnectionTest(params *RunGitConnectionTestParams) (*RunGitConnectionTestOK, error) {
+func (a *Client) RunGitConnectionTest(params *RunGitConnectionTestParams, opts ...ClientOption) (*RunGitConnectionTestOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRunGitConnectionTestParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "run_git_connection_test",
 		Method:             "GET",
 		PathPattern:        "/projects/{project_id}/git_connection_tests/{test_id}",
@@ -743,18 +1168,72 @@ func (a *Client) RunGitConnectionTest(params *RunGitConnectionTestParams) (*RunG
 		Reader:             &RunGitConnectionTestReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RunGitConnectionTestOK), nil
-
+	success, ok := result.(*RunGitConnectionTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_git_connection_test: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateGitBranch updates project git branch
+  RunLookmlTest runs look m l test
 
-### Checkout and/or reset --hard an existing Git Branch
+  ### Run LookML Tests
+
+Runs all tests in the project, optionally filtered by file, test, and/or model.
+
+*/
+func (a *Client) RunLookmlTest(params *RunLookmlTestParams, opts ...ClientOption) (*RunLookmlTestOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewRunLookmlTestParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "run_lookml_test",
+		Method:             "GET",
+		PathPattern:        "/projects/{project_id}/lookml_tests/run",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &RunLookmlTestReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*RunLookmlTestOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_lookml_test: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateGitBranch updates project git branch
+
+  ### Checkout and/or reset --hard an existing Git Branch
 
 Only allowed in development mode
   - Call `update_session` to select the 'dev' workspace.
@@ -766,13 +1245,12 @@ Optionally specify a branch name, tag name or commit SHA to which the branch sho
 
 
 */
-func (a *Client) UpdateGitBranch(params *UpdateGitBranchParams) (*UpdateGitBranchOK, error) {
+func (a *Client) UpdateGitBranch(params *UpdateGitBranchParams, opts ...ClientOption) (*UpdateGitBranchOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateGitBranchParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_git_branch",
 		Method:             "PUT",
 		PathPattern:        "/projects/{project_id}/git_branch",
@@ -783,18 +1261,29 @@ func (a *Client) UpdateGitBranch(params *UpdateGitBranchParams) (*UpdateGitBranc
 		Reader:             &UpdateGitBranchReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateGitBranchOK), nil
-
+	success, ok := result.(*UpdateGitBranchOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_git_branch: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateProject updates project
+  UpdateProject updates project
 
-### Update Project Configuration
+  ### Update Project Configuration
 
 Apply changes to a project's configuration.
 
@@ -813,18 +1302,18 @@ metadata. The remote git repository MUST be configured with the Looker-generated
 key for this project prior to setting the project's `git_remote_url`.
 
 To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
+
 1. Call `update_session` to select the 'dev' workspace.
-1. Call `update_project` setting `git_remote_url` to nil and `git_service_name` to "bare".
+1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
 
 
 */
-func (a *Client) UpdateProject(params *UpdateProjectParams) (*UpdateProjectOK, error) {
+func (a *Client) UpdateProject(params *UpdateProjectParams, opts ...ClientOption) (*UpdateProjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateProjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_project",
 		Method:             "PATCH",
 		PathPattern:        "/projects/{project_id}",
@@ -835,18 +1324,76 @@ func (a *Client) UpdateProject(params *UpdateProjectParams) (*UpdateProjectOK, e
 		Reader:             &UpdateProjectReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateProjectOK), nil
-
+	success, ok := result.(*UpdateProjectOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ValidateProject validates project
+  UpdateRepositoryCredential creates repository credential
 
-### Validate Project
+  ### Configure Repository Credential for a remote dependency
+
+Admin required.
+
+`root_project_id` is required.
+`credential_id` is required.
+
+
+*/
+func (a *Client) UpdateRepositoryCredential(params *UpdateRepositoryCredentialParams, opts ...ClientOption) (*UpdateRepositoryCredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateRepositoryCredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_repository_credential",
+		Method:             "PUT",
+		PathPattern:        "/projects/{root_project_id}/credential/{credential_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateRepositoryCredentialReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateRepositoryCredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_repository_credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ValidateProject validates project
+
+  ### Validate Project
 
 Performs lint validation of all lookml files in the project.
 Returns a list of errors found, if any.
@@ -857,13 +1404,12 @@ when you really want to recompute project validation. To quickly display the res
 the most recent project validation (without recomputing), use `project_validation_results(project_id)`
 
 */
-func (a *Client) ValidateProject(params *ValidateProjectParams) (*ValidateProjectOK, error) {
+func (a *Client) ValidateProject(params *ValidateProjectParams, opts ...ClientOption) (*ValidateProjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewValidateProjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "validate_project",
 		Method:             "POST",
 		PathPattern:        "/projects/{project_id}/validate",
@@ -874,12 +1420,23 @@ func (a *Client) ValidateProject(params *ValidateProjectParams) (*ValidateProjec
 		Reader:             &ValidateProjectReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ValidateProjectOK), nil
-
+	success, ok := result.(*ValidateProjectOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for validate_project: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

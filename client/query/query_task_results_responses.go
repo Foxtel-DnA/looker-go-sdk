@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // QueryTaskResultsReader is a Reader for the QueryTaskResults structure.
@@ -24,37 +23,32 @@ type QueryTaskResultsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *QueryTaskResultsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewQueryTaskResultsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 204:
 		result := NewQueryTaskResultsNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewQueryTaskResultsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewQueryTaskResultsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,16 +57,19 @@ func NewQueryTaskResultsOK() *QueryTaskResultsOK {
 	return &QueryTaskResultsOK{}
 }
 
-/*QueryTaskResultsOK handles this case with default header values.
+/* QueryTaskResultsOK describes a response with status code 200, with default header values.
 
 The query results.
 */
 type QueryTaskResultsOK struct {
-	Payload map[string]string
+	Payload string
 }
 
 func (o *QueryTaskResultsOK) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}/results][%d] queryTaskResultsOK  %+v", 200, o.Payload)
+}
+func (o *QueryTaskResultsOK) GetPayload() string {
+	return o.Payload
 }
 
 func (o *QueryTaskResultsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +87,7 @@ func NewQueryTaskResultsNoContent() *QueryTaskResultsNoContent {
 	return &QueryTaskResultsNoContent{}
 }
 
-/*QueryTaskResultsNoContent handles this case with default header values.
+/* QueryTaskResultsNoContent describes a response with status code 204, with default header values.
 
 The query is not finished
 */
@@ -100,6 +97,9 @@ type QueryTaskResultsNoContent struct {
 
 func (o *QueryTaskResultsNoContent) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}/results][%d] queryTaskResultsNoContent  %+v", 204, o.Payload)
+}
+func (o *QueryTaskResultsNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *QueryTaskResultsNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -117,7 +117,7 @@ func NewQueryTaskResultsBadRequest() *QueryTaskResultsBadRequest {
 	return &QueryTaskResultsBadRequest{}
 }
 
-/*QueryTaskResultsBadRequest handles this case with default header values.
+/* QueryTaskResultsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -127,6 +127,9 @@ type QueryTaskResultsBadRequest struct {
 
 func (o *QueryTaskResultsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}/results][%d] queryTaskResultsBadRequest  %+v", 400, o.Payload)
+}
+func (o *QueryTaskResultsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskResultsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -146,7 +149,7 @@ func NewQueryTaskResultsNotFound() *QueryTaskResultsNotFound {
 	return &QueryTaskResultsNotFound{}
 }
 
-/*QueryTaskResultsNotFound handles this case with default header values.
+/* QueryTaskResultsNotFound describes a response with status code 404, with default header values.
 
 The Query Task Id was not found or the results have expired.
 */
@@ -156,6 +159,9 @@ type QueryTaskResultsNotFound struct {
 
 func (o *QueryTaskResultsNotFound) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}/results][%d] queryTaskResultsNotFound  %+v", 404, o.Payload)
+}
+func (o *QueryTaskResultsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskResultsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

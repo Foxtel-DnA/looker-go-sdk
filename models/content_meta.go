@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ContentMeta content meta
+//
 // swagger:model ContentMeta
 type ContentMeta struct {
 
@@ -27,6 +31,10 @@ type ContentMeta struct {
 	// Read Only: true
 	DashboardID string `json:"dashboard_id,omitempty"`
 
+	// Id of associated folder when content_type is "space"
+	// Read Only: true
+	FolderID string `json:"folder_id,omitempty"`
+
 	// Unique Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
@@ -36,8 +44,7 @@ type ContentMeta struct {
 	InheritingID int64 `json:"inheriting_id,omitempty"`
 
 	// Whether content inherits its access levels from parent
-	// billtrust need to change to pointer so it can be set to false correctly
-	Inherits *bool `json:"inherits,omitempty"`
+	Inherits bool `json:"inherits,omitempty"`
 
 	// Id of associated look when content_type is "look"
 	// Read Only: true
@@ -57,12 +64,160 @@ type ContentMeta struct {
 
 	// Id of associated space when content_type is "space"
 	// Read Only: true
-	// billtrust API actually returns int64 and not string
-	SpaceID int64 `json:"space_id,omitempty"`
+	SpaceID string `json:"space_id,omitempty"`
 }
 
 // Validate validates this content meta
 func (m *ContentMeta) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this content meta based on the context it is used
+func (m *ContentMeta) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFolderID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInheritingID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParentID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpaceID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ContentMeta) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateContentType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_type", "body", string(m.ContentType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateDashboardID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_id", "body", string(m.DashboardID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateFolderID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "folder_id", "body", string(m.FolderID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateInheritingID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "inheriting_id", "body", int64(m.InheritingID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateLookID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "look_id", "body", int64(m.LookID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateParentID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "parent_id", "body", int64(m.ParentID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "slug", "body", string(m.Slug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMeta) contextValidateSpaceID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "space_id", "body", string(m.SpaceID)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

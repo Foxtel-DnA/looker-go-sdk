@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteGroupReader is a Reader for the DeleteGroup structure.
@@ -24,37 +23,38 @@ type DeleteGroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteGroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteGroupNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteGroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 403:
 		result := NewDeleteGroupForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteGroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteGroupTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewDeleteGroupNoContent() *DeleteGroupNoContent {
 	return &DeleteGroupNoContent{}
 }
 
-/*DeleteGroupNoContent handles this case with default header values.
+/* DeleteGroupNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -73,6 +73,9 @@ type DeleteGroupNoContent struct {
 
 func (o *DeleteGroupNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /groups/{group_id}][%d] deleteGroupNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteGroupNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteGroupNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewDeleteGroupBadRequest() *DeleteGroupBadRequest {
 	return &DeleteGroupBadRequest{}
 }
 
-/*DeleteGroupBadRequest handles this case with default header values.
+/* DeleteGroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type DeleteGroupBadRequest struct {
 
 func (o *DeleteGroupBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /groups/{group_id}][%d] deleteGroupBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteGroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewDeleteGroupForbidden() *DeleteGroupForbidden {
 	return &DeleteGroupForbidden{}
 }
 
-/*DeleteGroupForbidden handles this case with default header values.
+/* DeleteGroupForbidden describes a response with status code 403, with default header values.
 
 Permission Denied
 */
@@ -129,6 +135,9 @@ type DeleteGroupForbidden struct {
 
 func (o *DeleteGroupForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /groups/{group_id}][%d] deleteGroupForbidden  %+v", 403, o.Payload)
+}
+func (o *DeleteGroupForbidden) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteGroupForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewDeleteGroupNotFound() *DeleteGroupNotFound {
 	return &DeleteGroupNotFound{}
 }
 
-/*DeleteGroupNotFound handles this case with default header values.
+/* DeleteGroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -159,8 +168,43 @@ type DeleteGroupNotFound struct {
 func (o *DeleteGroupNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /groups/{group_id}][%d] deleteGroupNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteGroupNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteGroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteGroupTooManyRequests creates a DeleteGroupTooManyRequests with default headers values
+func NewDeleteGroupTooManyRequests() *DeleteGroupTooManyRequests {
+	return &DeleteGroupTooManyRequests{}
+}
+
+/* DeleteGroupTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteGroupTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteGroupTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /groups/{group_id}][%d] deleteGroupTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteGroupTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteGroupTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

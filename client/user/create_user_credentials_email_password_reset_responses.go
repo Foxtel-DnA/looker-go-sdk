@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateUserCredentialsEmailPasswordResetReader is a Reader for the CreateUserCredentialsEmailPasswordReset structure.
@@ -24,30 +23,26 @@ type CreateUserCredentialsEmailPasswordResetReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateUserCredentialsEmailPasswordResetReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateUserCredentialsEmailPasswordResetOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateUserCredentialsEmailPasswordResetBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateUserCredentialsEmailPasswordResetNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewCreateUserCredentialsEmailPasswordResetOK() *CreateUserCredentialsEmailP
 	return &CreateUserCredentialsEmailPasswordResetOK{}
 }
 
-/*CreateUserCredentialsEmailPasswordResetOK handles this case with default header values.
+/* CreateUserCredentialsEmailPasswordResetOK describes a response with status code 200, with default header values.
 
 email/password credential
 */
@@ -66,6 +61,9 @@ type CreateUserCredentialsEmailPasswordResetOK struct {
 
 func (o *CreateUserCredentialsEmailPasswordResetOK) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email/password_reset][%d] createUserCredentialsEmailPasswordResetOK  %+v", 200, o.Payload)
+}
+func (o *CreateUserCredentialsEmailPasswordResetOK) GetPayload() *models.CredentialsEmail {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailPasswordResetOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewCreateUserCredentialsEmailPasswordResetBadRequest() *CreateUserCredentia
 	return &CreateUserCredentialsEmailPasswordResetBadRequest{}
 }
 
-/*CreateUserCredentialsEmailPasswordResetBadRequest handles this case with default header values.
+/* CreateUserCredentialsEmailPasswordResetBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type CreateUserCredentialsEmailPasswordResetBadRequest struct {
 
 func (o *CreateUserCredentialsEmailPasswordResetBadRequest) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email/password_reset][%d] createUserCredentialsEmailPasswordResetBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateUserCredentialsEmailPasswordResetBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailPasswordResetBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewCreateUserCredentialsEmailPasswordResetNotFound() *CreateUserCredentials
 	return &CreateUserCredentialsEmailPasswordResetNotFound{}
 }
 
-/*CreateUserCredentialsEmailPasswordResetNotFound handles this case with default header values.
+/* CreateUserCredentialsEmailPasswordResetNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type CreateUserCredentialsEmailPasswordResetNotFound struct {
 
 func (o *CreateUserCredentialsEmailPasswordResetNotFound) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email/password_reset][%d] createUserCredentialsEmailPasswordResetNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateUserCredentialsEmailPasswordResetNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailPasswordResetNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

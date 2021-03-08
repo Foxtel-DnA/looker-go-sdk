@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateLegacyFeatureReader is a Reader for the UpdateLegacyFeature structure.
@@ -24,37 +23,38 @@ type UpdateLegacyFeatureReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateLegacyFeatureReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateLegacyFeatureOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateLegacyFeatureBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateLegacyFeatureNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateLegacyFeatureUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateLegacyFeatureTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateLegacyFeatureOK() *UpdateLegacyFeatureOK {
 	return &UpdateLegacyFeatureOK{}
 }
 
-/*UpdateLegacyFeatureOK handles this case with default header values.
+/* UpdateLegacyFeatureOK describes a response with status code 200, with default header values.
 
 Legacy Feature
 */
@@ -73,6 +73,9 @@ type UpdateLegacyFeatureOK struct {
 
 func (o *UpdateLegacyFeatureOK) Error() string {
 	return fmt.Sprintf("[PATCH /legacy_features/{legacy_feature_id}][%d] updateLegacyFeatureOK  %+v", 200, o.Payload)
+}
+func (o *UpdateLegacyFeatureOK) GetPayload() *models.LegacyFeature {
+	return o.Payload
 }
 
 func (o *UpdateLegacyFeatureOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateLegacyFeatureBadRequest() *UpdateLegacyFeatureBadRequest {
 	return &UpdateLegacyFeatureBadRequest{}
 }
 
-/*UpdateLegacyFeatureBadRequest handles this case with default header values.
+/* UpdateLegacyFeatureBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateLegacyFeatureBadRequest struct {
 
 func (o *UpdateLegacyFeatureBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /legacy_features/{legacy_feature_id}][%d] updateLegacyFeatureBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateLegacyFeatureBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLegacyFeatureBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateLegacyFeatureNotFound() *UpdateLegacyFeatureNotFound {
 	return &UpdateLegacyFeatureNotFound{}
 }
 
-/*UpdateLegacyFeatureNotFound handles this case with default header values.
+/* UpdateLegacyFeatureNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateLegacyFeatureNotFound struct {
 
 func (o *UpdateLegacyFeatureNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /legacy_features/{legacy_feature_id}][%d] updateLegacyFeatureNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateLegacyFeatureNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLegacyFeatureNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateLegacyFeatureUnprocessableEntity() *UpdateLegacyFeatureUnprocessab
 	return &UpdateLegacyFeatureUnprocessableEntity{}
 }
 
-/*UpdateLegacyFeatureUnprocessableEntity handles this case with default header values.
+/* UpdateLegacyFeatureUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateLegacyFeatureUnprocessableEntity struct {
 func (o *UpdateLegacyFeatureUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /legacy_features/{legacy_feature_id}][%d] updateLegacyFeatureUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateLegacyFeatureUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateLegacyFeatureUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateLegacyFeatureTooManyRequests creates a UpdateLegacyFeatureTooManyRequests with default headers values
+func NewUpdateLegacyFeatureTooManyRequests() *UpdateLegacyFeatureTooManyRequests {
+	return &UpdateLegacyFeatureTooManyRequests{}
+}
+
+/* UpdateLegacyFeatureTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateLegacyFeatureTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateLegacyFeatureTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /legacy_features/{legacy_feature_id}][%d] updateLegacyFeatureTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateLegacyFeatureTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateLegacyFeatureTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

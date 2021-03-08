@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateLdapConfigReader is a Reader for the UpdateLdapConfig structure.
@@ -24,37 +23,32 @@ type UpdateLdapConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateLdapConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateLdapConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateLdapConfigBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateLdapConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateLdapConfigUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewUpdateLdapConfigOK() *UpdateLdapConfigOK {
 	return &UpdateLdapConfigOK{}
 }
 
-/*UpdateLdapConfigOK handles this case with default header values.
+/* UpdateLdapConfigOK describes a response with status code 200, with default header values.
 
 New state for LDAP Configuration.
 */
@@ -73,6 +67,9 @@ type UpdateLdapConfigOK struct {
 
 func (o *UpdateLdapConfigOK) Error() string {
 	return fmt.Sprintf("[PATCH /ldap_config][%d] updateLdapConfigOK  %+v", 200, o.Payload)
+}
+func (o *UpdateLdapConfigOK) GetPayload() *models.LDAPConfig {
+	return o.Payload
 }
 
 func (o *UpdateLdapConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewUpdateLdapConfigBadRequest() *UpdateLdapConfigBadRequest {
 	return &UpdateLdapConfigBadRequest{}
 }
 
-/*UpdateLdapConfigBadRequest handles this case with default header values.
+/* UpdateLdapConfigBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type UpdateLdapConfigBadRequest struct {
 
 func (o *UpdateLdapConfigBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /ldap_config][%d] updateLdapConfigBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateLdapConfigBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLdapConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewUpdateLdapConfigNotFound() *UpdateLdapConfigNotFound {
 	return &UpdateLdapConfigNotFound{}
 }
 
-/*UpdateLdapConfigNotFound handles this case with default header values.
+/* UpdateLdapConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type UpdateLdapConfigNotFound struct {
 
 func (o *UpdateLdapConfigNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /ldap_config][%d] updateLdapConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateLdapConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateLdapConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewUpdateLdapConfigUnprocessableEntity() *UpdateLdapConfigUnprocessableEnti
 	return &UpdateLdapConfigUnprocessableEntity{}
 }
 
-/*UpdateLdapConfigUnprocessableEntity handles this case with default header values.
+/* UpdateLdapConfigUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type UpdateLdapConfigUnprocessableEntity struct {
 
 func (o *UpdateLdapConfigUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /ldap_config][%d] updateLdapConfigUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *UpdateLdapConfigUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *UpdateLdapConfigUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

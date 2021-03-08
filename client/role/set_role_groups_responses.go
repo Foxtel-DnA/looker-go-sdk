@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // SetRoleGroupsReader is a Reader for the SetRoleGroups structure.
@@ -24,37 +23,38 @@ type SetRoleGroupsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SetRoleGroupsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSetRoleGroupsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSetRoleGroupsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSetRoleGroupsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewSetRoleGroupsUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewSetRoleGroupsTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewSetRoleGroupsOK() *SetRoleGroupsOK {
 	return &SetRoleGroupsOK{}
 }
 
-/*SetRoleGroupsOK handles this case with default header values.
+/* SetRoleGroupsOK describes a response with status code 200, with default header values.
 
 Groups with role.
 */
@@ -73,6 +73,9 @@ type SetRoleGroupsOK struct {
 
 func (o *SetRoleGroupsOK) Error() string {
 	return fmt.Sprintf("[PUT /roles/{role_id}/groups][%d] setRoleGroupsOK  %+v", 200, o.Payload)
+}
+func (o *SetRoleGroupsOK) GetPayload() []*models.Group {
+	return o.Payload
 }
 
 func (o *SetRoleGroupsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewSetRoleGroupsBadRequest() *SetRoleGroupsBadRequest {
 	return &SetRoleGroupsBadRequest{}
 }
 
-/*SetRoleGroupsBadRequest handles this case with default header values.
+/* SetRoleGroupsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type SetRoleGroupsBadRequest struct {
 
 func (o *SetRoleGroupsBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /roles/{role_id}/groups][%d] setRoleGroupsBadRequest  %+v", 400, o.Payload)
+}
+func (o *SetRoleGroupsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetRoleGroupsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewSetRoleGroupsNotFound() *SetRoleGroupsNotFound {
 	return &SetRoleGroupsNotFound{}
 }
 
-/*SetRoleGroupsNotFound handles this case with default header values.
+/* SetRoleGroupsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type SetRoleGroupsNotFound struct {
 
 func (o *SetRoleGroupsNotFound) Error() string {
 	return fmt.Sprintf("[PUT /roles/{role_id}/groups][%d] setRoleGroupsNotFound  %+v", 404, o.Payload)
+}
+func (o *SetRoleGroupsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetRoleGroupsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewSetRoleGroupsUnprocessableEntity() *SetRoleGroupsUnprocessableEntity {
 	return &SetRoleGroupsUnprocessableEntity{}
 }
 
-/*SetRoleGroupsUnprocessableEntity handles this case with default header values.
+/* SetRoleGroupsUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -159,10 +168,45 @@ type SetRoleGroupsUnprocessableEntity struct {
 func (o *SetRoleGroupsUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PUT /roles/{role_id}/groups][%d] setRoleGroupsUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *SetRoleGroupsUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *SetRoleGroupsUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewSetRoleGroupsTooManyRequests creates a SetRoleGroupsTooManyRequests with default headers values
+func NewSetRoleGroupsTooManyRequests() *SetRoleGroupsTooManyRequests {
+	return &SetRoleGroupsTooManyRequests{}
+}
+
+/* SetRoleGroupsTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type SetRoleGroupsTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *SetRoleGroupsTooManyRequests) Error() string {
+	return fmt.Sprintf("[PUT /roles/{role_id}/groups][%d] setRoleGroupsTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *SetRoleGroupsTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *SetRoleGroupsTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // ValidationErrorDetail validation error detail
+//
 // swagger:model ValidationErrorDetail
 type ValidationErrorDetail struct {
 
@@ -57,6 +59,68 @@ func (m *ValidationErrorDetail) validateDocumentationURL(formats strfmt.Registry
 	}
 
 	if err := validate.FormatOf("documentation_url", "body", "uri", m.DocumentationURL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this validation error detail based on the context it is used
+func (m *ValidationErrorDetail) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDocumentationURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateField(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ValidationErrorDetail) contextValidateCode(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "code", "body", string(m.Code)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ValidationErrorDetail) contextValidateDocumentationURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "documentation_url", "body", strfmt.URI(m.DocumentationURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ValidationErrorDetail) contextValidateField(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field", "body", string(m.Field)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ValidationErrorDetail) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
 		return err
 	}
 

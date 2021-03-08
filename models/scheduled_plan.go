@@ -6,16 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // ScheduledPlan scheduled plan
+//
 // swagger:model ScheduledPlan
 type ScheduledPlan struct {
 
@@ -59,6 +60,9 @@ type ScheduledPlan struct {
 	// Whether links back to Looker should be included in this ScheduledPlan
 	IncludeLinks bool `json:"include_links,omitempty"`
 
+	// The pixel width at which we render the inline table visualizations
+	InlineTableWidth int64 `json:"inline_table_width,omitempty"`
+
 	// When the ScheduledPlan was last run
 	// Read Only: true
 	// Format: date-time
@@ -73,7 +77,7 @@ type ScheduledPlan struct {
 	// Id of a LookML dashboard
 	LookmlDashboardID string `json:"lookml_dashboard_id,omitempty"`
 
-	// Name
+	// Name of this scheduled plan
 	Name string `json:"name,omitempty"`
 
 	// When the ScheduledPlan will next run (null if running once)
@@ -81,10 +85,10 @@ type ScheduledPlan struct {
 	// Format: date-time
 	NextRunAt strfmt.DateTime `json:"next_run_at,omitempty"`
 
-	// Whether the paper should be landscape
+	// Whether the PDF should be formatted for landscape orientation
 	PdfLandscape bool `json:"pdf_landscape,omitempty"`
 
-	// The size of paper a PDF should be rendered for
+	// The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
 	PdfPaperSize string `json:"pdf_paper_size,omitempty"`
 
 	// Query id
@@ -99,7 +103,7 @@ type ScheduledPlan struct {
 	// Delivery should occur if running the dashboard or look returns results
 	RequireResults bool `json:"require_results,omitempty"`
 
-	// Whether schedule is ran as recipient (only applicable for email recipients)
+	// Whether schedule is run as recipient (only applicable for email recipients)
 	RunAsRecipient bool `json:"run_as_recipient,omitempty"`
 
 	// Whether the plan in question should only be run once (usually for testing)
@@ -127,7 +131,7 @@ type ScheduledPlan struct {
 	// Read Only: true
 	User *UserPublic `json:"user,omitempty"`
 
-	// User Id which owns this ScheduledPlan
+	// User Id which owns this scheduled plan
 	UserID int64 `json:"user_id,omitempty"`
 }
 
@@ -166,7 +170,6 @@ func (m *ScheduledPlan) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ScheduledPlan) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -179,7 +182,6 @@ func (m *ScheduledPlan) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *ScheduledPlan) validateLastRunAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastRunAt) { // not required
 		return nil
 	}
@@ -192,7 +194,6 @@ func (m *ScheduledPlan) validateLastRunAt(formats strfmt.Registry) error {
 }
 
 func (m *ScheduledPlan) validateNextRunAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NextRunAt) { // not required
 		return nil
 	}
@@ -205,7 +206,6 @@ func (m *ScheduledPlan) validateNextRunAt(formats strfmt.Registry) error {
 }
 
 func (m *ScheduledPlan) validateScheduledPlanDestination(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ScheduledPlanDestination) { // not required
 		return nil
 	}
@@ -230,7 +230,6 @@ func (m *ScheduledPlan) validateScheduledPlanDestination(formats strfmt.Registry
 }
 
 func (m *ScheduledPlan) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
@@ -243,13 +242,149 @@ func (m *ScheduledPlan) validateUpdatedAt(formats strfmt.Registry) error {
 }
 
 func (m *ScheduledPlan) validateUser(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.User) { // not required
 		return nil
 	}
 
 	if m.User != nil {
 		if err := m.User.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("user")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this scheduled plan based on the context it is used
+func (m *ScheduledPlan) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastRunAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNextRunAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateScheduledPlanDestination(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTitle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateLastRunAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_run_at", "body", strfmt.DateTime(m.LastRunAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateNextRunAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "next_run_at", "body", strfmt.DateTime(m.NextRunAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateScheduledPlanDestination(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ScheduledPlanDestination); i++ {
+
+		if m.ScheduledPlanDestination[i] != nil {
+			if err := m.ScheduledPlanDestination[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("scheduled_plan_destination" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateTitle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "title", "body", string(m.Title)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ScheduledPlan) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.User != nil {
+		if err := m.User.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("user")
 			}

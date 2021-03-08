@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSpaceParentParams creates a new SpaceParentParams object
-// with the default values initialized.
+// NewSpaceParentParams creates a new SpaceParentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceParentParams() *SpaceParentParams {
-	var ()
 	return &SpaceParentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceParentParamsWithTimeout creates a new SpaceParentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceParentParamsWithTimeout(timeout time.Duration) *SpaceParentParams {
-	var ()
 	return &SpaceParentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceParentParamsWithContext creates a new SpaceParentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceParentParamsWithContext(ctx context.Context) *SpaceParentParams {
-	var ()
 	return &SpaceParentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceParentParamsWithHTTPClient creates a new SpaceParentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceParentParamsWithHTTPClient(client *http.Client) *SpaceParentParams {
-	var ()
 	return &SpaceParentParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceParentParams contains all the parameters to send to the API endpoint
-for the space parent operation typically these are written to a http.Request
+/* SpaceParentParams contains all the parameters to send to the API endpoint
+   for the space parent operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceParentParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space parent params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceParentParams) WithDefaults() *SpaceParentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space parent params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceParentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space parent params
@@ -123,13 +136,13 @@ func (o *SpaceParentParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space parent params
-func (o *SpaceParentParams) WithSpaceID(spaceID int64) *SpaceParentParams {
+func (o *SpaceParentParams) WithSpaceID(spaceID string) *SpaceParentParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space parent params
-func (o *SpaceParentParams) SetSpaceID(spaceID int64) {
+func (o *SpaceParentParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -145,20 +158,21 @@ func (o *SpaceParentParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

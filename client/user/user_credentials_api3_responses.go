@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UserCredentialsApi3Reader is a Reader for the UserCredentialsApi3 structure.
@@ -24,30 +23,26 @@ type UserCredentialsApi3Reader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserCredentialsApi3Reader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserCredentialsApi3OK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserCredentialsApi3BadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserCredentialsApi3NotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserCredentialsApi3OK() *UserCredentialsApi3OK {
 	return &UserCredentialsApi3OK{}
 }
 
-/*UserCredentialsApi3OK handles this case with default header values.
+/* UserCredentialsApi3OK describes a response with status code 200, with default header values.
 
 API 3 Credential
 */
@@ -66,6 +61,9 @@ type UserCredentialsApi3OK struct {
 
 func (o *UserCredentialsApi3OK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_api3/{credentials_api3_id}][%d] userCredentialsApi3OK  %+v", 200, o.Payload)
+}
+func (o *UserCredentialsApi3OK) GetPayload() *models.CredentialsApi3 {
+	return o.Payload
 }
 
 func (o *UserCredentialsApi3OK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserCredentialsApi3BadRequest() *UserCredentialsApi3BadRequest {
 	return &UserCredentialsApi3BadRequest{}
 }
 
-/*UserCredentialsApi3BadRequest handles this case with default header values.
+/* UserCredentialsApi3BadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserCredentialsApi3BadRequest struct {
 
 func (o *UserCredentialsApi3BadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_api3/{credentials_api3_id}][%d] userCredentialsApi3BadRequest  %+v", 400, o.Payload)
+}
+func (o *UserCredentialsApi3BadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsApi3BadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserCredentialsApi3NotFound() *UserCredentialsApi3NotFound {
 	return &UserCredentialsApi3NotFound{}
 }
 
-/*UserCredentialsApi3NotFound handles this case with default header values.
+/* UserCredentialsApi3NotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserCredentialsApi3NotFound struct {
 
 func (o *UserCredentialsApi3NotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_api3/{credentials_api3_id}][%d] userCredentialsApi3NotFound  %+v", 404, o.Payload)
+}
+func (o *UserCredentialsApi3NotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsApi3NotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewFindGitBranchParams creates a new FindGitBranchParams object
-// with the default values initialized.
+// NewFindGitBranchParams creates a new FindGitBranchParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewFindGitBranchParams() *FindGitBranchParams {
-	var ()
 	return &FindGitBranchParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewFindGitBranchParamsWithTimeout creates a new FindGitBranchParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewFindGitBranchParamsWithTimeout(timeout time.Duration) *FindGitBranchParams {
-	var ()
 	return &FindGitBranchParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewFindGitBranchParamsWithContext creates a new FindGitBranchParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewFindGitBranchParamsWithContext(ctx context.Context) *FindGitBranchParams {
-	var ()
 	return &FindGitBranchParams{
-
 		Context: ctx,
 	}
 }
 
 // NewFindGitBranchParamsWithHTTPClient creates a new FindGitBranchParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewFindGitBranchParamsWithHTTPClient(client *http.Client) *FindGitBranchParams {
-	var ()
 	return &FindGitBranchParams{
 		HTTPClient: client,
 	}
 }
 
-/*FindGitBranchParams contains all the parameters to send to the API endpoint
-for the find git branch operation typically these are written to a http.Request
+/* FindGitBranchParams contains all the parameters to send to the API endpoint
+   for the find git branch operation.
+
+   Typically these are written to a http.Request.
 */
 type FindGitBranchParams struct {
 
-	/*BranchName
-	  Branch Name
+	/* BranchName.
 
+	   Branch Name
 	*/
 	BranchName string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the find git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FindGitBranchParams) WithDefaults() *FindGitBranchParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the find git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FindGitBranchParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the find git branch params

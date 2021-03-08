@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewDatagroupParams creates a new DatagroupParams object
-// with the default values initialized.
+// NewDatagroupParams creates a new DatagroupParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDatagroupParams() *DatagroupParams {
-	var ()
 	return &DatagroupParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDatagroupParamsWithTimeout creates a new DatagroupParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDatagroupParamsWithTimeout(timeout time.Duration) *DatagroupParams {
-	var ()
 	return &DatagroupParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDatagroupParamsWithContext creates a new DatagroupParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDatagroupParamsWithContext(ctx context.Context) *DatagroupParams {
-	var ()
 	return &DatagroupParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDatagroupParamsWithHTTPClient creates a new DatagroupParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDatagroupParamsWithHTTPClient(client *http.Client) *DatagroupParams {
-	var ()
 	return &DatagroupParams{
 		HTTPClient: client,
 	}
 }
 
-/*DatagroupParams contains all the parameters to send to the API endpoint
-for the datagroup operation typically these are written to a http.Request
+/* DatagroupParams contains all the parameters to send to the API endpoint
+   for the datagroup operation.
+
+   Typically these are written to a http.Request.
 */
 type DatagroupParams struct {
 
-	/*DatagroupID
-	  ID of datagroup.
+	/* DatagroupID.
 
+	   ID of datagroup.
 	*/
 	DatagroupID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the datagroup params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DatagroupParams) WithDefaults() *DatagroupParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the datagroup params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DatagroupParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the datagroup params

@@ -6,15 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreFieldset lookml model explore fieldset
+//
 // swagger:model LookmlModelExploreFieldset
 type LookmlModelExploreFieldset struct {
 
@@ -62,7 +64,6 @@ func (m *LookmlModelExploreFieldset) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LookmlModelExploreFieldset) validateDimensions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dimensions) { // not required
 		return nil
 	}
@@ -87,7 +88,6 @@ func (m *LookmlModelExploreFieldset) validateDimensions(formats strfmt.Registry)
 }
 
 func (m *LookmlModelExploreFieldset) validateFilters(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Filters) { // not required
 		return nil
 	}
@@ -112,7 +112,6 @@ func (m *LookmlModelExploreFieldset) validateFilters(formats strfmt.Registry) er
 }
 
 func (m *LookmlModelExploreFieldset) validateMeasures(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Measures) { // not required
 		return nil
 	}
@@ -137,7 +136,6 @@ func (m *LookmlModelExploreFieldset) validateMeasures(formats strfmt.Registry) e
 }
 
 func (m *LookmlModelExploreFieldset) validateParameters(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Parameters) { // not required
 		return nil
 	}
@@ -149,6 +147,120 @@ func (m *LookmlModelExploreFieldset) validateParameters(formats strfmt.Registry)
 
 		if m.Parameters[i] != nil {
 			if err := m.Parameters[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("parameters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this lookml model explore fieldset based on the context it is used
+func (m *LookmlModelExploreFieldset) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDimensions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMeasures(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParameters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreFieldset) contextValidateDimensions(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dimensions", "body", []*LookmlModelExploreField(m.Dimensions)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Dimensions); i++ {
+
+		if m.Dimensions[i] != nil {
+			if err := m.Dimensions[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dimensions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldset) contextValidateFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "filters", "body", []*LookmlModelExploreField(m.Filters)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Filters); i++ {
+
+		if m.Filters[i] != nil {
+			if err := m.Filters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldset) contextValidateMeasures(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "measures", "body", []*LookmlModelExploreField(m.Measures)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Measures); i++ {
+
+		if m.Measures[i] != nil {
+			if err := m.Measures[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("measures" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldset) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "parameters", "body", []*LookmlModelExploreField(m.Parameters)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Parameters); i++ {
+
+		if m.Parameters[i] != nil {
+			if err := m.Parameters[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("parameters" + "." + strconv.Itoa(i))
 				}

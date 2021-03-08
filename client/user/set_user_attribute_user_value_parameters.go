@@ -13,76 +13,95 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewSetUserAttributeUserValueParams creates a new SetUserAttributeUserValueParams object
-// with the default values initialized.
+// NewSetUserAttributeUserValueParams creates a new SetUserAttributeUserValueParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSetUserAttributeUserValueParams() *SetUserAttributeUserValueParams {
-	var ()
 	return &SetUserAttributeUserValueParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSetUserAttributeUserValueParamsWithTimeout creates a new SetUserAttributeUserValueParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSetUserAttributeUserValueParamsWithTimeout(timeout time.Duration) *SetUserAttributeUserValueParams {
-	var ()
 	return &SetUserAttributeUserValueParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSetUserAttributeUserValueParamsWithContext creates a new SetUserAttributeUserValueParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSetUserAttributeUserValueParamsWithContext(ctx context.Context) *SetUserAttributeUserValueParams {
-	var ()
 	return &SetUserAttributeUserValueParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSetUserAttributeUserValueParamsWithHTTPClient creates a new SetUserAttributeUserValueParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSetUserAttributeUserValueParamsWithHTTPClient(client *http.Client) *SetUserAttributeUserValueParams {
-	var ()
 	return &SetUserAttributeUserValueParams{
 		HTTPClient: client,
 	}
 }
 
-/*SetUserAttributeUserValueParams contains all the parameters to send to the API endpoint
-for the set user attribute user value operation typically these are written to a http.Request
+/* SetUserAttributeUserValueParams contains all the parameters to send to the API endpoint
+   for the set user attribute user value operation.
+
+   Typically these are written to a http.Request.
 */
 type SetUserAttributeUserValueParams struct {
 
-	/*Body
-	  New attribute value for user.
+	/* Body.
 
+	   New attribute value for user.
 	*/
 	Body *models.UserAttributeWithValue
-	/*UserAttributeID
-	  Id of user attribute
 
+	/* UserAttributeID.
+
+	   Id of user attribute
+
+	   Format: int64
 	*/
 	UserAttributeID int64
-	/*UserID
-	  Id of user
 
+	/* UserID.
+
+	   Id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the set user attribute user value params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetUserAttributeUserValueParams) WithDefaults() *SetUserAttributeUserValueParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the set user attribute user value params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetUserAttributeUserValueParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the set user attribute user value params
@@ -158,7 +177,6 @@ func (o *SetUserAttributeUserValueParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

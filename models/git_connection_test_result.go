@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // GitConnectionTestResult git connection test result
+//
 // swagger:model GitConnectionTestResult
 type GitConnectionTestResult struct {
 
@@ -27,13 +31,71 @@ type GitConnectionTestResult struct {
 	// Read Only: true
 	Message string `json:"message,omitempty"`
 
-	// Either "pass" or "fail"
+	// Either 'pass' or 'fail'
 	// Read Only: true
 	Status string `json:"status,omitempty"`
 }
 
 // Validate validates this git connection test result
 func (m *GitConnectionTestResult) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this git connection test result based on the context it is used
+func (m *GitConnectionTestResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GitConnectionTestResult) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *GitConnectionTestResult) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitConnectionTestResult) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitConnectionTestResult) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "status", "body", string(m.Status)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

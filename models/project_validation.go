@@ -6,15 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ProjectValidation project validation
+//
 // swagger:model ProjectValidation
 type ProjectValidation struct {
 
@@ -54,7 +56,6 @@ func (m *ProjectValidation) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ProjectValidation) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -79,7 +80,6 @@ func (m *ProjectValidation) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ProjectValidation) validateModelsNotValidated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModelsNotValidated) { // not required
 		return nil
 	}
@@ -98,6 +98,94 @@ func (m *ProjectValidation) validateModelsNotValidated(formats strfmt.Registry) 
 			}
 		}
 
+	}
+
+	return nil
+}
+
+// ContextValidate validate this project validation based on the context it is used
+func (m *ProjectValidation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateComputationTime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModelsNotValidated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjectDigest(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ProjectValidation) contextValidateComputationTime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "computation_time", "body", float32(m.ComputationTime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectValidation) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "errors", "body", []*ProjectError(m.Errors)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ProjectValidation) contextValidateModelsNotValidated(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "models_not_validated", "body", []*ModelsNotValidated(m.ModelsNotValidated)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.ModelsNotValidated); i++ {
+
+		if m.ModelsNotValidated[i] != nil {
+			if err := m.ModelsNotValidated[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("models_not_validated" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ProjectValidation) contextValidateProjectDigest(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "project_digest", "body", string(m.ProjectDigest)); err != nil {
+		return err
 	}
 
 	return nil

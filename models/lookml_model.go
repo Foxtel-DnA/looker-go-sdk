@@ -6,15 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModel lookml model
+//
 // swagger:model LookmlModel
 type LookmlModel struct {
 
@@ -62,7 +64,6 @@ func (m *LookmlModel) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LookmlModel) validateExplores(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Explores) { // not required
 		return nil
 	}
@@ -81,6 +82,77 @@ func (m *LookmlModel) validateExplores(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+// ContextValidate validate this lookml model based on the context it is used
+func (m *LookmlModel) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExplores(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasContent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModel) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LookmlModel) contextValidateExplores(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "explores", "body", []*LookmlModelNavExplore(m.Explores)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Explores); i++ {
+
+		if m.Explores[i] != nil {
+			if err := m.Explores[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("explores" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LookmlModel) contextValidateHasContent(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_content", "body", m.HasContent); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModel) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
 	}
 
 	return nil

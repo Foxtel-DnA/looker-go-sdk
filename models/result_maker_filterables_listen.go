@@ -6,12 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ResultMakerFilterablesListen result maker filterables listen
+//
 // swagger:model ResultMakerFilterablesListen
 type ResultMakerFilterablesListen struct {
 
@@ -24,6 +26,11 @@ type ResultMakerFilterablesListen struct {
 
 // Validate validates this result maker filterables listen
 func (m *ResultMakerFilterablesListen) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this result maker filterables listen based on context it is used
+func (m *ResultMakerFilterablesListen) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewCreateOidcTestConfigParams creates a new CreateOidcTestConfigParams object
-// with the default values initialized.
+// NewCreateOidcTestConfigParams creates a new CreateOidcTestConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateOidcTestConfigParams() *CreateOidcTestConfigParams {
-	var ()
 	return &CreateOidcTestConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateOidcTestConfigParamsWithTimeout creates a new CreateOidcTestConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateOidcTestConfigParamsWithTimeout(timeout time.Duration) *CreateOidcTestConfigParams {
-	var ()
 	return &CreateOidcTestConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateOidcTestConfigParamsWithContext creates a new CreateOidcTestConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateOidcTestConfigParamsWithContext(ctx context.Context) *CreateOidcTestConfigParams {
-	var ()
 	return &CreateOidcTestConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateOidcTestConfigParamsWithHTTPClient creates a new CreateOidcTestConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateOidcTestConfigParamsWithHTTPClient(client *http.Client) *CreateOidcTestConfigParams {
-	var ()
 	return &CreateOidcTestConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateOidcTestConfigParams contains all the parameters to send to the API endpoint
-for the create oidc test config operation typically these are written to a http.Request
+/* CreateOidcTestConfigParams contains all the parameters to send to the API endpoint
+   for the create oidc test config operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateOidcTestConfigParams struct {
 
-	/*Body
-	  OIDC test config
+	/* Body.
 
+	   OIDC test config
 	*/
 	Body *models.OIDCConfig
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create oidc test config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateOidcTestConfigParams) WithDefaults() *CreateOidcTestConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create oidc test config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateOidcTestConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create oidc test config params
@@ -125,7 +138,6 @@ func (o *CreateOidcTestConfigParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

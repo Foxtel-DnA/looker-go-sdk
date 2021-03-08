@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // CreateLookmlDashboardRenderTaskReader is a Reader for the CreateLookmlDashboardRenderTask structure.
@@ -24,44 +23,44 @@ type CreateLookmlDashboardRenderTaskReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateLookmlDashboardRenderTaskReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateLookmlDashboardRenderTaskOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateLookmlDashboardRenderTaskBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateLookmlDashboardRenderTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateLookmlDashboardRenderTaskConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateLookmlDashboardRenderTaskUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateLookmlDashboardRenderTaskTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateLookmlDashboardRenderTaskOK() *CreateLookmlDashboardRenderTaskOK {
 	return &CreateLookmlDashboardRenderTaskOK{}
 }
 
-/*CreateLookmlDashboardRenderTaskOK handles this case with default header values.
+/* CreateLookmlDashboardRenderTaskOK describes a response with status code 200, with default header values.
 
 Render Task
 */
@@ -80,6 +79,9 @@ type CreateLookmlDashboardRenderTaskOK struct {
 
 func (o *CreateLookmlDashboardRenderTaskOK) Error() string {
 	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskOK  %+v", 200, o.Payload)
+}
+func (o *CreateLookmlDashboardRenderTaskOK) GetPayload() *models.RenderTask {
+	return o.Payload
 }
 
 func (o *CreateLookmlDashboardRenderTaskOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateLookmlDashboardRenderTaskBadRequest() *CreateLookmlDashboardRender
 	return &CreateLookmlDashboardRenderTaskBadRequest{}
 }
 
-/*CreateLookmlDashboardRenderTaskBadRequest handles this case with default header values.
+/* CreateLookmlDashboardRenderTaskBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateLookmlDashboardRenderTaskBadRequest struct {
 
 func (o *CreateLookmlDashboardRenderTaskBadRequest) Error() string {
 	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateLookmlDashboardRenderTaskBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlDashboardRenderTaskBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateLookmlDashboardRenderTaskNotFound() *CreateLookmlDashboardRenderTa
 	return &CreateLookmlDashboardRenderTaskNotFound{}
 }
 
-/*CreateLookmlDashboardRenderTaskNotFound handles this case with default header values.
+/* CreateLookmlDashboardRenderTaskNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateLookmlDashboardRenderTaskNotFound struct {
 
 func (o *CreateLookmlDashboardRenderTaskNotFound) Error() string {
 	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateLookmlDashboardRenderTaskNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlDashboardRenderTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateLookmlDashboardRenderTaskConflict() *CreateLookmlDashboardRenderTa
 	return &CreateLookmlDashboardRenderTaskConflict{}
 }
 
-/*CreateLookmlDashboardRenderTaskConflict handles this case with default header values.
+/* CreateLookmlDashboardRenderTaskConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateLookmlDashboardRenderTaskConflict struct {
 
 func (o *CreateLookmlDashboardRenderTaskConflict) Error() string {
 	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskConflict  %+v", 409, o.Payload)
+}
+func (o *CreateLookmlDashboardRenderTaskConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateLookmlDashboardRenderTaskConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateLookmlDashboardRenderTaskUnprocessableEntity() *CreateLookmlDashbo
 	return &CreateLookmlDashboardRenderTaskUnprocessableEntity{}
 }
 
-/*CreateLookmlDashboardRenderTaskUnprocessableEntity handles this case with default header values.
+/* CreateLookmlDashboardRenderTaskUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateLookmlDashboardRenderTaskUnprocessableEntity struct {
 func (o *CreateLookmlDashboardRenderTaskUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateLookmlDashboardRenderTaskUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateLookmlDashboardRenderTaskUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateLookmlDashboardRenderTaskTooManyRequests creates a CreateLookmlDashboardRenderTaskTooManyRequests with default headers values
+func NewCreateLookmlDashboardRenderTaskTooManyRequests() *CreateLookmlDashboardRenderTaskTooManyRequests {
+	return &CreateLookmlDashboardRenderTaskTooManyRequests{}
+}
+
+/* CreateLookmlDashboardRenderTaskTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateLookmlDashboardRenderTaskTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateLookmlDashboardRenderTaskTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format}][%d] createLookmlDashboardRenderTaskTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateLookmlDashboardRenderTaskTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateLookmlDashboardRenderTaskTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

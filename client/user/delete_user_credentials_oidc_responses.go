@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DeleteUserCredentialsOidcReader is a Reader for the DeleteUserCredentialsOidc structure.
@@ -24,30 +23,32 @@ type DeleteUserCredentialsOidcReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteUserCredentialsOidcReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteUserCredentialsOidcNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteUserCredentialsOidcBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteUserCredentialsOidcNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteUserCredentialsOidcTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteUserCredentialsOidcNoContent() *DeleteUserCredentialsOidcNoContent
 	return &DeleteUserCredentialsOidcNoContent{}
 }
 
-/*DeleteUserCredentialsOidcNoContent handles this case with default header values.
+/* DeleteUserCredentialsOidcNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteUserCredentialsOidcNoContent struct {
 
 func (o *DeleteUserCredentialsOidcNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /users/{user_id}/credentials_oidc][%d] deleteUserCredentialsOidcNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteUserCredentialsOidcNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteUserCredentialsOidcNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteUserCredentialsOidcBadRequest() *DeleteUserCredentialsOidcBadReque
 	return &DeleteUserCredentialsOidcBadRequest{}
 }
 
-/*DeleteUserCredentialsOidcBadRequest handles this case with default header values.
+/* DeleteUserCredentialsOidcBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteUserCredentialsOidcBadRequest struct {
 
 func (o *DeleteUserCredentialsOidcBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /users/{user_id}/credentials_oidc][%d] deleteUserCredentialsOidcBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteUserCredentialsOidcBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteUserCredentialsOidcBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteUserCredentialsOidcNotFound() *DeleteUserCredentialsOidcNotFound {
 	return &DeleteUserCredentialsOidcNotFound{}
 }
 
-/*DeleteUserCredentialsOidcNotFound handles this case with default header values.
+/* DeleteUserCredentialsOidcNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteUserCredentialsOidcNotFound struct {
 func (o *DeleteUserCredentialsOidcNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /users/{user_id}/credentials_oidc][%d] deleteUserCredentialsOidcNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteUserCredentialsOidcNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteUserCredentialsOidcNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteUserCredentialsOidcTooManyRequests creates a DeleteUserCredentialsOidcTooManyRequests with default headers values
+func NewDeleteUserCredentialsOidcTooManyRequests() *DeleteUserCredentialsOidcTooManyRequests {
+	return &DeleteUserCredentialsOidcTooManyRequests{}
+}
+
+/* DeleteUserCredentialsOidcTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteUserCredentialsOidcTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteUserCredentialsOidcTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /users/{user_id}/credentials_oidc][%d] deleteUserCredentialsOidcTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteUserCredentialsOidcTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteUserCredentialsOidcTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // FetchIntegrationFormReader is a Reader for the FetchIntegrationForm structure.
@@ -24,37 +23,32 @@ type FetchIntegrationFormReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *FetchIntegrationFormReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewFetchIntegrationFormOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewFetchIntegrationFormBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewFetchIntegrationFormNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewFetchIntegrationFormUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewFetchIntegrationFormOK() *FetchIntegrationFormOK {
 	return &FetchIntegrationFormOK{}
 }
 
-/*FetchIntegrationFormOK handles this case with default header values.
+/* FetchIntegrationFormOK describes a response with status code 200, with default header values.
 
 Data Action Form
 */
@@ -73,6 +67,9 @@ type FetchIntegrationFormOK struct {
 
 func (o *FetchIntegrationFormOK) Error() string {
 	return fmt.Sprintf("[POST /integrations/{integration_id}/form][%d] fetchIntegrationFormOK  %+v", 200, o.Payload)
+}
+func (o *FetchIntegrationFormOK) GetPayload() *models.DataActionForm {
+	return o.Payload
 }
 
 func (o *FetchIntegrationFormOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewFetchIntegrationFormBadRequest() *FetchIntegrationFormBadRequest {
 	return &FetchIntegrationFormBadRequest{}
 }
 
-/*FetchIntegrationFormBadRequest handles this case with default header values.
+/* FetchIntegrationFormBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type FetchIntegrationFormBadRequest struct {
 
 func (o *FetchIntegrationFormBadRequest) Error() string {
 	return fmt.Sprintf("[POST /integrations/{integration_id}/form][%d] fetchIntegrationFormBadRequest  %+v", 400, o.Payload)
+}
+func (o *FetchIntegrationFormBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *FetchIntegrationFormBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewFetchIntegrationFormNotFound() *FetchIntegrationFormNotFound {
 	return &FetchIntegrationFormNotFound{}
 }
 
-/*FetchIntegrationFormNotFound handles this case with default header values.
+/* FetchIntegrationFormNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type FetchIntegrationFormNotFound struct {
 
 func (o *FetchIntegrationFormNotFound) Error() string {
 	return fmt.Sprintf("[POST /integrations/{integration_id}/form][%d] fetchIntegrationFormNotFound  %+v", 404, o.Payload)
+}
+func (o *FetchIntegrationFormNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *FetchIntegrationFormNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewFetchIntegrationFormUnprocessableEntity() *FetchIntegrationFormUnprocess
 	return &FetchIntegrationFormUnprocessableEntity{}
 }
 
-/*FetchIntegrationFormUnprocessableEntity handles this case with default header values.
+/* FetchIntegrationFormUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type FetchIntegrationFormUnprocessableEntity struct {
 
 func (o *FetchIntegrationFormUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /integrations/{integration_id}/form][%d] fetchIntegrationFormUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *FetchIntegrationFormUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *FetchIntegrationFormUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

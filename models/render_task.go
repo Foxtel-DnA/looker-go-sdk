@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // RenderTask render task
+//
 // swagger:model RenderTask
 type RenderTask struct {
 
@@ -94,6 +98,259 @@ type RenderTask struct {
 
 // Validate validates this render task
 func (m *RenderTask) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this render task based on the context it is used
+func (m *RenderTask) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardStyle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFinalizedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHeight(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookmlDashboardID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryRuntime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRenderRuntime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateResultFormat(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRuntime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatusDetail(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWidth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RenderTask) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateDashboardFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_filters", "body", string(m.DashboardFilters)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateDashboardID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_id", "body", int64(m.DashboardID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateDashboardStyle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_style", "body", string(m.DashboardStyle)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateFinalizedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "finalized_at", "body", string(m.FinalizedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateHeight(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "height", "body", int64(m.Height)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateLookID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "look_id", "body", int64(m.LookID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateLookmlDashboardID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "lookml_dashboard_id", "body", string(m.LookmlDashboardID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateQueryID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_id", "body", int64(m.QueryID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateQueryRuntime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_runtime", "body", float64(m.QueryRuntime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateRenderRuntime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "render_runtime", "body", float64(m.RenderRuntime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateResultFormat(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "result_format", "body", string(m.ResultFormat)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateRuntime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "runtime", "body", float64(m.Runtime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "status", "body", string(m.Status)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateStatusDetail(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "status_detail", "body", string(m.StatusDetail)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", int64(m.UserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RenderTask) contextValidateWidth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "width", "body", int64(m.Width)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

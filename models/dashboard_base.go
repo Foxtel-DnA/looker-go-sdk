@@ -6,13 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DashboardBase dashboard base
+//
 // swagger:model DashboardBase
 type DashboardBase struct {
 
@@ -32,14 +35,17 @@ type DashboardBase struct {
 	// Read Only: true
 	Description string `json:"description,omitempty"`
 
+	// Folder
+	// Read Only: true
+	Folder *FolderBase `json:"folder,omitempty"`
+
 	// Is Hidden
 	// Read Only: true
 	Hidden *bool `json:"hidden,omitempty"`
 
 	// Unique Id
 	// Read Only: true
-	// billtrust change made to type because the API returns back an int64 and not a string for this field
-	ID int64 `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// Model
 	// Read Only: true
@@ -53,17 +59,13 @@ type DashboardBase struct {
 	// Read Only: true
 	Readonly *bool `json:"readonly,omitempty"`
 
-	// Refresh Interval
+	// Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
 	// Read Only: true
 	RefreshInterval string `json:"refresh_interval,omitempty"`
 
-	// Refresh Interval as Integer
+	// Refresh Interval in milliseconds
 	// Read Only: true
-	RefreshIntervalToI int64 `json:"refresh_interval_to_i,omitempty"`
-
-	// ScheduledPlan
-	// Read Only: true
-	ScheduledPlan *ScheduledPlan `json:"scheduled_plan,omitempty"`
+	RefreshIntervalToi int64 `json:"refresh_interval_to_i,omitempty"`
 
 	// Space
 	// Read Only: true
@@ -82,11 +84,11 @@ type DashboardBase struct {
 func (m *DashboardBase) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateModel(formats); err != nil {
+	if err := m.validateFolder(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateScheduledPlan(formats); err != nil {
+	if err := m.validateModel(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -100,8 +102,24 @@ func (m *DashboardBase) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DashboardBase) validateModel(formats strfmt.Registry) error {
+func (m *DashboardBase) validateFolder(formats strfmt.Registry) error {
+	if swag.IsZero(m.Folder) { // not required
+		return nil
+	}
 
+	if m.Folder != nil {
+		if err := m.Folder.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) validateModel(formats strfmt.Registry) error {
 	if swag.IsZero(m.Model) { // not required
 		return nil
 	}
@@ -118,26 +136,7 @@ func (m *DashboardBase) validateModel(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DashboardBase) validateScheduledPlan(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ScheduledPlan) { // not required
-		return nil
-	}
-
-	if m.ScheduledPlan != nil {
-		if err := m.ScheduledPlan.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("scheduled_plan")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *DashboardBase) validateSpace(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Space) { // not required
 		return nil
 	}
@@ -149,6 +148,222 @@ func (m *DashboardBase) validateSpace(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dashboard base based on the context it is used
+func (m *DashboardBase) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentFavoriteID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFolder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHidden(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryTimezone(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReadonly(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefreshInterval(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefreshIntervalToi(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTitle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DashboardBase) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateContentFavoriteID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_favorite_id", "body", int64(m.ContentFavoriteID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateFolder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Folder != nil {
+		if err := m.Folder.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateHidden(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "hidden", "body", m.Hidden); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateModel(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Model != nil {
+		if err := m.Model.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("model")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateQueryTimezone(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_timezone", "body", string(m.QueryTimezone)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateReadonly(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "readonly", "body", m.Readonly); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateRefreshInterval(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "refresh_interval", "body", string(m.RefreshInterval)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateRefreshIntervalToi(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "refresh_interval_to_i", "body", int64(m.RefreshIntervalToi)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateSpace(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Space != nil {
+		if err := m.Space.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("space")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateTitle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "title", "body", string(m.Title)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardBase) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", int64(m.UserID)); err != nil {
+		return err
 	}
 
 	return nil

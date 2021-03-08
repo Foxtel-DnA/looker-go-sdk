@@ -13,101 +13,125 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewCreateLookmlDashboardRenderTaskParams creates a new CreateLookmlDashboardRenderTaskParams object
-// with the default values initialized.
+// NewCreateLookmlDashboardRenderTaskParams creates a new CreateLookmlDashboardRenderTaskParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateLookmlDashboardRenderTaskParams() *CreateLookmlDashboardRenderTaskParams {
-	var ()
 	return &CreateLookmlDashboardRenderTaskParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateLookmlDashboardRenderTaskParamsWithTimeout creates a new CreateLookmlDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateLookmlDashboardRenderTaskParamsWithTimeout(timeout time.Duration) *CreateLookmlDashboardRenderTaskParams {
-	var ()
 	return &CreateLookmlDashboardRenderTaskParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateLookmlDashboardRenderTaskParamsWithContext creates a new CreateLookmlDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateLookmlDashboardRenderTaskParamsWithContext(ctx context.Context) *CreateLookmlDashboardRenderTaskParams {
-	var ()
 	return &CreateLookmlDashboardRenderTaskParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateLookmlDashboardRenderTaskParamsWithHTTPClient creates a new CreateLookmlDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateLookmlDashboardRenderTaskParamsWithHTTPClient(client *http.Client) *CreateLookmlDashboardRenderTaskParams {
-	var ()
 	return &CreateLookmlDashboardRenderTaskParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateLookmlDashboardRenderTaskParams contains all the parameters to send to the API endpoint
-for the create lookml dashboard render task operation typically these are written to a http.Request
+/* CreateLookmlDashboardRenderTaskParams contains all the parameters to send to the API endpoint
+   for the create lookml dashboard render task operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateLookmlDashboardRenderTaskParams struct {
 
-	/*Body
-	  Dashboard render task parameters
+	/* Body.
 
+	   Dashboard render task parameters
 	*/
 	Body *models.CreateDashboardRenderTask
-	/*DashboardID
-	  Id of lookml dashboard to render
 
+	/* DashboardID.
+
+	   Id of lookml dashboard to render
 	*/
 	DashboardID string
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*Height
-	  Output height in pixels
 
+	/* Height.
+
+	   Output height in pixels
+
+	   Format: int64
 	*/
 	Height int64
-	/*PdfLandscape
-	  Whether to render pdf in landscape
 
+	/* PdfLandscape.
+
+	   Whether to render pdf in landscape
 	*/
 	PdfLandscape *bool
-	/*PdfPaperSize
-	  Paper size for pdf
 
+	/* PdfPaperSize.
+
+	   Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
 	*/
 	PdfPaperSize *string
-	/*ResultFormat
-	  Output type: pdf, png, or jpg
 
+	/* ResultFormat.
+
+	   Output type: pdf, png, or jpg
 	*/
 	ResultFormat string
-	/*Width
-	  Output width in pixels
 
+	/* Width.
+
+	   Output width in pixels
+
+	   Format: int64
 	*/
 	Width int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create lookml dashboard render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateLookmlDashboardRenderTaskParams) WithDefaults() *CreateLookmlDashboardRenderTaskParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create lookml dashboard render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateLookmlDashboardRenderTaskParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create lookml dashboard render task params
@@ -238,7 +262,6 @@ func (o *CreateLookmlDashboardRenderTaskParams) WriteToRequest(r runtime.ClientR
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -254,22 +277,24 @@ func (o *CreateLookmlDashboardRenderTaskParams) WriteToRequest(r runtime.ClientR
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param height
 	qrHeight := o.Height
 	qHeight := swag.FormatInt64(qrHeight)
 	if qHeight != "" {
+
 		if err := r.SetQueryParam("height", qHeight); err != nil {
 			return err
 		}
@@ -279,32 +304,34 @@ func (o *CreateLookmlDashboardRenderTaskParams) WriteToRequest(r runtime.ClientR
 
 		// query param pdf_landscape
 		var qrPdfLandscape bool
+
 		if o.PdfLandscape != nil {
 			qrPdfLandscape = *o.PdfLandscape
 		}
 		qPdfLandscape := swag.FormatBool(qrPdfLandscape)
 		if qPdfLandscape != "" {
+
 			if err := r.SetQueryParam("pdf_landscape", qPdfLandscape); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PdfPaperSize != nil {
 
 		// query param pdf_paper_size
 		var qrPdfPaperSize string
+
 		if o.PdfPaperSize != nil {
 			qrPdfPaperSize = *o.PdfPaperSize
 		}
 		qPdfPaperSize := qrPdfPaperSize
 		if qPdfPaperSize != "" {
+
 			if err := r.SetQueryParam("pdf_paper_size", qPdfPaperSize); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param result_format
@@ -316,6 +343,7 @@ func (o *CreateLookmlDashboardRenderTaskParams) WriteToRequest(r runtime.ClientR
 	qrWidth := o.Width
 	qWidth := swag.FormatInt64(qrWidth)
 	if qWidth != "" {
+
 		if err := r.SetQueryParam("width", qWidth); err != nil {
 			return err
 		}

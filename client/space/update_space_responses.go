@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // UpdateSpaceReader is a Reader for the UpdateSpace structure.
@@ -24,37 +23,38 @@ type UpdateSpaceReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateSpaceReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateSpaceOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateSpaceBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateSpaceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateSpaceUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateSpaceTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateSpaceOK() *UpdateSpaceOK {
 	return &UpdateSpaceOK{}
 }
 
-/*UpdateSpaceOK handles this case with default header values.
+/* UpdateSpaceOK describes a response with status code 200, with default header values.
 
 Space
 */
@@ -73,6 +73,9 @@ type UpdateSpaceOK struct {
 
 func (o *UpdateSpaceOK) Error() string {
 	return fmt.Sprintf("[PATCH /spaces/{space_id}][%d] updateSpaceOK  %+v", 200, o.Payload)
+}
+func (o *UpdateSpaceOK) GetPayload() *models.Space {
+	return o.Payload
 }
 
 func (o *UpdateSpaceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateSpaceBadRequest() *UpdateSpaceBadRequest {
 	return &UpdateSpaceBadRequest{}
 }
 
-/*UpdateSpaceBadRequest handles this case with default header values.
+/* UpdateSpaceBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateSpaceBadRequest struct {
 
 func (o *UpdateSpaceBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /spaces/{space_id}][%d] updateSpaceBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateSpaceBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateSpaceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateSpaceNotFound() *UpdateSpaceNotFound {
 	return &UpdateSpaceNotFound{}
 }
 
-/*UpdateSpaceNotFound handles this case with default header values.
+/* UpdateSpaceNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateSpaceNotFound struct {
 
 func (o *UpdateSpaceNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /spaces/{space_id}][%d] updateSpaceNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateSpaceNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateSpaceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateSpaceUnprocessableEntity() *UpdateSpaceUnprocessableEntity {
 	return &UpdateSpaceUnprocessableEntity{}
 }
 
-/*UpdateSpaceUnprocessableEntity handles this case with default header values.
+/* UpdateSpaceUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateSpaceUnprocessableEntity struct {
 func (o *UpdateSpaceUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /spaces/{space_id}][%d] updateSpaceUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateSpaceUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateSpaceUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateSpaceTooManyRequests creates a UpdateSpaceTooManyRequests with default headers values
+func NewUpdateSpaceTooManyRequests() *UpdateSpaceTooManyRequests {
+	return &UpdateSpaceTooManyRequests{}
+}
+
+/* UpdateSpaceTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateSpaceTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateSpaceTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /spaces/{space_id}][%d] updateSpaceTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateSpaceTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateSpaceTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

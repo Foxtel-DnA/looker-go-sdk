@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreJoins lookml model explore joins
+//
 // swagger:model LookmlModelExploreJoins
 type LookmlModelExploreJoins struct {
 
@@ -70,6 +74,185 @@ type LookmlModelExploreJoins struct {
 
 // Validate validates this lookml model explore joins
 func (m *LookmlModelExploreJoins) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this lookml model explore joins based on the context it is used
+func (m *LookmlModelExploreJoins) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDependentFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateForeignKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFrom(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOuterOnly(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRelationship(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequiredJoins(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLForeignKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLOn(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLTableName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateDependentFields(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dependent_fields", "body", []string(m.DependentFields)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateFields(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "fields", "body", []string(m.Fields)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateForeignKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "foreign_key", "body", string(m.ForeignKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateFrom(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "from", "body", string(m.From)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateOuterOnly(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "outer_only", "body", m.OuterOnly); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateRelationship(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "relationship", "body", string(m.Relationship)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateRequiredJoins(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "required_joins", "body", []string(m.RequiredJoins)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateSQLForeignKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql_foreign_key", "body", string(m.SQLForeignKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateSQLOn(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql_on", "body", string(m.SQLOn)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateSQLTableName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql_table_name", "body", string(m.SQLTableName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "type", "body", string(m.Type)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreJoins) contextValidateViewLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_label", "body", string(m.ViewLabel)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

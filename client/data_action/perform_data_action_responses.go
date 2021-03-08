@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // PerformDataActionReader is a Reader for the PerformDataAction structure.
@@ -24,30 +23,26 @@ type PerformDataActionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *PerformDataActionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewPerformDataActionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewPerformDataActionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewPerformDataActionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewPerformDataActionOK() *PerformDataActionOK {
 	return &PerformDataActionOK{}
 }
 
-/*PerformDataActionOK handles this case with default header values.
+/* PerformDataActionOK describes a response with status code 200, with default header values.
 
 Data Action Response
 */
@@ -66,6 +61,9 @@ type PerformDataActionOK struct {
 
 func (o *PerformDataActionOK) Error() string {
 	return fmt.Sprintf("[POST /data_actions][%d] performDataActionOK  %+v", 200, o.Payload)
+}
+func (o *PerformDataActionOK) GetPayload() *models.DataActionResponse {
+	return o.Payload
 }
 
 func (o *PerformDataActionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewPerformDataActionBadRequest() *PerformDataActionBadRequest {
 	return &PerformDataActionBadRequest{}
 }
 
-/*PerformDataActionBadRequest handles this case with default header values.
+/* PerformDataActionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type PerformDataActionBadRequest struct {
 
 func (o *PerformDataActionBadRequest) Error() string {
 	return fmt.Sprintf("[POST /data_actions][%d] performDataActionBadRequest  %+v", 400, o.Payload)
+}
+func (o *PerformDataActionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *PerformDataActionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewPerformDataActionNotFound() *PerformDataActionNotFound {
 	return &PerformDataActionNotFound{}
 }
 
-/*PerformDataActionNotFound handles this case with default header values.
+/* PerformDataActionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type PerformDataActionNotFound struct {
 
 func (o *PerformDataActionNotFound) Error() string {
 	return fmt.Sprintf("[POST /data_actions][%d] performDataActionNotFound  %+v", 404, o.Payload)
+}
+func (o *PerformDataActionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *PerformDataActionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

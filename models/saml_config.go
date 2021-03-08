@@ -6,18 +6,28 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // SamlConfig saml config
+//
 // swagger:model SamlConfig
 type SamlConfig struct {
+
+	// Allows roles to be directly assigned to SAML auth'd users.
+	AllowDirectRoles bool `json:"allow_direct_roles,omitempty"`
+
+	// Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+	AllowNormalGroupMembership bool `json:"allow_normal_group_membership,omitempty"`
+
+	// SAML auth'd users will inherit roles from non-reflected Looker groups.
+	AllowRolesFromNormalGroups bool `json:"allow_roles_from_normal_groups,omitempty"`
 
 	// Count of seconds of clock drift to allow when validating timestamps of assertions.
 	AllowedClockDrift int64 `json:"allowed_clock_drift,omitempty"`
@@ -159,7 +169,6 @@ func (m *SamlConfig) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SamlConfig) validateDefaultNewUserGroups(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DefaultNewUserGroups) { // not required
 		return nil
 	}
@@ -184,7 +193,6 @@ func (m *SamlConfig) validateDefaultNewUserGroups(formats strfmt.Registry) error
 }
 
 func (m *SamlConfig) validateDefaultNewUserRoles(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DefaultNewUserRoles) { // not required
 		return nil
 	}
@@ -209,7 +217,6 @@ func (m *SamlConfig) validateDefaultNewUserRoles(formats strfmt.Registry) error 
 }
 
 func (m *SamlConfig) validateGroups(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Groups) { // not required
 		return nil
 	}
@@ -234,7 +241,6 @@ func (m *SamlConfig) validateGroups(formats strfmt.Registry) error {
 }
 
 func (m *SamlConfig) validateGroupsWithRoleIds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GroupsWithRoleIds) { // not required
 		return nil
 	}
@@ -259,7 +265,6 @@ func (m *SamlConfig) validateGroupsWithRoleIds(formats strfmt.Registry) error {
 }
 
 func (m *SamlConfig) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
@@ -272,7 +277,6 @@ func (m *SamlConfig) validateURL(formats strfmt.Registry) error {
 }
 
 func (m *SamlConfig) validateUserAttributes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributes) { // not required
 		return nil
 	}
@@ -297,7 +301,6 @@ func (m *SamlConfig) validateUserAttributes(formats strfmt.Registry) error {
 }
 
 func (m *SamlConfig) validateUserAttributesWithIds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributesWithIds) { // not required
 		return nil
 	}
@@ -309,6 +312,225 @@ func (m *SamlConfig) validateUserAttributesWithIds(formats strfmt.Registry) erro
 
 		if m.UserAttributesWithIds[i] != nil {
 			if err := m.UserAttributesWithIds[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes_with_ids" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this saml config based on the context it is used
+func (m *SamlConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultNewUserGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultNewUserRoles(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroupsWithRoleIds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiedBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTestSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributesWithIds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SamlConfig) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateDefaultNewUserGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_new_user_groups", "body", []*Group(m.DefaultNewUserGroups)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DefaultNewUserGroups); i++ {
+
+		if m.DefaultNewUserGroups[i] != nil {
+			if err := m.DefaultNewUserGroups[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("default_new_user_groups" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateDefaultNewUserRoles(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_new_user_roles", "body", []*Role(m.DefaultNewUserRoles)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DefaultNewUserRoles); i++ {
+
+		if m.DefaultNewUserRoles[i] != nil {
+			if err := m.DefaultNewUserRoles[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("default_new_user_roles" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "groups", "body", []*SamlGroupRead(m.Groups)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Groups); i++ {
+
+		if m.Groups[i] != nil {
+			if err := m.Groups[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("groups" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateGroupsWithRoleIds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.GroupsWithRoleIds); i++ {
+
+		if m.GroupsWithRoleIds[i] != nil {
+			if err := m.GroupsWithRoleIds[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("groups_with_role_ids" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateModifiedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "modified_at", "body", string(m.ModifiedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateModifiedBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "modified_by", "body", string(m.ModifiedBy)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateTestSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "test_slug", "body", string(m.TestSlug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateUserAttributes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attributes", "body", []*SamlUserAttributeRead(m.UserAttributes)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.UserAttributes); i++ {
+
+		if m.UserAttributes[i] != nil {
+			if err := m.UserAttributes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SamlConfig) contextValidateUserAttributesWithIds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.UserAttributesWithIds); i++ {
+
+		if m.UserAttributesWithIds[i] != nil {
+			if err := m.UserAttributesWithIds[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("user_attributes_with_ids" + "." + strconv.Itoa(i))
 				}

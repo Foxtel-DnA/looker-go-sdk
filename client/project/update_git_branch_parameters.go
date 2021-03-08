@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
-// NewUpdateGitBranchParams creates a new UpdateGitBranchParams object
-// with the default values initialized.
+// NewUpdateGitBranchParams creates a new UpdateGitBranchParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateGitBranchParams() *UpdateGitBranchParams {
-	var ()
 	return &UpdateGitBranchParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateGitBranchParamsWithTimeout creates a new UpdateGitBranchParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateGitBranchParamsWithTimeout(timeout time.Duration) *UpdateGitBranchParams {
-	var ()
 	return &UpdateGitBranchParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateGitBranchParamsWithContext creates a new UpdateGitBranchParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateGitBranchParamsWithContext(ctx context.Context) *UpdateGitBranchParams {
-	var ()
 	return &UpdateGitBranchParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateGitBranchParamsWithHTTPClient creates a new UpdateGitBranchParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateGitBranchParamsWithHTTPClient(client *http.Client) *UpdateGitBranchParams {
-	var ()
 	return &UpdateGitBranchParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateGitBranchParams contains all the parameters to send to the API endpoint
-for the update git branch operation typically these are written to a http.Request
+/* UpdateGitBranchParams contains all the parameters to send to the API endpoint
+   for the update git branch operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateGitBranchParams struct {
 
-	/*Body
-	  Git Branch
+	/* Body.
 
+	   Git Branch
 	*/
 	Body *models.GitBranch
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateGitBranchParams) WithDefaults() *UpdateGitBranchParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateGitBranchParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update git branch params
@@ -141,7 +155,6 @@ func (o *UpdateGitBranchParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

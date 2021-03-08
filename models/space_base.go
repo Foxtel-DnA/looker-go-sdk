@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // SpaceBase space base
+//
 // swagger:model SpaceBase
 type SpaceBase struct {
 
@@ -29,6 +31,11 @@ type SpaceBase struct {
 	// Read Only: true
 	ContentMetadataID int64 `json:"content_metadata_id,omitempty"`
 
+	// Time the space was created
+	// Read Only: true
+	// Format: date-time
+	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
+
 	// User Id of Creator
 	// Read Only: true
 	CreatorID int64 `json:"creator_id,omitempty"`
@@ -39,7 +46,7 @@ type SpaceBase struct {
 
 	// Unique Id
 	// Read Only: true
-	ID int64 `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// Space is an embed space
 	// Read Only: true
@@ -61,36 +68,31 @@ type SpaceBase struct {
 	// Read Only: true
 	IsPersonalDescendant *bool `json:"is_personal_descendant,omitempty"`
 
-	// (DEPRECATED) Space is the root shared space (alias of is_shared_root)
-	// Read Only: true
-	IsRoot *bool `json:"is_root,omitempty"`
-
 	// Space is the root shared space
 	// Read Only: true
 	IsSharedRoot *bool `json:"is_shared_root,omitempty"`
-
-	// (DEPRECATED) Space is the root user space (alias of is_users_root
-	// Read Only: true
-	IsUserRoot *bool `json:"is_user_root,omitempty"`
 
 	// Space is the root user space
 	// Read Only: true
 	IsUsersRoot *bool `json:"is_users_root,omitempty"`
 
 	// Unique Name
-	// Read Only: true
-	Name string `json:"name,omitempty"`
-
-	// Id of Parent
 	// Required: true
-	ParentID *int64 `json:"parent_id"`
+	Name *string `json:"name"`
+
+	// Id of Parent. If the parent id is null, this is a root-level entry
+	ParentID string `json:"parent_id,omitempty"`
 }
 
 // Validate validates this space base
 func (m *SpaceBase) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateParentID(formats); err != nil {
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -100,9 +102,209 @@ func (m *SpaceBase) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SpaceBase) validateParentID(formats strfmt.Registry) error {
+func (m *SpaceBase) validateCreatedAt(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
 
-	if err := validate.Required("parent_id", "body", m.ParentID); err != nil {
+	if err := validate.FormatOf("created_at", "body", "date-time", m.CreatedAt.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) validateName(formats strfmt.Registry) error {
+
+	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this space base based on the context it is used
+func (m *SpaceBase) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateChildCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatorID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExternalID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsEmbed(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsEmbedSharedRoot(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsEmbedUsersRoot(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsPersonal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsPersonalDescendant(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsSharedRoot(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsUsersRoot(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SpaceBase) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateChildCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "child_count", "body", int64(m.ChildCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateCreatorID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "creator_id", "body", int64(m.CreatorID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateExternalID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "external_id", "body", string(m.ExternalID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsEmbed(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_embed", "body", m.IsEmbed); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsEmbedSharedRoot(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_embed_shared_root", "body", m.IsEmbedSharedRoot); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsEmbedUsersRoot(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_embed_users_root", "body", m.IsEmbedUsersRoot); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsPersonal(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_personal", "body", m.IsPersonal); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsPersonalDescendant(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_personal_descendant", "body", m.IsPersonalDescendant); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsSharedRoot(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_shared_root", "body", m.IsSharedRoot); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SpaceBase) contextValidateIsUsersRoot(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_users_root", "body", m.IsUsersRoot); err != nil {
 		return err
 	}
 

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"your-damain.com/swagger/looker-api-golang/models"
 )
 
 // DatagroupReader is a Reader for the Datagroup structure.
@@ -24,30 +23,26 @@ type DatagroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DatagroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewDatagroupOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDatagroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDatagroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewDatagroupOK() *DatagroupOK {
 	return &DatagroupOK{}
 }
 
-/*DatagroupOK handles this case with default header values.
+/* DatagroupOK describes a response with status code 200, with default header values.
 
 Datagroup
 */
@@ -66,6 +61,9 @@ type DatagroupOK struct {
 
 func (o *DatagroupOK) Error() string {
 	return fmt.Sprintf("[GET /datagroups/{datagroup_id}][%d] datagroupOK  %+v", 200, o.Payload)
+}
+func (o *DatagroupOK) GetPayload() *models.Datagroup {
+	return o.Payload
 }
 
 func (o *DatagroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewDatagroupBadRequest() *DatagroupBadRequest {
 	return &DatagroupBadRequest{}
 }
 
-/*DatagroupBadRequest handles this case with default header values.
+/* DatagroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type DatagroupBadRequest struct {
 
 func (o *DatagroupBadRequest) Error() string {
 	return fmt.Sprintf("[GET /datagroups/{datagroup_id}][%d] datagroupBadRequest  %+v", 400, o.Payload)
+}
+func (o *DatagroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DatagroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewDatagroupNotFound() *DatagroupNotFound {
 	return &DatagroupNotFound{}
 }
 
-/*DatagroupNotFound handles this case with default header values.
+/* DatagroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type DatagroupNotFound struct {
 
 func (o *DatagroupNotFound) Error() string {
 	return fmt.Sprintf("[GET /datagroups/{datagroup_id}][%d] datagroupNotFound  %+v", 404, o.Payload)
+}
+func (o *DatagroupNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DatagroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

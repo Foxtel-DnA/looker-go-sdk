@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllConnectionsParams creates a new AllConnectionsParams object
-// with the default values initialized.
+// NewAllConnectionsParams creates a new AllConnectionsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllConnectionsParams() *AllConnectionsParams {
-	var ()
 	return &AllConnectionsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllConnectionsParamsWithTimeout creates a new AllConnectionsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllConnectionsParamsWithTimeout(timeout time.Duration) *AllConnectionsParams {
-	var ()
 	return &AllConnectionsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllConnectionsParamsWithContext creates a new AllConnectionsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllConnectionsParamsWithContext(ctx context.Context) *AllConnectionsParams {
-	var ()
 	return &AllConnectionsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllConnectionsParamsWithHTTPClient creates a new AllConnectionsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllConnectionsParamsWithHTTPClient(client *http.Client) *AllConnectionsParams {
-	var ()
 	return &AllConnectionsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllConnectionsParams contains all the parameters to send to the API endpoint
-for the all connections operation typically these are written to a http.Request
+/* AllConnectionsParams contains all the parameters to send to the API endpoint
+   for the all connections operation.
+
+   Typically these are written to a http.Request.
 */
 type AllConnectionsParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all connections params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllConnectionsParams) WithDefaults() *AllConnectionsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all connections params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllConnectionsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all connections params
@@ -128,16 +141,17 @@ func (o *AllConnectionsParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {
