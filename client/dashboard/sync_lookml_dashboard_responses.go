@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"your-damain.com/swagger/looker-api-golang/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // SyncLookmlDashboardReader is a Reader for the SyncLookmlDashboard structure.

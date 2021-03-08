@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"your-damain.com/swagger/looker-api-golang/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // NewCreateThemeParams creates a new CreateThemeParams object,

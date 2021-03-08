@@ -16,7 +16,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"your-damain.com/swagger/looker-api-golang/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // NewAddGroupUserParams creates a new AddGroupUserParams object,
