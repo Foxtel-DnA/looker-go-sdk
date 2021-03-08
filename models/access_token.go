@@ -61,27 +61,15 @@ func (m *AccessToken) ContextValidate(ctx context.Context, formats strfmt.Regist
 
 func (m *AccessToken) contextValidateAccessToken(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "access_token", "body", string(m.AccessToken)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (m *AccessToken) contextValidateExpiresIn(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "expires_in", "body", int64(m.ExpiresIn)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (m *AccessToken) contextValidateTokenType(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "token_type", "body", string(m.TokenType)); err != nil {
-		return err
-	}
 
 	return nil
 }

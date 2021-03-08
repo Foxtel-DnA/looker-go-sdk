@@ -61,10 +61,6 @@ func (m *APISession) contextValidateCan(ctx context.Context, formats strfmt.Regi
 
 func (m *APISession) contextValidateSudoUserID(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "sudo_user_id", "body", int64(m.SudoUserID)); err != nil {
-		return err
-	}
-
 	return nil
 }
 

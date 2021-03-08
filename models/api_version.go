@@ -124,10 +124,6 @@ func (m *APIVersion) ContextValidate(ctx context.Context, formats strfmt.Registr
 
 func (m *APIVersion) contextValidateAPIServerURL(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "api_server_url", "body", string(m.APIServerURL)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -147,18 +143,10 @@ func (m *APIVersion) contextValidateCurrentVersion(ctx context.Context, formats 
 
 func (m *APIVersion) contextValidateLookerReleaseVersion(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "looker_release_version", "body", string(m.LookerReleaseVersion)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (m *APIVersion) contextValidateSupportedVersions(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "supported_versions", "body", []*APIVersionElement(m.SupportedVersions)); err != nil {
-		return err
-	}
 
 	for i := 0; i < len(m.SupportedVersions); i++ {
 

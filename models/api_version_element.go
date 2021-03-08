@@ -91,36 +91,20 @@ func (m *APIVersionElement) ContextValidate(ctx context.Context, formats strfmt.
 
 func (m *APIVersionElement) contextValidateFullVersion(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "full_version", "body", string(m.FullVersion)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (m *APIVersionElement) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "status", "body", string(m.Status)); err != nil {
-		return err
-	}
 
 	return nil
 }
 
 func (m *APIVersionElement) contextValidateSwaggerURL(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.ReadOnly(ctx, "swagger_url", "body", strfmt.URI(m.SwaggerURL)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 func (m *APIVersionElement) contextValidateVersion(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := validate.ReadOnly(ctx, "version", "body", string(m.Version)); err != nil {
-		return err
-	}
 
 	return nil
 }
