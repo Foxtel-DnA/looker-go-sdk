@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // RenderTaskResultsReader is a Reader for the RenderTaskResults structure.
@@ -24,52 +23,33 @@ type RenderTaskResultsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *RenderTaskResultsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
-	case 102:
-		result := NewRenderTaskResultsProcessing()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
 	case 200:
 		result := NewRenderTaskResultsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
+	case 202:
+		result := NewRenderTaskResultsAccepted()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return result, nil
+	case 400:
+		result := NewRenderTaskResultsBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewRenderTaskResultsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
-}
-
-// NewRenderTaskResultsProcessing creates a RenderTaskResultsProcessing with default headers values
-func NewRenderTaskResultsProcessing() *RenderTaskResultsProcessing {
-	return &RenderTaskResultsProcessing{}
-}
-
-/*RenderTaskResultsProcessing handles this case with default header values.
-
-Processing
-*/
-type RenderTaskResultsProcessing struct {
-}
-
-func (o *RenderTaskResultsProcessing) Error() string {
-	return fmt.Sprintf("[GET /render_tasks/{render_task_id}/results][%d] renderTaskResultsProcessing ", 102)
-}
-
-func (o *RenderTaskResultsProcessing) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
 }
 
 // NewRenderTaskResultsOK creates a RenderTaskResultsOK with default headers values
@@ -77,7 +57,7 @@ func NewRenderTaskResultsOK() *RenderTaskResultsOK {
 	return &RenderTaskResultsOK{}
 }
 
-/*RenderTaskResultsOK handles this case with default header values.
+/* RenderTaskResultsOK describes a response with status code 200, with default header values.
 
 Document or image
 */
@@ -87,6 +67,9 @@ type RenderTaskResultsOK struct {
 
 func (o *RenderTaskResultsOK) Error() string {
 	return fmt.Sprintf("[GET /render_tasks/{render_task_id}/results][%d] renderTaskResultsOK  %+v", 200, o.Payload)
+}
+func (o *RenderTaskResultsOK) GetPayload() string {
+	return o.Payload
 }
 
 func (o *RenderTaskResultsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,12 +82,65 @@ func (o *RenderTaskResultsOK) readResponse(response runtime.ClientResponse, cons
 	return nil
 }
 
+// NewRenderTaskResultsAccepted creates a RenderTaskResultsAccepted with default headers values
+func NewRenderTaskResultsAccepted() *RenderTaskResultsAccepted {
+	return &RenderTaskResultsAccepted{}
+}
+
+/* RenderTaskResultsAccepted describes a response with status code 202, with default header values.
+
+Accepted
+*/
+type RenderTaskResultsAccepted struct {
+}
+
+func (o *RenderTaskResultsAccepted) Error() string {
+	return fmt.Sprintf("[GET /render_tasks/{render_task_id}/results][%d] renderTaskResultsAccepted ", 202)
+}
+
+func (o *RenderTaskResultsAccepted) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewRenderTaskResultsBadRequest creates a RenderTaskResultsBadRequest with default headers values
+func NewRenderTaskResultsBadRequest() *RenderTaskResultsBadRequest {
+	return &RenderTaskResultsBadRequest{}
+}
+
+/* RenderTaskResultsBadRequest describes a response with status code 400, with default header values.
+
+Bad Request
+*/
+type RenderTaskResultsBadRequest struct {
+	Payload *models.Error
+}
+
+func (o *RenderTaskResultsBadRequest) Error() string {
+	return fmt.Sprintf("[GET /render_tasks/{render_task_id}/results][%d] renderTaskResultsBadRequest  %+v", 400, o.Payload)
+}
+func (o *RenderTaskResultsBadRequest) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *RenderTaskResultsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
 // NewRenderTaskResultsNotFound creates a RenderTaskResultsNotFound with default headers values
 func NewRenderTaskResultsNotFound() *RenderTaskResultsNotFound {
 	return &RenderTaskResultsNotFound{}
 }
 
-/*RenderTaskResultsNotFound handles this case with default header values.
+/* RenderTaskResultsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -114,6 +150,9 @@ type RenderTaskResultsNotFound struct {
 
 func (o *RenderTaskResultsNotFound) Error() string {
 	return fmt.Sprintf("[GET /render_tasks/{render_task_id}/results][%d] renderTaskResultsNotFound  %+v", 404, o.Payload)
+}
+func (o *RenderTaskResultsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RenderTaskResultsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateUserCredentialsEmailReader is a Reader for the CreateUserCredentialsEmail structure.
@@ -24,44 +23,44 @@ type CreateUserCredentialsEmailReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateUserCredentialsEmailReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateUserCredentialsEmailOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateUserCredentialsEmailBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateUserCredentialsEmailNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateUserCredentialsEmailConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateUserCredentialsEmailUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateUserCredentialsEmailTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateUserCredentialsEmailOK() *CreateUserCredentialsEmailOK {
 	return &CreateUserCredentialsEmailOK{}
 }
 
-/*CreateUserCredentialsEmailOK handles this case with default header values.
+/* CreateUserCredentialsEmailOK describes a response with status code 200, with default header values.
 
 Email/Password Credential
 */
@@ -80,6 +79,9 @@ type CreateUserCredentialsEmailOK struct {
 
 func (o *CreateUserCredentialsEmailOK) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailOK  %+v", 200, o.Payload)
+}
+func (o *CreateUserCredentialsEmailOK) GetPayload() *models.CredentialsEmail {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateUserCredentialsEmailBadRequest() *CreateUserCredentialsEmailBadReq
 	return &CreateUserCredentialsEmailBadRequest{}
 }
 
-/*CreateUserCredentialsEmailBadRequest handles this case with default header values.
+/* CreateUserCredentialsEmailBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateUserCredentialsEmailBadRequest struct {
 
 func (o *CreateUserCredentialsEmailBadRequest) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateUserCredentialsEmailBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateUserCredentialsEmailNotFound() *CreateUserCredentialsEmailNotFound
 	return &CreateUserCredentialsEmailNotFound{}
 }
 
-/*CreateUserCredentialsEmailNotFound handles this case with default header values.
+/* CreateUserCredentialsEmailNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateUserCredentialsEmailNotFound struct {
 
 func (o *CreateUserCredentialsEmailNotFound) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateUserCredentialsEmailNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateUserCredentialsEmailConflict() *CreateUserCredentialsEmailConflict
 	return &CreateUserCredentialsEmailConflict{}
 }
 
-/*CreateUserCredentialsEmailConflict handles this case with default header values.
+/* CreateUserCredentialsEmailConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateUserCredentialsEmailConflict struct {
 
 func (o *CreateUserCredentialsEmailConflict) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailConflict  %+v", 409, o.Payload)
+}
+func (o *CreateUserCredentialsEmailConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserCredentialsEmailConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateUserCredentialsEmailUnprocessableEntity() *CreateUserCredentialsEm
 	return &CreateUserCredentialsEmailUnprocessableEntity{}
 }
 
-/*CreateUserCredentialsEmailUnprocessableEntity handles this case with default header values.
+/* CreateUserCredentialsEmailUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateUserCredentialsEmailUnprocessableEntity struct {
 func (o *CreateUserCredentialsEmailUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateUserCredentialsEmailUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateUserCredentialsEmailUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateUserCredentialsEmailTooManyRequests creates a CreateUserCredentialsEmailTooManyRequests with default headers values
+func NewCreateUserCredentialsEmailTooManyRequests() *CreateUserCredentialsEmailTooManyRequests {
+	return &CreateUserCredentialsEmailTooManyRequests{}
+}
+
+/* CreateUserCredentialsEmailTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateUserCredentialsEmailTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateUserCredentialsEmailTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /users/{user_id}/credentials_email][%d] createUserCredentialsEmailTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateUserCredentialsEmailTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateUserCredentialsEmailTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

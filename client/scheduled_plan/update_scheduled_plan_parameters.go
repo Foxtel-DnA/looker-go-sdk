@@ -13,71 +13,87 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateScheduledPlanParams creates a new UpdateScheduledPlanParams object
-// with the default values initialized.
+// NewUpdateScheduledPlanParams creates a new UpdateScheduledPlanParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateScheduledPlanParams() *UpdateScheduledPlanParams {
-	var ()
 	return &UpdateScheduledPlanParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateScheduledPlanParamsWithTimeout creates a new UpdateScheduledPlanParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateScheduledPlanParamsWithTimeout(timeout time.Duration) *UpdateScheduledPlanParams {
-	var ()
 	return &UpdateScheduledPlanParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateScheduledPlanParamsWithContext creates a new UpdateScheduledPlanParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateScheduledPlanParamsWithContext(ctx context.Context) *UpdateScheduledPlanParams {
-	var ()
 	return &UpdateScheduledPlanParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateScheduledPlanParamsWithHTTPClient creates a new UpdateScheduledPlanParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateScheduledPlanParamsWithHTTPClient(client *http.Client) *UpdateScheduledPlanParams {
-	var ()
 	return &UpdateScheduledPlanParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateScheduledPlanParams contains all the parameters to send to the API endpoint
-for the update scheduled plan operation typically these are written to a http.Request
+/* UpdateScheduledPlanParams contains all the parameters to send to the API endpoint
+   for the update scheduled plan operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateScheduledPlanParams struct {
 
-	/*Body
-	  Scheduled Plan
+	/* Body.
 
+	   Scheduled Plan
 	*/
 	Body *models.ScheduledPlan
-	/*ScheduledPlanID
-	  Scheduled Plan Id
 
+	/* ScheduledPlanID.
+
+	   Scheduled Plan Id
+
+	   Format: int64
 	*/
 	ScheduledPlanID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update scheduled plan params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateScheduledPlanParams) WithDefaults() *UpdateScheduledPlanParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update scheduled plan params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateScheduledPlanParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update scheduled plan params
@@ -142,7 +158,6 @@ func (o *UpdateScheduledPlanParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

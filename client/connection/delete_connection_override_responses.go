@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // DeleteConnectionOverrideReader is a Reader for the DeleteConnectionOverride structure.
@@ -24,37 +23,38 @@ type DeleteConnectionOverrideReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteConnectionOverrideReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteConnectionOverrideNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteConnectionOverrideBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteConnectionOverrideNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewDeleteConnectionOverrideUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteConnectionOverrideTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewDeleteConnectionOverrideNoContent() *DeleteConnectionOverrideNoContent {
 	return &DeleteConnectionOverrideNoContent{}
 }
 
-/*DeleteConnectionOverrideNoContent handles this case with default header values.
+/* DeleteConnectionOverrideNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -73,6 +73,9 @@ type DeleteConnectionOverrideNoContent struct {
 
 func (o *DeleteConnectionOverrideNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}/connection_override/{override_context}][%d] deleteConnectionOverrideNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteConnectionOverrideNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteConnectionOverrideNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewDeleteConnectionOverrideBadRequest() *DeleteConnectionOverrideBadRequest
 	return &DeleteConnectionOverrideBadRequest{}
 }
 
-/*DeleteConnectionOverrideBadRequest handles this case with default header values.
+/* DeleteConnectionOverrideBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type DeleteConnectionOverrideBadRequest struct {
 
 func (o *DeleteConnectionOverrideBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}/connection_override/{override_context}][%d] deleteConnectionOverrideBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteConnectionOverrideBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteConnectionOverrideBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewDeleteConnectionOverrideNotFound() *DeleteConnectionOverrideNotFound {
 	return &DeleteConnectionOverrideNotFound{}
 }
 
-/*DeleteConnectionOverrideNotFound handles this case with default header values.
+/* DeleteConnectionOverrideNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type DeleteConnectionOverrideNotFound struct {
 
 func (o *DeleteConnectionOverrideNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}/connection_override/{override_context}][%d] deleteConnectionOverrideNotFound  %+v", 404, o.Payload)
+}
+func (o *DeleteConnectionOverrideNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteConnectionOverrideNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewDeleteConnectionOverrideUnprocessableEntity() *DeleteConnectionOverrideU
 	return &DeleteConnectionOverrideUnprocessableEntity{}
 }
 
-/*DeleteConnectionOverrideUnprocessableEntity handles this case with default header values.
+/* DeleteConnectionOverrideUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -159,10 +168,45 @@ type DeleteConnectionOverrideUnprocessableEntity struct {
 func (o *DeleteConnectionOverrideUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}/connection_override/{override_context}][%d] deleteConnectionOverrideUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *DeleteConnectionOverrideUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *DeleteConnectionOverrideUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteConnectionOverrideTooManyRequests creates a DeleteConnectionOverrideTooManyRequests with default headers values
+func NewDeleteConnectionOverrideTooManyRequests() *DeleteConnectionOverrideTooManyRequests {
+	return &DeleteConnectionOverrideTooManyRequests{}
+}
+
+/* DeleteConnectionOverrideTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteConnectionOverrideTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteConnectionOverrideTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /connections/{connection_name}/connection_override/{override_context}][%d] deleteConnectionOverrideTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteConnectionOverrideTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteConnectionOverrideTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

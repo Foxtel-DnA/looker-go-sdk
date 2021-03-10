@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UserSessionReader is a Reader for the UserSession structure.
@@ -24,30 +23,26 @@ type UserSessionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserSessionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserSessionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserSessionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserSessionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserSessionOK() *UserSessionOK {
 	return &UserSessionOK{}
 }
 
-/*UserSessionOK handles this case with default header values.
+/* UserSessionOK describes a response with status code 200, with default header values.
 
 Web Login Session
 */
@@ -66,6 +61,9 @@ type UserSessionOK struct {
 
 func (o *UserSessionOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/sessions/{session_id}][%d] userSessionOK  %+v", 200, o.Payload)
+}
+func (o *UserSessionOK) GetPayload() *models.Session {
+	return o.Payload
 }
 
 func (o *UserSessionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserSessionBadRequest() *UserSessionBadRequest {
 	return &UserSessionBadRequest{}
 }
 
-/*UserSessionBadRequest handles this case with default header values.
+/* UserSessionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserSessionBadRequest struct {
 
 func (o *UserSessionBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/sessions/{session_id}][%d] userSessionBadRequest  %+v", 400, o.Payload)
+}
+func (o *UserSessionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserSessionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserSessionNotFound() *UserSessionNotFound {
 	return &UserSessionNotFound{}
 }
 
-/*UserSessionNotFound handles this case with default header values.
+/* UserSessionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserSessionNotFound struct {
 
 func (o *UserSessionNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/sessions/{session_id}][%d] userSessionNotFound  %+v", 404, o.Payload)
+}
+func (o *UserSessionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserSessionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

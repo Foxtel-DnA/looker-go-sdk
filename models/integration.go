@@ -6,21 +6,27 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Integration integration
+//
 // swagger:model Integration
 type Integration struct {
 
 	// Operations the current user is able to perform on this object
 	// Read Only: true
 	Can map[string]bool `json:"can,omitempty"`
+
+	// Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker.
+	// Read Only: true
+	DelegateOauth *bool `json:"delegate_oauth,omitempty"`
 
 	// Description of the integration.
 	// Read Only: true
@@ -36,6 +42,9 @@ type Integration struct {
 	// ID of the integration.
 	// Read Only: true
 	ID string `json:"id,omitempty"`
+
+	// Whether the integration is available to users.
+	InstalledDelegateOauthTargets []int64 `json:"installed_delegate_oauth_targets"`
 
 	// ID of the integration hub.
 	// Read Only: true
@@ -56,21 +65,25 @@ type Integration struct {
 	// Read Only: true
 	SupportedActionTypes []string `json:"supported_action_types"`
 
-	// A list of all the download mechanisms the integration supports. The order is undefined: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this will default to ["push"]. Valid values are: "push", "url".
+	// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
 	// Read Only: true
 	SupportedDownloadSettings []string `json:"supported_download_settings"`
 
-	// A list of data formats the integration supports. If unspecified, this will default to ["txt", "csv", "inline_json", "json", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip"]. Valid values are: "txt", "csv", "inline_json", "json", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+	// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
 	// Read Only: true
 	SupportedFormats []string `json:"supported_formats"`
 
-	// A list of formatting options the integration supports. If unspecified, this will default to ["formatted", "unformatted"]. Valid values are: "formatted", "unformatted".
+	// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
 	// Read Only: true
 	SupportedFormattings []string `json:"supported_formattings"`
 
-	// A list of visualization formatting options the integration supports. If unspecified, this will default to ["apply", "noapply"]. Valid values are: "apply", "noapply".
+	// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
 	// Read Only: true
 	SupportedVisualizationFormattings []string `json:"supported_visualization_formattings"`
+
+	// Whether the integration uses oauth.
+	// Read Only: true
+	UsesOauth *bool `json:"uses_oauth,omitempty"`
 }
 
 // Validate validates this integration
@@ -92,7 +105,6 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Integration) validateParams(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Params) { // not required
 		return nil
 	}
@@ -117,7 +129,6 @@ func (m *Integration) validateParams(formats strfmt.Registry) error {
 }
 
 func (m *Integration) validateRequiredFields(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RequiredFields) { // not required
 		return nil
 	}
@@ -136,6 +147,229 @@ func (m *Integration) validateRequiredFields(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+// ContextValidate validate this integration based on the context it is used
+func (m *Integration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDelegateOauth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIconURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIntegrationHubID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParams(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequiredFields(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedActionTypes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedDownloadSettings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedFormats(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedFormattings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSupportedVisualizationFormattings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUsesOauth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Integration) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Integration) contextValidateDelegateOauth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "delegate_oauth", "body", m.DelegateOauth); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateIconURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "icon_url", "body", string(m.IconURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateIntegrationHubID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "integration_hub_id", "body", int64(m.IntegrationHubID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateParams(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Params); i++ {
+
+		if m.Params[i] != nil {
+			if err := m.Params[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("params" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateRequiredFields(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "required_fields", "body", []*IntegrationRequiredField(m.RequiredFields)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.RequiredFields); i++ {
+
+		if m.RequiredFields[i] != nil {
+			if err := m.RequiredFields[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("required_fields" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateSupportedActionTypes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "supported_action_types", "body", []string(m.SupportedActionTypes)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateSupportedDownloadSettings(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "supported_download_settings", "body", []string(m.SupportedDownloadSettings)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateSupportedFormats(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "supported_formats", "body", []string(m.SupportedFormats)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateSupportedFormattings(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "supported_formattings", "body", []string(m.SupportedFormattings)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateSupportedVisualizationFormattings(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "supported_visualization_formattings", "body", []string(m.SupportedVisualizationFormattings)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) contextValidateUsesOauth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "uses_oauth", "body", m.UsesOauth); err != nil {
+		return err
 	}
 
 	return nil

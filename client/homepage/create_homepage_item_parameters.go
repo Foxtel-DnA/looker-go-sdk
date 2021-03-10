@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateHomepageItemParams creates a new CreateHomepageItemParams object
-// with the default values initialized.
+// NewCreateHomepageItemParams creates a new CreateHomepageItemParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateHomepageItemParams() *CreateHomepageItemParams {
-	var ()
 	return &CreateHomepageItemParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateHomepageItemParamsWithTimeout creates a new CreateHomepageItemParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateHomepageItemParamsWithTimeout(timeout time.Duration) *CreateHomepageItemParams {
-	var ()
 	return &CreateHomepageItemParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateHomepageItemParamsWithContext creates a new CreateHomepageItemParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateHomepageItemParamsWithContext(ctx context.Context) *CreateHomepageItemParams {
-	var ()
 	return &CreateHomepageItemParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateHomepageItemParamsWithHTTPClient creates a new CreateHomepageItemParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateHomepageItemParamsWithHTTPClient(client *http.Client) *CreateHomepageItemParams {
-	var ()
 	return &CreateHomepageItemParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateHomepageItemParams contains all the parameters to send to the API endpoint
-for the create homepage item operation typically these are written to a http.Request
+/* CreateHomepageItemParams contains all the parameters to send to the API endpoint
+   for the create homepage item operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateHomepageItemParams struct {
 
-	/*Body
-	  Homepage Item
+	/* Body.
 
+	   Homepage Item
 	*/
 	Body *models.HomepageItem
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create homepage item params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateHomepageItemParams) WithDefaults() *CreateHomepageItemParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create homepage item params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateHomepageItemParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create homepage item params
@@ -141,7 +155,6 @@ func (o *CreateHomepageItemParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -152,16 +165,17 @@ func (o *CreateHomepageItemParams) WriteToRequest(r runtime.ClientRequest, reg s
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

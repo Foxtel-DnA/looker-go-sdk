@@ -13,73 +13,88 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewLookmlModelExploreParams creates a new LookmlModelExploreParams object
-// with the default values initialized.
+// NewLookmlModelExploreParams creates a new LookmlModelExploreParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewLookmlModelExploreParams() *LookmlModelExploreParams {
-	var ()
 	return &LookmlModelExploreParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewLookmlModelExploreParamsWithTimeout creates a new LookmlModelExploreParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewLookmlModelExploreParamsWithTimeout(timeout time.Duration) *LookmlModelExploreParams {
-	var ()
 	return &LookmlModelExploreParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewLookmlModelExploreParamsWithContext creates a new LookmlModelExploreParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewLookmlModelExploreParamsWithContext(ctx context.Context) *LookmlModelExploreParams {
-	var ()
 	return &LookmlModelExploreParams{
-
 		Context: ctx,
 	}
 }
 
 // NewLookmlModelExploreParamsWithHTTPClient creates a new LookmlModelExploreParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewLookmlModelExploreParamsWithHTTPClient(client *http.Client) *LookmlModelExploreParams {
-	var ()
 	return &LookmlModelExploreParams{
 		HTTPClient: client,
 	}
 }
 
-/*LookmlModelExploreParams contains all the parameters to send to the API endpoint
-for the lookml model explore operation typically these are written to a http.Request
+/* LookmlModelExploreParams contains all the parameters to send to the API endpoint
+   for the lookml model explore operation.
+
+   Typically these are written to a http.Request.
 */
 type LookmlModelExploreParams struct {
 
-	/*ExploreName
-	  Name of explore.
+	/* ExploreName.
 
+	   Name of explore.
 	*/
 	ExploreName string
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*LookmlModelName
-	  Name of lookml model.
 
+	/* LookmlModelName.
+
+	   Name of lookml model.
 	*/
 	LookmlModelName string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the lookml model explore params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LookmlModelExploreParams) WithDefaults() *LookmlModelExploreParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the lookml model explore params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *LookmlModelExploreParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the lookml model explore params
@@ -165,16 +180,17 @@ func (o *LookmlModelExploreParams) WriteToRequest(r runtime.ClientRequest, reg s
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param lookml_model_name

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AcceptIntegrationHubLegalAgreementReader is a Reader for the AcceptIntegrationHubLegalAgreement structure.
@@ -24,37 +23,32 @@ type AcceptIntegrationHubLegalAgreementReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AcceptIntegrationHubLegalAgreementReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAcceptIntegrationHubLegalAgreementOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAcceptIntegrationHubLegalAgreementBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAcceptIntegrationHubLegalAgreementNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewAcceptIntegrationHubLegalAgreementUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewAcceptIntegrationHubLegalAgreementOK() *AcceptIntegrationHubLegalAgreeme
 	return &AcceptIntegrationHubLegalAgreementOK{}
 }
 
-/*AcceptIntegrationHubLegalAgreementOK handles this case with default header values.
+/* AcceptIntegrationHubLegalAgreementOK describes a response with status code 200, with default header values.
 
 Integration hub
 */
@@ -73,6 +67,9 @@ type AcceptIntegrationHubLegalAgreementOK struct {
 
 func (o *AcceptIntegrationHubLegalAgreementOK) Error() string {
 	return fmt.Sprintf("[POST /integration_hubs/{integration_hub_id}/accept_legal_agreement][%d] acceptIntegrationHubLegalAgreementOK  %+v", 200, o.Payload)
+}
+func (o *AcceptIntegrationHubLegalAgreementOK) GetPayload() *models.IntegrationHub {
+	return o.Payload
 }
 
 func (o *AcceptIntegrationHubLegalAgreementOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewAcceptIntegrationHubLegalAgreementBadRequest() *AcceptIntegrationHubLega
 	return &AcceptIntegrationHubLegalAgreementBadRequest{}
 }
 
-/*AcceptIntegrationHubLegalAgreementBadRequest handles this case with default header values.
+/* AcceptIntegrationHubLegalAgreementBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type AcceptIntegrationHubLegalAgreementBadRequest struct {
 
 func (o *AcceptIntegrationHubLegalAgreementBadRequest) Error() string {
 	return fmt.Sprintf("[POST /integration_hubs/{integration_hub_id}/accept_legal_agreement][%d] acceptIntegrationHubLegalAgreementBadRequest  %+v", 400, o.Payload)
+}
+func (o *AcceptIntegrationHubLegalAgreementBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AcceptIntegrationHubLegalAgreementBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewAcceptIntegrationHubLegalAgreementNotFound() *AcceptIntegrationHubLegalA
 	return &AcceptIntegrationHubLegalAgreementNotFound{}
 }
 
-/*AcceptIntegrationHubLegalAgreementNotFound handles this case with default header values.
+/* AcceptIntegrationHubLegalAgreementNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type AcceptIntegrationHubLegalAgreementNotFound struct {
 
 func (o *AcceptIntegrationHubLegalAgreementNotFound) Error() string {
 	return fmt.Sprintf("[POST /integration_hubs/{integration_hub_id}/accept_legal_agreement][%d] acceptIntegrationHubLegalAgreementNotFound  %+v", 404, o.Payload)
+}
+func (o *AcceptIntegrationHubLegalAgreementNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AcceptIntegrationHubLegalAgreementNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewAcceptIntegrationHubLegalAgreementUnprocessableEntity() *AcceptIntegrati
 	return &AcceptIntegrationHubLegalAgreementUnprocessableEntity{}
 }
 
-/*AcceptIntegrationHubLegalAgreementUnprocessableEntity handles this case with default header values.
+/* AcceptIntegrationHubLegalAgreementUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type AcceptIntegrationHubLegalAgreementUnprocessableEntity struct {
 
 func (o *AcceptIntegrationHubLegalAgreementUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /integration_hubs/{integration_hub_id}/accept_legal_agreement][%d] acceptIntegrationHubLegalAgreementUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *AcceptIntegrationHubLegalAgreementUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *AcceptIntegrationHubLegalAgreementUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

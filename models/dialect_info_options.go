@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DialectInfoOptions dialect info options
+//
 // swagger:model DialectInfoOptions
 type DialectInfoOptions struct {
 
@@ -31,7 +35,7 @@ type DialectInfoOptions struct {
 	// Read Only: true
 	Host *bool `json:"host,omitempty"`
 
-	// Has OAuth support
+	// Has support for a service account
 	// Read Only: true
 	OauthCredentials *bool `json:"oauth_credentials,omitempty"`
 
@@ -62,6 +66,155 @@ type DialectInfoOptions struct {
 
 // Validate validates this dialect info options
 func (m *DialectInfoOptions) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this dialect info options based on the context it is used
+func (m *DialectInfoOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalParams(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAuth(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHost(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauthCredentials(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjectName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSchema(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSsl(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTimezone(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTmpTable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUsernameRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateAdditionalParams(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "additional_params", "body", m.AdditionalParams); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateAuth(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "auth", "body", m.Auth); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateHost(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "host", "body", m.Host); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateOauthCredentials(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "oauth_credentials", "body", m.OauthCredentials); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateProjectName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "project_name", "body", m.ProjectName); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateSchema(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "schema", "body", m.Schema); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateSsl(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "ssl", "body", m.Ssl); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateTimezone(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "timezone", "body", m.Timezone); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateTmpTable(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "tmp_table", "body", m.TmpTable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DialectInfoOptions) contextValidateUsernameRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "username_required", "body", m.UsernameRequired); err != nil {
+		return err
+	}
+
 	return nil
 }
 

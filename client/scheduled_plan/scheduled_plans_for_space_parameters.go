@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewScheduledPlansForSpaceParams creates a new ScheduledPlansForSpaceParams object
-// with the default values initialized.
+// NewScheduledPlansForSpaceParams creates a new ScheduledPlansForSpaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewScheduledPlansForSpaceParams() *ScheduledPlansForSpaceParams {
-	var ()
 	return &ScheduledPlansForSpaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewScheduledPlansForSpaceParamsWithTimeout creates a new ScheduledPlansForSpaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewScheduledPlansForSpaceParamsWithTimeout(timeout time.Duration) *ScheduledPlansForSpaceParams {
-	var ()
 	return &ScheduledPlansForSpaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewScheduledPlansForSpaceParamsWithContext creates a new ScheduledPlansForSpaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewScheduledPlansForSpaceParamsWithContext(ctx context.Context) *ScheduledPlansForSpaceParams {
-	var ()
 	return &ScheduledPlansForSpaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewScheduledPlansForSpaceParamsWithHTTPClient creates a new ScheduledPlansForSpaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewScheduledPlansForSpaceParamsWithHTTPClient(client *http.Client) *ScheduledPlansForSpaceParams {
-	var ()
 	return &ScheduledPlansForSpaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*ScheduledPlansForSpaceParams contains all the parameters to send to the API endpoint
-for the scheduled plans for space operation typically these are written to a http.Request
+/* ScheduledPlansForSpaceParams contains all the parameters to send to the API endpoint
+   for the scheduled plans for space operation.
+
+   Typically these are written to a http.Request.
 */
 type ScheduledPlansForSpaceParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Space Id
 
+	/* SpaceID.
+
+	   Space Id
+
+	   Format: int64
 	*/
 	SpaceID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the scheduled plans for space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForSpaceParams) WithDefaults() *ScheduledPlansForSpaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the scheduled plans for space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ScheduledPlansForSpaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the scheduled plans for space params
@@ -145,16 +161,17 @@ func (o *ScheduledPlansForSpaceParams) WriteToRequest(r runtime.ClientRequest, r
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id

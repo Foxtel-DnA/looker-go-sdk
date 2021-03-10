@@ -13,69 +13,87 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteUserCredentialsEmbedParams creates a new DeleteUserCredentialsEmbedParams object
-// with the default values initialized.
+// NewDeleteUserCredentialsEmbedParams creates a new DeleteUserCredentialsEmbedParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteUserCredentialsEmbedParams() *DeleteUserCredentialsEmbedParams {
-	var ()
 	return &DeleteUserCredentialsEmbedParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteUserCredentialsEmbedParamsWithTimeout creates a new DeleteUserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteUserCredentialsEmbedParamsWithTimeout(timeout time.Duration) *DeleteUserCredentialsEmbedParams {
-	var ()
 	return &DeleteUserCredentialsEmbedParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteUserCredentialsEmbedParamsWithContext creates a new DeleteUserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteUserCredentialsEmbedParamsWithContext(ctx context.Context) *DeleteUserCredentialsEmbedParams {
-	var ()
 	return &DeleteUserCredentialsEmbedParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteUserCredentialsEmbedParamsWithHTTPClient creates a new DeleteUserCredentialsEmbedParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteUserCredentialsEmbedParamsWithHTTPClient(client *http.Client) *DeleteUserCredentialsEmbedParams {
-	var ()
 	return &DeleteUserCredentialsEmbedParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteUserCredentialsEmbedParams contains all the parameters to send to the API endpoint
-for the delete user credentials embed operation typically these are written to a http.Request
+/* DeleteUserCredentialsEmbedParams contains all the parameters to send to the API endpoint
+   for the delete user credentials embed operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteUserCredentialsEmbedParams struct {
 
-	/*CredentialsEmbedID
-	  id of Embedding Credential
+	/* CredentialsEmbedID.
 
+	   id of Embedding Credential
+
+	   Format: int64
 	*/
 	CredentialsEmbedID int64
-	/*UserID
-	  id of user
 
+	/* UserID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete user credentials embed params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsEmbedParams) WithDefaults() *DeleteUserCredentialsEmbedParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete user credentials embed params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsEmbedParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete user credentials embed params

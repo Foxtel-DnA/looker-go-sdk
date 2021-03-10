@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateRoleReader is a Reader for the UpdateRole structure.
@@ -24,44 +23,44 @@ type UpdateRoleReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateRoleReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateRoleOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateRoleBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateRoleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 405:
 		result := NewUpdateRoleMethodNotAllowed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateRoleUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateRoleTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewUpdateRoleOK() *UpdateRoleOK {
 	return &UpdateRoleOK{}
 }
 
-/*UpdateRoleOK handles this case with default header values.
+/* UpdateRoleOK describes a response with status code 200, with default header values.
 
 Role
 */
@@ -80,6 +79,9 @@ type UpdateRoleOK struct {
 
 func (o *UpdateRoleOK) Error() string {
 	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleOK  %+v", 200, o.Payload)
+}
+func (o *UpdateRoleOK) GetPayload() *models.Role {
+	return o.Payload
 }
 
 func (o *UpdateRoleOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewUpdateRoleBadRequest() *UpdateRoleBadRequest {
 	return &UpdateRoleBadRequest{}
 }
 
-/*UpdateRoleBadRequest handles this case with default header values.
+/* UpdateRoleBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type UpdateRoleBadRequest struct {
 
 func (o *UpdateRoleBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateRoleBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateRoleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewUpdateRoleNotFound() *UpdateRoleNotFound {
 	return &UpdateRoleNotFound{}
 }
 
-/*UpdateRoleNotFound handles this case with default header values.
+/* UpdateRoleNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type UpdateRoleNotFound struct {
 
 func (o *UpdateRoleNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateRoleNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateRoleNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewUpdateRoleMethodNotAllowed() *UpdateRoleMethodNotAllowed {
 	return &UpdateRoleMethodNotAllowed{}
 }
 
-/*UpdateRoleMethodNotAllowed handles this case with default header values.
+/* UpdateRoleMethodNotAllowed describes a response with status code 405, with default header values.
 
 Resource Can't Be Modified
 */
@@ -167,6 +175,9 @@ type UpdateRoleMethodNotAllowed struct {
 
 func (o *UpdateRoleMethodNotAllowed) Error() string {
 	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleMethodNotAllowed  %+v", 405, o.Payload)
+}
+func (o *UpdateRoleMethodNotAllowed) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateRoleMethodNotAllowed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewUpdateRoleUnprocessableEntity() *UpdateRoleUnprocessableEntity {
 	return &UpdateRoleUnprocessableEntity{}
 }
 
-/*UpdateRoleUnprocessableEntity handles this case with default header values.
+/* UpdateRoleUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type UpdateRoleUnprocessableEntity struct {
 func (o *UpdateRoleUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateRoleUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateRoleUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateRoleTooManyRequests creates a UpdateRoleTooManyRequests with default headers values
+func NewUpdateRoleTooManyRequests() *UpdateRoleTooManyRequests {
+	return &UpdateRoleTooManyRequests{}
+}
+
+/* UpdateRoleTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateRoleTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateRoleTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /roles/{role_id}][%d] updateRoleTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateRoleTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateRoleTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -13,73 +13,88 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewUserForCredentialParams creates a new UserForCredentialParams object
-// with the default values initialized.
+// NewUserForCredentialParams creates a new UserForCredentialParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserForCredentialParams() *UserForCredentialParams {
-	var ()
 	return &UserForCredentialParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserForCredentialParamsWithTimeout creates a new UserForCredentialParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserForCredentialParamsWithTimeout(timeout time.Duration) *UserForCredentialParams {
-	var ()
 	return &UserForCredentialParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserForCredentialParamsWithContext creates a new UserForCredentialParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserForCredentialParamsWithContext(ctx context.Context) *UserForCredentialParams {
-	var ()
 	return &UserForCredentialParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserForCredentialParamsWithHTTPClient creates a new UserForCredentialParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserForCredentialParamsWithHTTPClient(client *http.Client) *UserForCredentialParams {
-	var ()
 	return &UserForCredentialParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserForCredentialParams contains all the parameters to send to the API endpoint
-for the user for credential operation typically these are written to a http.Request
+/* UserForCredentialParams contains all the parameters to send to the API endpoint
+   for the user for credential operation.
+
+   Typically these are written to a http.Request.
 */
 type UserForCredentialParams struct {
 
-	/*CredentialID
-	  Id of credential
+	/* CredentialID.
 
+	   Id of credential
 	*/
 	CredentialID string
-	/*CredentialType
-	  Type name of credential
 
+	/* CredentialType.
+
+	   Type name of credential
 	*/
 	CredentialType string
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user for credential params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserForCredentialParams) WithDefaults() *UserForCredentialParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user for credential params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserForCredentialParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user for credential params
@@ -170,16 +185,17 @@ func (o *UserForCredentialParams) WriteToRequest(r runtime.ClientRequest, reg st
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

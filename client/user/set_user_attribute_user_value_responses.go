@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // SetUserAttributeUserValueReader is a Reader for the SetUserAttributeUserValue structure.
@@ -24,30 +23,32 @@ type SetUserAttributeUserValueReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SetUserAttributeUserValueReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSetUserAttributeUserValueOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSetUserAttributeUserValueBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSetUserAttributeUserValueNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 422:
+		result := NewSetUserAttributeUserValueUnprocessableEntity()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewSetUserAttributeUserValueOK() *SetUserAttributeUserValueOK {
 	return &SetUserAttributeUserValueOK{}
 }
 
-/*SetUserAttributeUserValueOK handles this case with default header values.
+/* SetUserAttributeUserValueOK describes a response with status code 200, with default header values.
 
 User attribute value.
 */
@@ -66,6 +67,9 @@ type SetUserAttributeUserValueOK struct {
 
 func (o *SetUserAttributeUserValueOK) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/attribute_values/{user_attribute_id}][%d] setUserAttributeUserValueOK  %+v", 200, o.Payload)
+}
+func (o *SetUserAttributeUserValueOK) GetPayload() *models.UserAttributeWithValue {
+	return o.Payload
 }
 
 func (o *SetUserAttributeUserValueOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +89,7 @@ func NewSetUserAttributeUserValueBadRequest() *SetUserAttributeUserValueBadReque
 	return &SetUserAttributeUserValueBadRequest{}
 }
 
-/*SetUserAttributeUserValueBadRequest handles this case with default header values.
+/* SetUserAttributeUserValueBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +99,9 @@ type SetUserAttributeUserValueBadRequest struct {
 
 func (o *SetUserAttributeUserValueBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/attribute_values/{user_attribute_id}][%d] setUserAttributeUserValueBadRequest  %+v", 400, o.Payload)
+}
+func (o *SetUserAttributeUserValueBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserAttributeUserValueBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +121,7 @@ func NewSetUserAttributeUserValueNotFound() *SetUserAttributeUserValueNotFound {
 	return &SetUserAttributeUserValueNotFound{}
 }
 
-/*SetUserAttributeUserValueNotFound handles this case with default header values.
+/* SetUserAttributeUserValueNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -125,10 +132,45 @@ type SetUserAttributeUserValueNotFound struct {
 func (o *SetUserAttributeUserValueNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /users/{user_id}/attribute_values/{user_attribute_id}][%d] setUserAttributeUserValueNotFound  %+v", 404, o.Payload)
 }
+func (o *SetUserAttributeUserValueNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *SetUserAttributeUserValueNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewSetUserAttributeUserValueUnprocessableEntity creates a SetUserAttributeUserValueUnprocessableEntity with default headers values
+func NewSetUserAttributeUserValueUnprocessableEntity() *SetUserAttributeUserValueUnprocessableEntity {
+	return &SetUserAttributeUserValueUnprocessableEntity{}
+}
+
+/* SetUserAttributeUserValueUnprocessableEntity describes a response with status code 422, with default header values.
+
+Validation Error
+*/
+type SetUserAttributeUserValueUnprocessableEntity struct {
+	Payload *models.ValidationError
+}
+
+func (o *SetUserAttributeUserValueUnprocessableEntity) Error() string {
+	return fmt.Sprintf("[PATCH /users/{user_id}/attribute_values/{user_attribute_id}][%d] setUserAttributeUserValueUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *SetUserAttributeUserValueUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
+
+func (o *SetUserAttributeUserValueUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ValidationError)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

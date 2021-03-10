@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // OidcTestConfigReader is a Reader for the OidcTestConfig structure.
@@ -24,23 +23,20 @@ type OidcTestConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *OidcTestConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewOidcTestConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 404:
 		result := NewOidcTestConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -49,7 +45,7 @@ func NewOidcTestConfigOK() *OidcTestConfigOK {
 	return &OidcTestConfigOK{}
 }
 
-/*OidcTestConfigOK handles this case with default header values.
+/* OidcTestConfigOK describes a response with status code 200, with default header values.
 
 OIDC test config.
 */
@@ -59,6 +55,9 @@ type OidcTestConfigOK struct {
 
 func (o *OidcTestConfigOK) Error() string {
 	return fmt.Sprintf("[GET /oidc_test_configs/{test_slug}][%d] oidcTestConfigOK  %+v", 200, o.Payload)
+}
+func (o *OidcTestConfigOK) GetPayload() *models.OIDCConfig {
+	return o.Payload
 }
 
 func (o *OidcTestConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -78,7 +77,7 @@ func NewOidcTestConfigNotFound() *OidcTestConfigNotFound {
 	return &OidcTestConfigNotFound{}
 }
 
-/*OidcTestConfigNotFound handles this case with default header values.
+/* OidcTestConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -88,6 +87,9 @@ type OidcTestConfigNotFound struct {
 
 func (o *OidcTestConfigNotFound) Error() string {
 	return fmt.Sprintf("[GET /oidc_test_configs/{test_slug}][%d] oidcTestConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *OidcTestConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *OidcTestConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

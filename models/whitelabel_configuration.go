@@ -6,14 +6,24 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // WhitelabelConfiguration whitelabel configuration
+//
 // swagger:model WhitelabelConfiguration
 type WhitelabelConfiguration struct {
+
+	// Remove Looker links from Alerts
+	AlertsLinks bool `json:"alerts_links,omitempty"`
+
+	// Remove Looker logo from Alerts
+	AlertsLogo bool `json:"alerts_logo,omitempty"`
 
 	// Boolean to toggle links to Looker in emails
 	AllowLookerLinks bool `json:"allow_looker_links,omitempty"`
@@ -25,6 +35,9 @@ type WhitelabelConfiguration struct {
 	// Read Only: true
 	Can map[string]bool `json:"can,omitempty"`
 
+	// Allow subject line and email heading customization in customized emails”
+	CustomWelcomeEmailAdvanced bool `json:"custom_welcome_email_advanced,omitempty"`
+
 	// Default page title
 	DefaultTitle string `json:"default_title,omitempty"`
 
@@ -34,6 +47,9 @@ type WhitelabelConfiguration struct {
 	// Favicon image url (read-only)
 	// Read Only: true
 	FaviconURL string `json:"favicon_url,omitempty"`
+
+	// Remove Looker mentions in home folder page when you don’t have any items saved
+	FoldersMentions bool `json:"folders_mentions,omitempty"`
 
 	// Unique Id
 	// Read Only: true
@@ -45,6 +61,9 @@ type WhitelabelConfiguration struct {
 	// Logo image url (read-only)
 	// Read Only: true
 	LogoURL string `json:"logo_url,omitempty"`
+
+	// Remove the word Looker from appearing in the account setup page
+	SetupMentions bool `json:"setup_mentions,omitempty"`
 
 	// Boolean to toggle showing docs
 	ShowDocs bool `json:"show_docs,omitempty"`
@@ -58,6 +77,64 @@ type WhitelabelConfiguration struct {
 
 // Validate validates this whitelabel configuration
 func (m *WhitelabelConfiguration) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this whitelabel configuration based on the context it is used
+func (m *WhitelabelConfiguration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFaviconURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLogoURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *WhitelabelConfiguration) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *WhitelabelConfiguration) contextValidateFaviconURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "favicon_url", "body", string(m.FaviconURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WhitelabelConfiguration) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *WhitelabelConfiguration) contextValidateLogoURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "logo_url", "body", string(m.LogoURL)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ModelsNotValidated models not validated
+//
 // swagger:model ModelsNotValidated
 type ModelsNotValidated struct {
 
@@ -26,6 +30,42 @@ type ModelsNotValidated struct {
 
 // Validate validates this models not validated
 func (m *ModelsNotValidated) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this models not validated based on the context it is used
+func (m *ModelsNotValidated) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjectFileID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ModelsNotValidated) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ModelsNotValidated) contextValidateProjectFileID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "project_file_id", "body", string(m.ProjectFileID)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

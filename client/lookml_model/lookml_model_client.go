@@ -6,13 +6,14 @@ package lookml_model
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new lookml model API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,40 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllLookmlModels gets all look m l models
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get information about all lookml models.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllLookmlModels(params *AllLookmlModelsParams, opts ...ClientOption) (*AllLookmlModelsOK, error)
+
+	CreateLookmlModel(params *CreateLookmlModelParams, opts ...ClientOption) (*CreateLookmlModelOK, error)
+
+	DeleteLookmlModel(params *DeleteLookmlModelParams, opts ...ClientOption) (*DeleteLookmlModelNoContent, error)
+
+	GraphDerivedTablesForModel(params *GraphDerivedTablesForModelParams, opts ...ClientOption) (*GraphDerivedTablesForModelOK, error)
+
+	LookmlModel(params *LookmlModelParams, opts ...ClientOption) (*LookmlModelOK, error)
+
+	LookmlModelExplore(params *LookmlModelExploreParams, opts ...ClientOption) (*LookmlModelExploreOK, error)
+
+	UpdateLookmlModel(params *UpdateLookmlModelParams, opts ...ClientOption) (*UpdateLookmlModelOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllLookmlModels gets all look m l models
+
+  ### Get information about all lookml models.
 
 */
-func (a *Client) AllLookmlModels(params *AllLookmlModelsParams) (*AllLookmlModelsOK, error) {
+func (a *Client) AllLookmlModels(params *AllLookmlModelsParams, opts ...ClientOption) (*AllLookmlModelsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllLookmlModelsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_lookml_models",
 		Method:             "GET",
 		PathPattern:        "/lookml_models",
@@ -47,27 +69,37 @@ func (a *Client) AllLookmlModels(params *AllLookmlModelsParams) (*AllLookmlModel
 		Reader:             &AllLookmlModelsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllLookmlModelsOK), nil
-
+	success, ok := result.(*AllLookmlModelsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_lookml_models: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateLookmlModel creates look m l model
+  CreateLookmlModel creates look m l model
 
-### Create a lookml model using the specified configuration.
+  ### Create a lookml model using the specified configuration.
 
 */
-func (a *Client) CreateLookmlModel(params *CreateLookmlModelParams) (*CreateLookmlModelOK, error) {
+func (a *Client) CreateLookmlModel(params *CreateLookmlModelParams, opts ...ClientOption) (*CreateLookmlModelOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLookmlModelParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_lookml_model",
 		Method:             "POST",
 		PathPattern:        "/lookml_models",
@@ -78,27 +110,37 @@ func (a *Client) CreateLookmlModel(params *CreateLookmlModelParams) (*CreateLook
 		Reader:             &CreateLookmlModelReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateLookmlModelOK), nil
-
+	success, ok := result.(*CreateLookmlModelOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_lookml_model: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteLookmlModel deletes look m l model
+  DeleteLookmlModel deletes look m l model
 
-### Delete a lookml model.
+  ### Delete a lookml model.
 
 */
-func (a *Client) DeleteLookmlModel(params *DeleteLookmlModelParams) (*DeleteLookmlModelNoContent, error) {
+func (a *Client) DeleteLookmlModel(params *DeleteLookmlModelParams, opts ...ClientOption) (*DeleteLookmlModelNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteLookmlModelParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_lookml_model",
 		Method:             "DELETE",
 		PathPattern:        "/lookml_models/{lookml_model_name}",
@@ -109,27 +151,78 @@ func (a *Client) DeleteLookmlModel(params *DeleteLookmlModelParams) (*DeleteLook
 		Reader:             &DeleteLookmlModelReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteLookmlModelNoContent), nil
-
+	success, ok := result.(*DeleteLookmlModelNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_lookml_model: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-LookmlModel gets look m l model
+  GraphDerivedTablesForModel gets derived table
 
-### Get information about a lookml model.
+  ### Discover information about derived tables
 
 */
-func (a *Client) LookmlModel(params *LookmlModelParams) (*LookmlModelOK, error) {
+func (a *Client) GraphDerivedTablesForModel(params *GraphDerivedTablesForModelParams, opts ...ClientOption) (*GraphDerivedTablesForModelOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGraphDerivedTablesForModelParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "graph_derived_tables_for_model",
+		Method:             "GET",
+		PathPattern:        "/derived_table/graph/model/{model}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GraphDerivedTablesForModelReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GraphDerivedTablesForModelOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for graph_derived_tables_for_model: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  LookmlModel gets look m l model
+
+  ### Get information about a lookml model.
+
+*/
+func (a *Client) LookmlModel(params *LookmlModelParams, opts ...ClientOption) (*LookmlModelOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLookmlModelParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "lookml_model",
 		Method:             "GET",
 		PathPattern:        "/lookml_models/{lookml_model_name}",
@@ -140,27 +233,37 @@ func (a *Client) LookmlModel(params *LookmlModelParams) (*LookmlModelOK, error) 
 		Reader:             &LookmlModelReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LookmlModelOK), nil
-
+	success, ok := result.(*LookmlModelOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for lookml_model: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-LookmlModelExplore gets look m l model explore
+  LookmlModelExplore gets look m l model explore
 
-### Get information about a lookml model explore.
+  ### Get information about a lookml model explore.
 
 */
-func (a *Client) LookmlModelExplore(params *LookmlModelExploreParams) (*LookmlModelExploreOK, error) {
+func (a *Client) LookmlModelExplore(params *LookmlModelExploreParams, opts ...ClientOption) (*LookmlModelExploreOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLookmlModelExploreParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "lookml_model_explore",
 		Method:             "GET",
 		PathPattern:        "/lookml_models/{lookml_model_name}/explores/{explore_name}",
@@ -171,27 +274,37 @@ func (a *Client) LookmlModelExplore(params *LookmlModelExploreParams) (*LookmlMo
 		Reader:             &LookmlModelExploreReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LookmlModelExploreOK), nil
-
+	success, ok := result.(*LookmlModelExploreOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for lookml_model_explore: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateLookmlModel updates look m l model
+  UpdateLookmlModel updates look m l model
 
-### Update a lookml model using the specified configuration.
+  ### Update a lookml model using the specified configuration.
 
 */
-func (a *Client) UpdateLookmlModel(params *UpdateLookmlModelParams) (*UpdateLookmlModelOK, error) {
+func (a *Client) UpdateLookmlModel(params *UpdateLookmlModelParams, opts ...ClientOption) (*UpdateLookmlModelOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateLookmlModelParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_lookml_model",
 		Method:             "PATCH",
 		PathPattern:        "/lookml_models/{lookml_model_name}",
@@ -202,12 +315,23 @@ func (a *Client) UpdateLookmlModel(params *UpdateLookmlModelParams) (*UpdateLook
 		Reader:             &UpdateLookmlModelReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateLookmlModelOK), nil
-
+	success, ok := result.(*UpdateLookmlModelOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_lookml_model: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

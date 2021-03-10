@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UserCredentialsLookerOpenidReader is a Reader for the UserCredentialsLookerOpenid structure.
@@ -24,30 +23,26 @@ type UserCredentialsLookerOpenidReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserCredentialsLookerOpenidReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserCredentialsLookerOpenidOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUserCredentialsLookerOpenidBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUserCredentialsLookerOpenidNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewUserCredentialsLookerOpenidOK() *UserCredentialsLookerOpenidOK {
 	return &UserCredentialsLookerOpenidOK{}
 }
 
-/*UserCredentialsLookerOpenidOK handles this case with default header values.
+/* UserCredentialsLookerOpenidOK describes a response with status code 200, with default header values.
 
 Looker OpenId Credential
 */
@@ -66,6 +61,9 @@ type UserCredentialsLookerOpenidOK struct {
 
 func (o *UserCredentialsLookerOpenidOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_looker_openid][%d] userCredentialsLookerOpenidOK  %+v", 200, o.Payload)
+}
+func (o *UserCredentialsLookerOpenidOK) GetPayload() *models.CredentialsLookerOpenid {
+	return o.Payload
 }
 
 func (o *UserCredentialsLookerOpenidOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewUserCredentialsLookerOpenidBadRequest() *UserCredentialsLookerOpenidBadR
 	return &UserCredentialsLookerOpenidBadRequest{}
 }
 
-/*UserCredentialsLookerOpenidBadRequest handles this case with default header values.
+/* UserCredentialsLookerOpenidBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type UserCredentialsLookerOpenidBadRequest struct {
 
 func (o *UserCredentialsLookerOpenidBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_looker_openid][%d] userCredentialsLookerOpenidBadRequest  %+v", 400, o.Payload)
+}
+func (o *UserCredentialsLookerOpenidBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsLookerOpenidBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewUserCredentialsLookerOpenidNotFound() *UserCredentialsLookerOpenidNotFou
 	return &UserCredentialsLookerOpenidNotFound{}
 }
 
-/*UserCredentialsLookerOpenidNotFound handles this case with default header values.
+/* UserCredentialsLookerOpenidNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type UserCredentialsLookerOpenidNotFound struct {
 
 func (o *UserCredentialsLookerOpenidNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/credentials_looker_openid][%d] userCredentialsLookerOpenidNotFound  %+v", 404, o.Payload)
+}
+func (o *UserCredentialsLookerOpenidNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserCredentialsLookerOpenidNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

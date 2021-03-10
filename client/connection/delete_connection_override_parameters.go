@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewDeleteConnectionOverrideParams creates a new DeleteConnectionOverrideParams object
-// with the default values initialized.
+// NewDeleteConnectionOverrideParams creates a new DeleteConnectionOverrideParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteConnectionOverrideParams() *DeleteConnectionOverrideParams {
-	var ()
 	return &DeleteConnectionOverrideParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteConnectionOverrideParamsWithTimeout creates a new DeleteConnectionOverrideParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteConnectionOverrideParamsWithTimeout(timeout time.Duration) *DeleteConnectionOverrideParams {
-	var ()
 	return &DeleteConnectionOverrideParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteConnectionOverrideParamsWithContext creates a new DeleteConnectionOverrideParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteConnectionOverrideParamsWithContext(ctx context.Context) *DeleteConnectionOverrideParams {
-	var ()
 	return &DeleteConnectionOverrideParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteConnectionOverrideParamsWithHTTPClient creates a new DeleteConnectionOverrideParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteConnectionOverrideParamsWithHTTPClient(client *http.Client) *DeleteConnectionOverrideParams {
-	var ()
 	return &DeleteConnectionOverrideParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteConnectionOverrideParams contains all the parameters to send to the API endpoint
-for the delete connection override operation typically these are written to a http.Request
+/* DeleteConnectionOverrideParams contains all the parameters to send to the API endpoint
+   for the delete connection override operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteConnectionOverrideParams struct {
 
-	/*ConnectionName
-	  Name of connection
+	/* ConnectionName.
 
+	   Name of connection
 	*/
 	ConnectionName string
-	/*OverrideContext
-	  Context of connection override
 
+	/* OverrideContext.
+
+	   Context of connection override
 	*/
 	OverrideContext string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete connection override params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteConnectionOverrideParams) WithDefaults() *DeleteConnectionOverrideParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete connection override params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteConnectionOverrideParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete connection override params

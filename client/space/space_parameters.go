@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewSpaceParams creates a new SpaceParams object
-// with the default values initialized.
+// NewSpaceParams creates a new SpaceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSpaceParams() *SpaceParams {
-	var ()
 	return &SpaceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSpaceParamsWithTimeout creates a new SpaceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSpaceParamsWithTimeout(timeout time.Duration) *SpaceParams {
-	var ()
 	return &SpaceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSpaceParamsWithContext creates a new SpaceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSpaceParamsWithContext(ctx context.Context) *SpaceParams {
-	var ()
 	return &SpaceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSpaceParamsWithHTTPClient creates a new SpaceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSpaceParamsWithHTTPClient(client *http.Client) *SpaceParams {
-	var ()
 	return &SpaceParams{
 		HTTPClient: client,
 	}
 }
 
-/*SpaceParams contains all the parameters to send to the API endpoint
-for the space operation typically these are written to a http.Request
+/* SpaceParams contains all the parameters to send to the API endpoint
+   for the space operation.
+
+   Typically these are written to a http.Request.
 */
 type SpaceParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SpaceID
-	  Id of space
 
+	/* SpaceID.
+
+	   Id of space
 	*/
-	SpaceID int64
+	SpaceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceParams) WithDefaults() *SpaceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the space params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SpaceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the space params
@@ -123,13 +136,13 @@ func (o *SpaceParams) SetFields(fields *string) {
 }
 
 // WithSpaceID adds the spaceID to the space params
-func (o *SpaceParams) WithSpaceID(spaceID int64) *SpaceParams {
+func (o *SpaceParams) WithSpaceID(spaceID string) *SpaceParams {
 	o.SetSpaceID(spaceID)
 	return o
 }
 
 // SetSpaceID adds the spaceId to the space params
-func (o *SpaceParams) SetSpaceID(spaceID int64) {
+func (o *SpaceParams) SetSpaceID(spaceID string) {
 	o.SpaceID = spaceID
 }
 
@@ -145,20 +158,21 @@ func (o *SpaceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registr
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param space_id
-	if err := r.SetPathParam("space_id", swag.FormatInt64(o.SpaceID)); err != nil {
+	if err := r.SetPathParam("space_id", o.SpaceID); err != nil {
 		return err
 	}
 

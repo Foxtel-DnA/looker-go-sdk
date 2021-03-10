@@ -6,13 +6,14 @@ package auth
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new auth API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,121 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-CreateOidcTestConfig creates o ID c test configuration
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Create a OIDC test configuration.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllUserLoginLockouts(params *AllUserLoginLockoutsParams, opts ...ClientOption) (*AllUserLoginLockoutsOK, error)
+
+	CreateOidcTestConfig(params *CreateOidcTestConfigParams, opts ...ClientOption) (*CreateOidcTestConfigOK, error)
+
+	CreateSamlTestConfig(params *CreateSamlTestConfigParams, opts ...ClientOption) (*CreateSamlTestConfigOK, error)
+
+	CreateSsoEmbedURL(params *CreateSsoEmbedURLParams, opts ...ClientOption) (*CreateSsoEmbedURLOK, error)
+
+	DeleteOidcTestConfig(params *DeleteOidcTestConfigParams, opts ...ClientOption) (*DeleteOidcTestConfigNoContent, error)
+
+	DeleteSamlTestConfig(params *DeleteSamlTestConfigParams, opts ...ClientOption) (*DeleteSamlTestConfigNoContent, error)
+
+	DeleteUserLoginLockout(params *DeleteUserLoginLockoutParams, opts ...ClientOption) (*DeleteUserLoginLockoutNoContent, error)
+
+	FetchAndParseSamlIdpMetadata(params *FetchAndParseSamlIdpMetadataParams, opts ...ClientOption) (*FetchAndParseSamlIdpMetadataOK, error)
+
+	ForcePasswordResetAtNextLoginForAllUsers(params *ForcePasswordResetAtNextLoginForAllUsersParams, opts ...ClientOption) (*ForcePasswordResetAtNextLoginForAllUsersOK, error)
+
+	LdapConfig(params *LdapConfigParams, opts ...ClientOption) (*LdapConfigOK, error)
+
+	OidcConfig(params *OidcConfigParams, opts ...ClientOption) (*OidcConfigOK, error)
+
+	OidcTestConfig(params *OidcTestConfigParams, opts ...ClientOption) (*OidcTestConfigOK, error)
+
+	ParseSamlIdpMetadata(params *ParseSamlIdpMetadataParams, opts ...ClientOption) (*ParseSamlIdpMetadataOK, error)
+
+	PasswordConfig(params *PasswordConfigParams, opts ...ClientOption) (*PasswordConfigOK, error)
+
+	SamlConfig(params *SamlConfigParams, opts ...ClientOption) (*SamlConfigOK, error)
+
+	SamlTestConfig(params *SamlTestConfigParams, opts ...ClientOption) (*SamlTestConfigOK, error)
+
+	SearchUserLoginLockouts(params *SearchUserLoginLockoutsParams, opts ...ClientOption) (*SearchUserLoginLockoutsOK, error)
+
+	SessionConfig(params *SessionConfigParams, opts ...ClientOption) (*SessionConfigOK, error)
+
+	TestLdapConfigAuth(params *TestLdapConfigAuthParams, opts ...ClientOption) (*TestLdapConfigAuthOK, error)
+
+	TestLdapConfigConnection(params *TestLdapConfigConnectionParams, opts ...ClientOption) (*TestLdapConfigConnectionOK, error)
+
+	TestLdapConfigUserAuth(params *TestLdapConfigUserAuthParams, opts ...ClientOption) (*TestLdapConfigUserAuthOK, error)
+
+	TestLdapConfigUserInfo(params *TestLdapConfigUserInfoParams, opts ...ClientOption) (*TestLdapConfigUserInfoOK, error)
+
+	UpdateLdapConfig(params *UpdateLdapConfigParams, opts ...ClientOption) (*UpdateLdapConfigOK, error)
+
+	UpdateOidcConfig(params *UpdateOidcConfigParams, opts ...ClientOption) (*UpdateOidcConfigOK, error)
+
+	UpdatePasswordConfig(params *UpdatePasswordConfigParams, opts ...ClientOption) (*UpdatePasswordConfigOK, error)
+
+	UpdateSamlConfig(params *UpdateSamlConfigParams, opts ...ClientOption) (*UpdateSamlConfigOK, error)
+
+	UpdateSessionConfig(params *UpdateSessionConfigParams, opts ...ClientOption) (*UpdateSessionConfigOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllUserLoginLockouts gets all user login lockouts
+
+  ### Get currently locked-out users.
 
 */
-func (a *Client) CreateOidcTestConfig(params *CreateOidcTestConfigParams) (*CreateOidcTestConfigOK, error) {
+func (a *Client) AllUserLoginLockouts(params *AllUserLoginLockoutsParams, opts ...ClientOption) (*AllUserLoginLockoutsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAllUserLoginLockoutsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "all_user_login_lockouts",
+		Method:             "GET",
+		PathPattern:        "/user_login_lockouts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AllUserLoginLockoutsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AllUserLoginLockoutsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_user_login_lockouts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateOidcTestConfig creates o ID c test configuration
+
+  ### Create a OIDC test configuration.
+
+*/
+func (a *Client) CreateOidcTestConfig(params *CreateOidcTestConfigParams, opts ...ClientOption) (*CreateOidcTestConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateOidcTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_oidc_test_config",
 		Method:             "POST",
 		PathPattern:        "/oidc_test_configs",
@@ -47,27 +150,37 @@ func (a *Client) CreateOidcTestConfig(params *CreateOidcTestConfigParams) (*Crea
 		Reader:             &CreateOidcTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateOidcTestConfigOK), nil
-
+	success, ok := result.(*CreateOidcTestConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_oidc_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateSamlTestConfig creates s a m l test configuration
+  CreateSamlTestConfig creates s a m l test configuration
 
-### Create a SAML test configuration.
+  ### Create a SAML test configuration.
 
 */
-func (a *Client) CreateSamlTestConfig(params *CreateSamlTestConfigParams) (*CreateSamlTestConfigOK, error) {
+func (a *Client) CreateSamlTestConfig(params *CreateSamlTestConfigParams, opts ...ClientOption) (*CreateSamlTestConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateSamlTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_saml_test_config",
 		Method:             "POST",
 		PathPattern:        "/saml_test_configs",
@@ -78,27 +191,111 @@ func (a *Client) CreateSamlTestConfig(params *CreateSamlTestConfigParams) (*Crea
 		Reader:             &CreateSamlTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateSamlTestConfigOK), nil
-
+	success, ok := result.(*CreateSamlTestConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_saml_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteOidcTestConfig deletes o ID c test configuration
+  CreateSsoEmbedURL creates s s o embed Url
 
-### Delete a OIDC test configuration.
+  ### Create SSO Embed URL
+
+Creates an SSO embed URL and cryptographically signs it with an embed secret.
+This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
+Do not make any modifications to this URL - any change may invalidate the signature and
+cause the URL to fail to load a Looker embed session.
+
+A signed SSO embed URL can only be used once. After it has been used to request a page from the
+Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
+'replay attacks'.
+
+The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
+To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
+The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
+copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
+
+Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
+and the lists of models and permissions assigned to the embed user.
+At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
+These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
+
+The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
+
+This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
+SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+
+The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
+if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
+
+#### Security Note
+Protect this signed URL as you would an access token or password credentials - do not write
+it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
+encrypted transport.
 
 */
-func (a *Client) DeleteOidcTestConfig(params *DeleteOidcTestConfigParams) (*DeleteOidcTestConfigNoContent, error) {
+func (a *Client) CreateSsoEmbedURL(params *CreateSsoEmbedURLParams, opts ...ClientOption) (*CreateSsoEmbedURLOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSsoEmbedURLParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_sso_embed_url",
+		Method:             "POST",
+		PathPattern:        "/embed/sso_url",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateSsoEmbedURLReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSsoEmbedURLOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_sso_embed_url: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeleteOidcTestConfig deletes o ID c test configuration
+
+  ### Delete a OIDC test configuration.
+
+*/
+func (a *Client) DeleteOidcTestConfig(params *DeleteOidcTestConfigParams, opts ...ClientOption) (*DeleteOidcTestConfigNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteOidcTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_oidc_test_config",
 		Method:             "DELETE",
 		PathPattern:        "/oidc_test_configs/{test_slug}",
@@ -109,27 +306,37 @@ func (a *Client) DeleteOidcTestConfig(params *DeleteOidcTestConfigParams) (*Dele
 		Reader:             &DeleteOidcTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteOidcTestConfigNoContent), nil
-
+	success, ok := result.(*DeleteOidcTestConfigNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_oidc_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteSamlTestConfig deletes s a m l test configuration
+  DeleteSamlTestConfig deletes s a m l test configuration
 
-### Delete a SAML test configuration.
+  ### Delete a SAML test configuration.
 
 */
-func (a *Client) DeleteSamlTestConfig(params *DeleteSamlTestConfigParams) (*DeleteSamlTestConfigNoContent, error) {
+func (a *Client) DeleteSamlTestConfig(params *DeleteSamlTestConfigParams, opts ...ClientOption) (*DeleteSamlTestConfigNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteSamlTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_saml_test_config",
 		Method:             "DELETE",
 		PathPattern:        "/saml_test_configs/{test_slug}",
@@ -140,29 +347,80 @@ func (a *Client) DeleteSamlTestConfig(params *DeleteSamlTestConfigParams) (*Dele
 		Reader:             &DeleteSamlTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteSamlTestConfigNoContent), nil
-
+	success, ok := result.(*DeleteSamlTestConfigNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_saml_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-FetchAndParseSamlIdpMetadata parses s a m l Id p Url
+  DeleteUserLoginLockout deletes user login lockout
 
-### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
+  ### Removes login lockout for the associated user.
+
+*/
+func (a *Client) DeleteUserLoginLockout(params *DeleteUserLoginLockoutParams, opts ...ClientOption) (*DeleteUserLoginLockoutNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteUserLoginLockoutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_user_login_lockout",
+		Method:             "DELETE",
+		PathPattern:        "/user_login_lockout/{key}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteUserLoginLockoutReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteUserLoginLockoutNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_user_login_lockout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  FetchAndParseSamlIdpMetadata parses s a m l Id p Url
+
+  ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
 Note that this requires that the url be public or at least at a location where the Looker instance
 can fetch it without requiring any special authentication.
 
 */
-func (a *Client) FetchAndParseSamlIdpMetadata(params *FetchAndParseSamlIdpMetadataParams) (*FetchAndParseSamlIdpMetadataOK, error) {
+func (a *Client) FetchAndParseSamlIdpMetadata(params *FetchAndParseSamlIdpMetadataParams, opts ...ClientOption) (*FetchAndParseSamlIdpMetadataOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFetchAndParseSamlIdpMetadataParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "fetch_and_parse_saml_idp_metadata",
 		Method:             "POST",
 		PathPattern:        "/fetch_and_parse_saml_idp_metadata",
@@ -173,18 +431,70 @@ func (a *Client) FetchAndParseSamlIdpMetadata(params *FetchAndParseSamlIdpMetada
 		Reader:             &FetchAndParseSamlIdpMetadataReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*FetchAndParseSamlIdpMetadataOK), nil
-
+	success, ok := result.(*FetchAndParseSamlIdpMetadataOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for fetch_and_parse_saml_idp_metadata: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-LdapConfig gets l d a p configuration
+  ForcePasswordResetAtNextLoginForAllUsers forces password reset
 
-### Get the LDAP configuration.
+  ### Force all credentials_email users to reset their login passwords upon their next login.
+
+*/
+func (a *Client) ForcePasswordResetAtNextLoginForAllUsers(params *ForcePasswordResetAtNextLoginForAllUsersParams, opts ...ClientOption) (*ForcePasswordResetAtNextLoginForAllUsersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewForcePasswordResetAtNextLoginForAllUsersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "force_password_reset_at_next_login_for_all_users",
+		Method:             "PUT",
+		PathPattern:        "/password_config/force_password_reset_at_next_login_for_all_users",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ForcePasswordResetAtNextLoginForAllUsersReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ForcePasswordResetAtNextLoginForAllUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for force_password_reset_at_next_login_for_all_users: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  LdapConfig gets l d a p configuration
+
+  ### Get the LDAP configuration.
 
 Looker can be optionally configured to authenticate users against an Active Directory or other LDAP directory server.
 LDAP setup requires coordination with an administrator of that directory server.
@@ -202,13 +512,12 @@ Looker will never return an **auth_password** field. That value can be set, but 
 See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
 
 */
-func (a *Client) LdapConfig(params *LdapConfigParams) (*LdapConfigOK, error) {
+func (a *Client) LdapConfig(params *LdapConfigParams, opts ...ClientOption) (*LdapConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLdapConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ldap_config",
 		Method:             "GET",
 		PathPattern:        "/ldap_config",
@@ -219,18 +528,29 @@ func (a *Client) LdapConfig(params *LdapConfigParams) (*LdapConfigOK, error) {
 		Reader:             &LdapConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LdapConfigOK), nil
-
+	success, ok := result.(*LdapConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ldap_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-OidcConfig gets o ID c configuration
+  OidcConfig gets o ID c configuration
 
-### Get the OIDC configuration.
+  ### Get the OIDC configuration.
 
 Looker can be optionally configured to authenticate users against an OpenID Connect (OIDC)
 authentication server. OIDC setup requires coordination with an administrator of that server.
@@ -244,13 +564,12 @@ Looker maintains a single OIDC configuation. It can be read and updated.       U
 OIDC is enabled or disabled for Looker using the **enabled** field.
 
 */
-func (a *Client) OidcConfig(params *OidcConfigParams) (*OidcConfigOK, error) {
+func (a *Client) OidcConfig(params *OidcConfigParams, opts ...ClientOption) (*OidcConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOidcConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "oidc_config",
 		Method:             "GET",
 		PathPattern:        "/oidc_config",
@@ -261,27 +580,37 @@ func (a *Client) OidcConfig(params *OidcConfigParams) (*OidcConfigOK, error) {
 		Reader:             &OidcConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*OidcConfigOK), nil
-
+	success, ok := result.(*OidcConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for oidc_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-OidcTestConfig gets o ID c test configuration
+  OidcTestConfig gets o ID c test configuration
 
-### Get a OIDC test configuration by test_slug.
+  ### Get a OIDC test configuration by test_slug.
 
 */
-func (a *Client) OidcTestConfig(params *OidcTestConfigParams) (*OidcTestConfigOK, error) {
+func (a *Client) OidcTestConfig(params *OidcTestConfigParams, opts ...ClientOption) (*OidcTestConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOidcTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "oidc_test_config",
 		Method:             "GET",
 		PathPattern:        "/oidc_test_configs/{test_slug}",
@@ -292,27 +621,37 @@ func (a *Client) OidcTestConfig(params *OidcTestConfigParams) (*OidcTestConfigOK
 		Reader:             &OidcTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*OidcTestConfigOK), nil
-
+	success, ok := result.(*OidcTestConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for oidc_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ParseSamlIdpMetadata parses s a m l Id p XML
+  ParseSamlIdpMetadata parses s a m l Id p XML
 
-### Parse the given xml as a SAML IdP metadata document and return the result.
+  ### Parse the given xml as a SAML IdP metadata document and return the result.
 
 */
-func (a *Client) ParseSamlIdpMetadata(params *ParseSamlIdpMetadataParams) (*ParseSamlIdpMetadataOK, error) {
+func (a *Client) ParseSamlIdpMetadata(params *ParseSamlIdpMetadataParams, opts ...ClientOption) (*ParseSamlIdpMetadataOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewParseSamlIdpMetadataParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "parse_saml_idp_metadata",
 		Method:             "POST",
 		PathPattern:        "/parse_saml_idp_metadata",
@@ -323,18 +662,70 @@ func (a *Client) ParseSamlIdpMetadata(params *ParseSamlIdpMetadataParams) (*Pars
 		Reader:             &ParseSamlIdpMetadataReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ParseSamlIdpMetadataOK), nil
-
+	success, ok := result.(*ParseSamlIdpMetadataOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for parse_saml_idp_metadata: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SamlConfig gets s a m l configuration
+  PasswordConfig gets password config
 
-### Get the SAML configuration.
+  ### Get password config.
+
+*/
+func (a *Client) PasswordConfig(params *PasswordConfigParams, opts ...ClientOption) (*PasswordConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPasswordConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "password_config",
+		Method:             "GET",
+		PathPattern:        "/password_config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PasswordConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PasswordConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for password_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SamlConfig gets s a m l configuration
+
+  ### Get the SAML configuration.
 
 Looker can be optionally configured to authenticate users against a SAML authentication server.
 SAML setup requires coordination with an administrator of that server.
@@ -348,13 +739,12 @@ Looker maintains a single SAML configuation. It can be read and updated.       U
 SAML is enabled or disabled for Looker using the **enabled** field.
 
 */
-func (a *Client) SamlConfig(params *SamlConfigParams) (*SamlConfigOK, error) {
+func (a *Client) SamlConfig(params *SamlConfigParams, opts ...ClientOption) (*SamlConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSamlConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "saml_config",
 		Method:             "GET",
 		PathPattern:        "/saml_config",
@@ -365,27 +755,37 @@ func (a *Client) SamlConfig(params *SamlConfigParams) (*SamlConfigOK, error) {
 		Reader:             &SamlConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SamlConfigOK), nil
-
+	success, ok := result.(*SamlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for saml_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SamlTestConfig gets s a m l test configuration
+  SamlTestConfig gets s a m l test configuration
 
-### Get a SAML test configuration by test_slug.
+  ### Get a SAML test configuration by test_slug.
 
 */
-func (a *Client) SamlTestConfig(params *SamlTestConfigParams) (*SamlTestConfigOK, error) {
+func (a *Client) SamlTestConfig(params *SamlTestConfigParams, opts ...ClientOption) (*SamlTestConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSamlTestConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "saml_test_config",
 		Method:             "GET",
 		PathPattern:        "/saml_test_configs/{test_slug}",
@@ -396,18 +796,111 @@ func (a *Client) SamlTestConfig(params *SamlTestConfigParams) (*SamlTestConfigOK
 		Reader:             &SamlTestConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SamlTestConfigOK), nil
-
+	success, ok := result.(*SamlTestConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for saml_test_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestLdapConfigAuth tests l d a p auth
+  SearchUserLoginLockouts searches user login lockouts
 
-### Test the connection authentication settings for an LDAP configuration.
+  ### Search currently locked-out users.
+
+*/
+func (a *Client) SearchUserLoginLockouts(params *SearchUserLoginLockoutsParams, opts ...ClientOption) (*SearchUserLoginLockoutsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchUserLoginLockoutsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_user_login_lockouts",
+		Method:             "GET",
+		PathPattern:        "/user_login_lockouts/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchUserLoginLockoutsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchUserLoginLockoutsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_user_login_lockouts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SessionConfig gets session config
+
+  ### Get session config.
+
+*/
+func (a *Client) SessionConfig(params *SessionConfigParams, opts ...ClientOption) (*SessionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSessionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "session_config",
+		Method:             "GET",
+		PathPattern:        "/session_config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SessionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SessionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for session_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  TestLdapConfigAuth tests l d a p auth
+
+  ### Test the connection authentication settings for an LDAP configuration.
 
 This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
 
@@ -430,13 +923,12 @@ The active LDAP settings are not modified.
 
 
 */
-func (a *Client) TestLdapConfigAuth(params *TestLdapConfigAuthParams) (*TestLdapConfigAuthOK, error) {
+func (a *Client) TestLdapConfigAuth(params *TestLdapConfigAuthParams, opts ...ClientOption) (*TestLdapConfigAuthOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestLdapConfigAuthParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_ldap_config_auth",
 		Method:             "PUT",
 		PathPattern:        "/ldap_config/test_auth",
@@ -447,18 +939,29 @@ func (a *Client) TestLdapConfigAuth(params *TestLdapConfigAuthParams) (*TestLdap
 		Reader:             &TestLdapConfigAuthReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestLdapConfigAuthOK), nil
-
+	success, ok := result.(*TestLdapConfigAuthOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_ldap_config_auth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestLdapConfigConnection tests l d a p connection
+  TestLdapConfigConnection tests l d a p connection
 
-### Test the connection settings for an LDAP configuration.
+  ### Test the connection settings for an LDAP configuration.
 
 This tests that the connection is possible given a connection_host and connection_port.
 
@@ -478,13 +981,12 @@ No authentication to the LDAP server is attempted.
 The active LDAP settings are not modified.
 
 */
-func (a *Client) TestLdapConfigConnection(params *TestLdapConfigConnectionParams) (*TestLdapConfigConnectionOK, error) {
+func (a *Client) TestLdapConfigConnection(params *TestLdapConfigConnectionParams, opts ...ClientOption) (*TestLdapConfigConnectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestLdapConfigConnectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_ldap_config_connection",
 		Method:             "PUT",
 		PathPattern:        "/ldap_config/test_connection",
@@ -495,18 +997,29 @@ func (a *Client) TestLdapConfigConnection(params *TestLdapConfigConnectionParams
 		Reader:             &TestLdapConfigConnectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestLdapConfigConnectionOK), nil
-
+	success, ok := result.(*TestLdapConfigConnectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_ldap_config_connection: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestLdapConfigUserAuth tests l d a p user auth
+  TestLdapConfigUserAuth tests l d a p user auth
 
-### Test the user authentication settings for an LDAP configuration.
+  ### Test the user authentication settings for an LDAP configuration.
 
 This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
 
@@ -518,13 +1031,12 @@ The active LDAP settings are not modified.
 
 
 */
-func (a *Client) TestLdapConfigUserAuth(params *TestLdapConfigUserAuthParams) (*TestLdapConfigUserAuthOK, error) {
+func (a *Client) TestLdapConfigUserAuth(params *TestLdapConfigUserAuthParams, opts ...ClientOption) (*TestLdapConfigUserAuthOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestLdapConfigUserAuthParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_ldap_config_user_auth",
 		Method:             "PUT",
 		PathPattern:        "/ldap_config/test_user_auth",
@@ -535,18 +1047,29 @@ func (a *Client) TestLdapConfigUserAuth(params *TestLdapConfigUserAuthParams) (*
 		Reader:             &TestLdapConfigUserAuthReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestLdapConfigUserAuthOK), nil
-
+	success, ok := result.(*TestLdapConfigUserAuthOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_ldap_config_user_auth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-TestLdapConfigUserInfo tests l d a p user info
+  TestLdapConfigUserInfo tests l d a p user info
 
-### Test the user authentication settings for an LDAP configuration without authenticating the user.
+  ### Test the user authentication settings for an LDAP configuration without authenticating the user.
 
 This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
 
@@ -558,13 +1081,12 @@ The active LDAP settings are not modified.
 
 
 */
-func (a *Client) TestLdapConfigUserInfo(params *TestLdapConfigUserInfoParams) (*TestLdapConfigUserInfoOK, error) {
+func (a *Client) TestLdapConfigUserInfo(params *TestLdapConfigUserInfoParams, opts ...ClientOption) (*TestLdapConfigUserInfoOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewTestLdapConfigUserInfoParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "test_ldap_config_user_info",
 		Method:             "PUT",
 		PathPattern:        "/ldap_config/test_user_info",
@@ -575,18 +1097,29 @@ func (a *Client) TestLdapConfigUserInfo(params *TestLdapConfigUserInfoParams) (*
 		Reader:             &TestLdapConfigUserInfoReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*TestLdapConfigUserInfoOK), nil
-
+	success, ok := result.(*TestLdapConfigUserInfoOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for test_ldap_config_user_info: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateLdapConfig updates l d a p configuration
+  UpdateLdapConfig updates l d a p configuration
 
-### Update the LDAP configuration.
+  ### Update the LDAP configuration.
 
 Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
 
@@ -599,13 +1132,12 @@ It is **highly** recommended that any LDAP setting changes be tested using the A
 See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
 
 */
-func (a *Client) UpdateLdapConfig(params *UpdateLdapConfigParams) (*UpdateLdapConfigOK, error) {
+func (a *Client) UpdateLdapConfig(params *UpdateLdapConfigParams, opts ...ClientOption) (*UpdateLdapConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateLdapConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_ldap_config",
 		Method:             "PATCH",
 		PathPattern:        "/ldap_config",
@@ -616,18 +1148,29 @@ func (a *Client) UpdateLdapConfig(params *UpdateLdapConfigParams) (*UpdateLdapCo
 		Reader:             &UpdateLdapConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateLdapConfigOK), nil
-
+	success, ok := result.(*UpdateLdapConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_ldap_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateOidcConfig updates o ID c configuration
+  UpdateOidcConfig updates o ID c configuration
 
-### Update the OIDC configuration.
+  ### Update the OIDC configuration.
 
 Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
 
@@ -638,13 +1181,12 @@ OIDC is enabled or disabled for Looker using the **enabled** field.
 It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
 
 */
-func (a *Client) UpdateOidcConfig(params *UpdateOidcConfigParams) (*UpdateOidcConfigOK, error) {
+func (a *Client) UpdateOidcConfig(params *UpdateOidcConfigParams, opts ...ClientOption) (*UpdateOidcConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateOidcConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_oidc_config",
 		Method:             "PATCH",
 		PathPattern:        "/oidc_config",
@@ -655,18 +1197,70 @@ func (a *Client) UpdateOidcConfig(params *UpdateOidcConfigParams) (*UpdateOidcCo
 		Reader:             &UpdateOidcConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateOidcConfigOK), nil
-
+	success, ok := result.(*UpdateOidcConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_oidc_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateSamlConfig updates s a m l configuration
+  UpdatePasswordConfig updates password config
 
-### Update the SAML configuration.
+  ### Update password config.
+
+*/
+func (a *Client) UpdatePasswordConfig(params *UpdatePasswordConfigParams, opts ...ClientOption) (*UpdatePasswordConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdatePasswordConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_password_config",
+		Method:             "PATCH",
+		PathPattern:        "/password_config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdatePasswordConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdatePasswordConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_password_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateSamlConfig updates s a m l configuration
+
+  ### Update the SAML configuration.
 
 Configuring SAML impacts authentication for all users. This configuration should be done carefully.
 
@@ -677,13 +1271,12 @@ SAML is enabled or disabled for Looker using the **enabled** field.
 It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
 
 */
-func (a *Client) UpdateSamlConfig(params *UpdateSamlConfigParams) (*UpdateSamlConfigOK, error) {
+func (a *Client) UpdateSamlConfig(params *UpdateSamlConfigParams, opts ...ClientOption) (*UpdateSamlConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateSamlConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_saml_config",
 		Method:             "PATCH",
 		PathPattern:        "/saml_config",
@@ -694,12 +1287,64 @@ func (a *Client) UpdateSamlConfig(params *UpdateSamlConfigParams) (*UpdateSamlCo
 		Reader:             &UpdateSamlConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateSamlConfigOK), nil
+	success, ok := result.(*UpdateSamlConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_saml_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
 
+/*
+  UpdateSessionConfig updates session config
+
+  ### Update session config.
+
+*/
+func (a *Client) UpdateSessionConfig(params *UpdateSessionConfigParams, opts ...ClientOption) (*UpdateSessionConfigOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateSessionConfigParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_session_config",
+		Method:             "PATCH",
+		PathPattern:        "/session_config",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateSessionConfigReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateSessionConfigOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_session_config: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

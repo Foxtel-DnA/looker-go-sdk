@@ -13,71 +13,87 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateContentMetadataAccessParams creates a new UpdateContentMetadataAccessParams object
-// with the default values initialized.
+// NewUpdateContentMetadataAccessParams creates a new UpdateContentMetadataAccessParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateContentMetadataAccessParams() *UpdateContentMetadataAccessParams {
-	var ()
 	return &UpdateContentMetadataAccessParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateContentMetadataAccessParamsWithTimeout creates a new UpdateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateContentMetadataAccessParamsWithTimeout(timeout time.Duration) *UpdateContentMetadataAccessParams {
-	var ()
 	return &UpdateContentMetadataAccessParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateContentMetadataAccessParamsWithContext creates a new UpdateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateContentMetadataAccessParamsWithContext(ctx context.Context) *UpdateContentMetadataAccessParams {
-	var ()
 	return &UpdateContentMetadataAccessParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateContentMetadataAccessParamsWithHTTPClient creates a new UpdateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateContentMetadataAccessParamsWithHTTPClient(client *http.Client) *UpdateContentMetadataAccessParams {
-	var ()
 	return &UpdateContentMetadataAccessParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateContentMetadataAccessParams contains all the parameters to send to the API endpoint
-for the update content metadata access operation typically these are written to a http.Request
+/* UpdateContentMetadataAccessParams contains all the parameters to send to the API endpoint
+   for the update content metadata access operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateContentMetadataAccessParams struct {
 
-	/*Body
-	  Content Metadata Access
+	/* Body.
 
+	   Content Metadata Access
 	*/
 	Body *models.ContentMetaGroupUser
-	/*ContentMetadataAccessID
-	  Id of content metadata access
 
+	/* ContentMetadataAccessID.
+
+	   Id of content metadata access
+
+	   Format: int64
 	*/
 	ContentMetadataAccessID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateContentMetadataAccessParams) WithDefaults() *UpdateContentMetadataAccessParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateContentMetadataAccessParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update content metadata access params
@@ -142,7 +158,6 @@ func (o *UpdateContentMetadataAccessParams) WriteToRequest(r runtime.ClientReque
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

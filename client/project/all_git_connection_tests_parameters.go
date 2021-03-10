@@ -13,63 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllGitConnectionTestsParams creates a new AllGitConnectionTestsParams object
-// with the default values initialized.
+// NewAllGitConnectionTestsParams creates a new AllGitConnectionTestsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllGitConnectionTestsParams() *AllGitConnectionTestsParams {
-	var ()
 	return &AllGitConnectionTestsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllGitConnectionTestsParamsWithTimeout creates a new AllGitConnectionTestsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllGitConnectionTestsParamsWithTimeout(timeout time.Duration) *AllGitConnectionTestsParams {
-	var ()
 	return &AllGitConnectionTestsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllGitConnectionTestsParamsWithContext creates a new AllGitConnectionTestsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllGitConnectionTestsParamsWithContext(ctx context.Context) *AllGitConnectionTestsParams {
-	var ()
 	return &AllGitConnectionTestsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllGitConnectionTestsParamsWithHTTPClient creates a new AllGitConnectionTestsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllGitConnectionTestsParamsWithHTTPClient(client *http.Client) *AllGitConnectionTestsParams {
-	var ()
 	return &AllGitConnectionTestsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllGitConnectionTestsParams contains all the parameters to send to the API endpoint
-for the all git connection tests operation typically these are written to a http.Request
+/* AllGitConnectionTestsParams contains all the parameters to send to the API endpoint
+   for the all git connection tests operation.
+
+   Typically these are written to a http.Request.
 */
 type AllGitConnectionTestsParams struct {
 
-	/*ProjectID
-	  Project Id
+	/* ProjectID.
 
+	   Project Id
 	*/
 	ProjectID string
+
+	/* RemoteURL.
+
+	   (Optional: leave blank for root project) The remote url for remote dependency to test.
+	*/
+	RemoteURL *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all git connection tests params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllGitConnectionTestsParams) WithDefaults() *AllGitConnectionTestsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all git connection tests params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllGitConnectionTestsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all git connection tests params
@@ -116,6 +135,17 @@ func (o *AllGitConnectionTestsParams) SetProjectID(projectID string) {
 	o.ProjectID = projectID
 }
 
+// WithRemoteURL adds the remoteURL to the all git connection tests params
+func (o *AllGitConnectionTestsParams) WithRemoteURL(remoteURL *string) *AllGitConnectionTestsParams {
+	o.SetRemoteURL(remoteURL)
+	return o
+}
+
+// SetRemoteURL adds the remoteUrl to the all git connection tests params
+func (o *AllGitConnectionTestsParams) SetRemoteURL(remoteURL *string) {
+	o.RemoteURL = remoteURL
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *AllGitConnectionTestsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -127,6 +157,23 @@ func (o *AllGitConnectionTestsParams) WriteToRequest(r runtime.ClientRequest, re
 	// path param project_id
 	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
 		return err
+	}
+
+	if o.RemoteURL != nil {
+
+		// query param remote_url
+		var qrRemoteURL string
+
+		if o.RemoteURL != nil {
+			qrRemoteURL = *o.RemoteURL
+		}
+		qRemoteURL := qrRemoteURL
+		if qRemoteURL != "" {
+
+			if err := r.SetQueryParam("remote_url", qRemoteURL); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

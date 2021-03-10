@@ -13,73 +13,88 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewRunURLEncodedQueryParams creates a new RunURLEncodedQueryParams object
-// with the default values initialized.
+// NewRunURLEncodedQueryParams creates a new RunURLEncodedQueryParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRunURLEncodedQueryParams() *RunURLEncodedQueryParams {
-	var ()
 	return &RunURLEncodedQueryParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRunURLEncodedQueryParamsWithTimeout creates a new RunURLEncodedQueryParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRunURLEncodedQueryParamsWithTimeout(timeout time.Duration) *RunURLEncodedQueryParams {
-	var ()
 	return &RunURLEncodedQueryParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRunURLEncodedQueryParamsWithContext creates a new RunURLEncodedQueryParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRunURLEncodedQueryParamsWithContext(ctx context.Context) *RunURLEncodedQueryParams {
-	var ()
 	return &RunURLEncodedQueryParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRunURLEncodedQueryParamsWithHTTPClient creates a new RunURLEncodedQueryParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRunURLEncodedQueryParamsWithHTTPClient(client *http.Client) *RunURLEncodedQueryParams {
-	var ()
 	return &RunURLEncodedQueryParams{
 		HTTPClient: client,
 	}
 }
 
-/*RunURLEncodedQueryParams contains all the parameters to send to the API endpoint
-for the run url encoded query operation typically these are written to a http.Request
+/* RunURLEncodedQueryParams contains all the parameters to send to the API endpoint
+   for the run url encoded query operation.
+
+   Typically these are written to a http.Request.
 */
 type RunURLEncodedQueryParams struct {
 
-	/*ModelName
-	  Model name
+	/* ModelName.
 
+	   Model name
 	*/
 	ModelName string
-	/*ResultFormat
-	  Format of result
 
+	/* ResultFormat.
+
+	   Format of result
 	*/
 	ResultFormat string
-	/*ViewName
-	  View name
 
+	/* ViewName.
+
+	   View name
 	*/
 	ViewName string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the run url encoded query params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RunURLEncodedQueryParams) WithDefaults() *RunURLEncodedQueryParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the run url encoded query params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RunURLEncodedQueryParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the run url encoded query params

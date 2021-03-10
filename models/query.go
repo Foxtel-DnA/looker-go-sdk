@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // Query query
+//
 // swagger:model Query
 type Query struct {
 
@@ -28,7 +30,7 @@ type Query struct {
 	ColumnLimit string `json:"column_limit,omitempty"`
 
 	// Dynamic Fields
-	DynamicFields []string `json:"dynamic_fields"`
+	DynamicFields string `json:"dynamic_fields,omitempty"`
 
 	// Expanded Share Url
 	// Read Only: true
@@ -73,7 +75,7 @@ type Query struct {
 	// Raw Total
 	RowTotal string `json:"row_total,omitempty"`
 
-	// Runtime
+	// (DEPRECATED) Runtime (Deprecated)
 	Runtime float64 `json:"runtime,omitempty"`
 
 	// Share Url
@@ -138,6 +140,103 @@ func (m *Query) validateModel(formats strfmt.Registry) error {
 func (m *Query) validateView(formats strfmt.Registry) error {
 
 	if err := validate.Required("view", "body", m.View); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this query based on the context it is used
+func (m *Query) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpandedShareURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasTableCalculations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShareURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Query) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Query) contextValidateExpandedShareURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "expanded_share_url", "body", string(m.ExpandedShareURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Query) contextValidateHasTableCalculations(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_table_calculations", "body", m.HasTableCalculations); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Query) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Query) contextValidateShareURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "share_url", "body", string(m.ShareURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Query) contextValidateSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "slug", "body", string(m.Slug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Query) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", string(m.URL)); err != nil {
 		return err
 	}
 

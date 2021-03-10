@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ContentMetaGroupUser content meta group user
+//
 // swagger:model ContentMetaGroupUser
 type ContentMetaGroupUser struct {
 
@@ -21,7 +25,7 @@ type ContentMetaGroupUser struct {
 
 	// Id of associated Content Metadata
 	// Read Only: true
-	ContentMetadataID int64 `json:"content_metadata_id,omitempty"`
+	ContentMetadataID string `json:"content_metadata_id,omitempty"`
 
 	// ID of associated group
 	// Read Only: true
@@ -29,9 +33,9 @@ type ContentMetaGroupUser struct {
 
 	// Unique Id
 	// Read Only: true
-	ID int64 `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
-	// Type of permission: "view" or "edit"
+	// Type of permission: "view" or "edit" Valid values are: "view", "edit".
 	// Read Only: true
 	PermissionType string `json:"permission_type,omitempty"`
 
@@ -42,6 +46,90 @@ type ContentMetaGroupUser struct {
 
 // Validate validates this content meta group user
 func (m *ContentMetaGroupUser) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this content meta group user based on the context it is used
+func (m *ContentMetaGroupUser) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePermissionType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", string(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidateGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "group_id", "body", int64(m.GroupID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidatePermissionType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "permission_type", "body", string(m.PermissionType)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ContentMetaGroupUser) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", int64(m.UserID)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewPermissionSetParams creates a new PermissionSetParams object
-// with the default values initialized.
+// NewPermissionSetParams creates a new PermissionSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewPermissionSetParams() *PermissionSetParams {
-	var ()
 	return &PermissionSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewPermissionSetParamsWithTimeout creates a new PermissionSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewPermissionSetParamsWithTimeout(timeout time.Duration) *PermissionSetParams {
-	var ()
 	return &PermissionSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewPermissionSetParamsWithContext creates a new PermissionSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewPermissionSetParamsWithContext(ctx context.Context) *PermissionSetParams {
-	var ()
 	return &PermissionSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewPermissionSetParamsWithHTTPClient creates a new PermissionSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewPermissionSetParamsWithHTTPClient(client *http.Client) *PermissionSetParams {
-	var ()
 	return &PermissionSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*PermissionSetParams contains all the parameters to send to the API endpoint
-for the permission set operation typically these are written to a http.Request
+/* PermissionSetParams contains all the parameters to send to the API endpoint
+   for the permission set operation.
+
+   Typically these are written to a http.Request.
 */
 type PermissionSetParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*PermissionSetID
-	  Id of permission set
 
+	/* PermissionSetID.
+
+	   Id of permission set
+
+	   Format: int64
 	*/
 	PermissionSetID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the permission set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PermissionSetParams) WithDefaults() *PermissionSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the permission set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PermissionSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the permission set params
@@ -145,16 +161,17 @@ func (o *PermissionSetParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param permission_set_id

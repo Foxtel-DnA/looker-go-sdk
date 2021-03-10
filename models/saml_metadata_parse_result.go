@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // SamlMetadataParseResult saml metadata parse result
+//
 // swagger:model SamlMetadataParseResult
 type SamlMetadataParseResult struct {
 
@@ -34,6 +38,64 @@ type SamlMetadataParseResult struct {
 
 // Validate validates this saml metadata parse result
 func (m *SamlMetadataParseResult) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this saml metadata parse result based on the context it is used
+func (m *SamlMetadataParseResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIdpCert(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIdpIssuer(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIdpURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SamlMetadataParseResult) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *SamlMetadataParseResult) contextValidateIdpCert(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "idp_cert", "body", string(m.IdpCert)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlMetadataParseResult) contextValidateIdpIssuer(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "idp_issuer", "body", string(m.IdpIssuer)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlMetadataParseResult) contextValidateIdpURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "idp_url", "body", string(m.IdpURL)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

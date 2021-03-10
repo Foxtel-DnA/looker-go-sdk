@@ -6,22 +6,66 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DataActionUserState data action user state
+//
 // swagger:model DataActionUserState
 type DataActionUserState struct {
 
 	// User state data
 	// Read Only: true
 	Data string `json:"data,omitempty"`
+
+	// Time in seconds until the state needs to be refreshed
+	// Read Only: true
+	RefreshTime int64 `json:"refresh_time,omitempty"`
 }
 
 // Validate validates this data action user state
 func (m *DataActionUserState) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this data action user state based on the context it is used
+func (m *DataActionUserState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefreshTime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DataActionUserState) contextValidateData(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "data", "body", string(m.Data)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DataActionUserState) contextValidateRefreshTime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "refresh_time", "body", int64(m.RefreshTime)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

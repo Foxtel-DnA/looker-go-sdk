@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllPermissionSetsReader is a Reader for the AllPermissionSets structure.
@@ -24,30 +23,26 @@ type AllPermissionSetsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllPermissionSetsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllPermissionSetsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllPermissionSetsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllPermissionSetsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllPermissionSetsOK() *AllPermissionSetsOK {
 	return &AllPermissionSetsOK{}
 }
 
-/*AllPermissionSetsOK handles this case with default header values.
+/* AllPermissionSetsOK describes a response with status code 200, with default header values.
 
 Permission Set
 */
@@ -66,6 +61,9 @@ type AllPermissionSetsOK struct {
 
 func (o *AllPermissionSetsOK) Error() string {
 	return fmt.Sprintf("[GET /permission_sets][%d] allPermissionSetsOK  %+v", 200, o.Payload)
+}
+func (o *AllPermissionSetsOK) GetPayload() []*models.PermissionSet {
+	return o.Payload
 }
 
 func (o *AllPermissionSetsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllPermissionSetsBadRequest() *AllPermissionSetsBadRequest {
 	return &AllPermissionSetsBadRequest{}
 }
 
-/*AllPermissionSetsBadRequest handles this case with default header values.
+/* AllPermissionSetsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllPermissionSetsBadRequest struct {
 
 func (o *AllPermissionSetsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /permission_sets][%d] allPermissionSetsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllPermissionSetsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllPermissionSetsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllPermissionSetsNotFound() *AllPermissionSetsNotFound {
 	return &AllPermissionSetsNotFound{}
 }
 
-/*AllPermissionSetsNotFound handles this case with default header values.
+/* AllPermissionSetsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllPermissionSetsNotFound struct {
 
 func (o *AllPermissionSetsNotFound) Error() string {
 	return fmt.Sprintf("[GET /permission_sets][%d] allPermissionSetsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllPermissionSetsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllPermissionSetsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

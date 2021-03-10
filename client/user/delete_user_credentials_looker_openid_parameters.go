@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteUserCredentialsLookerOpenidParams creates a new DeleteUserCredentialsLookerOpenidParams object
-// with the default values initialized.
+// NewDeleteUserCredentialsLookerOpenidParams creates a new DeleteUserCredentialsLookerOpenidParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteUserCredentialsLookerOpenidParams() *DeleteUserCredentialsLookerOpenidParams {
-	var ()
 	return &DeleteUserCredentialsLookerOpenidParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteUserCredentialsLookerOpenidParamsWithTimeout creates a new DeleteUserCredentialsLookerOpenidParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteUserCredentialsLookerOpenidParamsWithTimeout(timeout time.Duration) *DeleteUserCredentialsLookerOpenidParams {
-	var ()
 	return &DeleteUserCredentialsLookerOpenidParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteUserCredentialsLookerOpenidParamsWithContext creates a new DeleteUserCredentialsLookerOpenidParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteUserCredentialsLookerOpenidParamsWithContext(ctx context.Context) *DeleteUserCredentialsLookerOpenidParams {
-	var ()
 	return &DeleteUserCredentialsLookerOpenidParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteUserCredentialsLookerOpenidParamsWithHTTPClient creates a new DeleteUserCredentialsLookerOpenidParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteUserCredentialsLookerOpenidParamsWithHTTPClient(client *http.Client) *DeleteUserCredentialsLookerOpenidParams {
-	var ()
 	return &DeleteUserCredentialsLookerOpenidParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteUserCredentialsLookerOpenidParams contains all the parameters to send to the API endpoint
-for the delete user credentials looker openid operation typically these are written to a http.Request
+/* DeleteUserCredentialsLookerOpenidParams contains all the parameters to send to the API endpoint
+   for the delete user credentials looker openid operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteUserCredentialsLookerOpenidParams struct {
 
-	/*UserID
-	  id of user
+	/* UserID.
 
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete user credentials looker openid params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsLookerOpenidParams) WithDefaults() *DeleteUserCredentialsLookerOpenidParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete user credentials looker openid params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsLookerOpenidParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete user credentials looker openid params

@@ -13,74 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserSessionParams creates a new UserSessionParams object
-// with the default values initialized.
+// NewUserSessionParams creates a new UserSessionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserSessionParams() *UserSessionParams {
-	var ()
 	return &UserSessionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserSessionParamsWithTimeout creates a new UserSessionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserSessionParamsWithTimeout(timeout time.Duration) *UserSessionParams {
-	var ()
 	return &UserSessionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserSessionParamsWithContext creates a new UserSessionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserSessionParamsWithContext(ctx context.Context) *UserSessionParams {
-	var ()
 	return &UserSessionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserSessionParamsWithHTTPClient creates a new UserSessionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserSessionParamsWithHTTPClient(client *http.Client) *UserSessionParams {
-	var ()
 	return &UserSessionParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserSessionParams contains all the parameters to send to the API endpoint
-for the user session operation typically these are written to a http.Request
+/* UserSessionParams contains all the parameters to send to the API endpoint
+   for the user session operation.
+
+   Typically these are written to a http.Request.
 */
 type UserSessionParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*SessionID
-	  Id of Web Login Session
 
+	/* SessionID.
+
+	   Id of Web Login Session
+
+	   Format: int64
 	*/
 	SessionID int64
-	/*UserID
-	  Id of user
 
+	/* UserID.
+
+	   Id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user session params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserSessionParams) WithDefaults() *UserSessionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user session params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserSessionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user session params
@@ -161,16 +180,17 @@ func (o *UserSessionParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param session_id

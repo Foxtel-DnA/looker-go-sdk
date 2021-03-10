@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateUserAttributeReader is a Reader for the CreateUserAttribute structure.
@@ -24,44 +23,44 @@ type CreateUserAttributeReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateUserAttributeReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateUserAttributeOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateUserAttributeBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateUserAttributeNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateUserAttributeConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateUserAttributeUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateUserAttributeTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateUserAttributeOK() *CreateUserAttributeOK {
 	return &CreateUserAttributeOK{}
 }
 
-/*CreateUserAttributeOK handles this case with default header values.
+/* CreateUserAttributeOK describes a response with status code 200, with default header values.
 
 User Attribute
 */
@@ -80,6 +79,9 @@ type CreateUserAttributeOK struct {
 
 func (o *CreateUserAttributeOK) Error() string {
 	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeOK  %+v", 200, o.Payload)
+}
+func (o *CreateUserAttributeOK) GetPayload() *models.UserAttribute {
+	return o.Payload
 }
 
 func (o *CreateUserAttributeOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateUserAttributeBadRequest() *CreateUserAttributeBadRequest {
 	return &CreateUserAttributeBadRequest{}
 }
 
-/*CreateUserAttributeBadRequest handles this case with default header values.
+/* CreateUserAttributeBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateUserAttributeBadRequest struct {
 
 func (o *CreateUserAttributeBadRequest) Error() string {
 	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateUserAttributeBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserAttributeBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateUserAttributeNotFound() *CreateUserAttributeNotFound {
 	return &CreateUserAttributeNotFound{}
 }
 
-/*CreateUserAttributeNotFound handles this case with default header values.
+/* CreateUserAttributeNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateUserAttributeNotFound struct {
 
 func (o *CreateUserAttributeNotFound) Error() string {
 	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateUserAttributeNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserAttributeNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateUserAttributeConflict() *CreateUserAttributeConflict {
 	return &CreateUserAttributeConflict{}
 }
 
-/*CreateUserAttributeConflict handles this case with default header values.
+/* CreateUserAttributeConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateUserAttributeConflict struct {
 
 func (o *CreateUserAttributeConflict) Error() string {
 	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeConflict  %+v", 409, o.Payload)
+}
+func (o *CreateUserAttributeConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateUserAttributeConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateUserAttributeUnprocessableEntity() *CreateUserAttributeUnprocessab
 	return &CreateUserAttributeUnprocessableEntity{}
 }
 
-/*CreateUserAttributeUnprocessableEntity handles this case with default header values.
+/* CreateUserAttributeUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateUserAttributeUnprocessableEntity struct {
 func (o *CreateUserAttributeUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateUserAttributeUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateUserAttributeUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateUserAttributeTooManyRequests creates a CreateUserAttributeTooManyRequests with default headers values
+func NewCreateUserAttributeTooManyRequests() *CreateUserAttributeTooManyRequests {
+	return &CreateUserAttributeTooManyRequests{}
+}
+
+/* CreateUserAttributeTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateUserAttributeTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateUserAttributeTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /user_attributes][%d] createUserAttributeTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateUserAttributeTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateUserAttributeTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -6,18 +6,22 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // Dashboard dashboard
+//
 // swagger:model Dashboard
 type Dashboard struct {
+
+	// Dashboard visual settings only applicable to dashboards-next (beta)
+	Appearance *DashboardAppearance `json:"appearance,omitempty"`
 
 	// Background color
 	BackgroundColor string `json:"background_color,omitempty"`
@@ -39,6 +43,9 @@ type Dashboard struct {
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"created_at,omitempty"`
 
+	// Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+	CrossfilterEnabled bool `json:"crossfilter_enabled,omitempty"`
+
 	// Elements
 	// Read Only: true
 	DashboardElements []*DashboardElement `json:"dashboard_elements"`
@@ -51,15 +58,15 @@ type Dashboard struct {
 	// Read Only: true
 	DashboardLayouts []*DashboardLayout `json:"dashboard_layouts"`
 
-	// Whether or not a dashboard is deleted.
+	// Whether or not a dashboard is 'soft' deleted.
 	Deleted bool `json:"deleted,omitempty"`
 
-	// Time that the Dashboard was deleted.
+	// Time that the Dashboard was 'soft' deleted.
 	// Read Only: true
 	// Format: date-time
 	DeletedAt strfmt.DateTime `json:"deleted_at,omitempty"`
 
-	// Id of User that deleted the dashboard.
+	// Id of User that 'soft' deleted the dashboard.
 	// Read Only: true
 	DeleterID int64 `json:"deleter_id,omitempty"`
 
@@ -75,6 +82,13 @@ type Dashboard struct {
 	// Read Only: true
 	FavoriteCount int64 `json:"favorite_count,omitempty"`
 
+	// Folder
+	// Read Only: true
+	Folder *FolderBase `json:"folder,omitempty"`
+
+	// Id of folder
+	FolderID string `json:"folder_id,omitempty"`
+
 	// Is Hidden
 	Hidden bool `json:"hidden,omitempty"`
 
@@ -87,10 +101,6 @@ type Dashboard struct {
 	// Format: date-time
 	LastAccessedAt strfmt.DateTime `json:"last_accessed_at,omitempty"`
 
-	// Id of User that last updated the dashboard.
-	// Read Only: true
-	LastUpdaterID int64 `json:"last_updater_id,omitempty"`
-
 	// Time last viewed in the Looker web UI
 	// Read Only: true
 	// Format: date-time
@@ -100,12 +110,14 @@ type Dashboard struct {
 	LoadConfiguration string `json:"load_configuration,omitempty"`
 
 	// Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-	// Read Only: true
 	LookmlLinkID string `json:"lookml_link_id,omitempty"`
 
 	// Model
 	// Read Only: true
 	Model *LookModel `json:"model,omitempty"`
+
+	// The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+	PreferredViewer string `json:"preferred_viewer,omitempty"`
 
 	// Timezone in which the Dashboard will run by default.
 	QueryTimezone string `json:"query_timezone,omitempty"`
@@ -114,14 +126,14 @@ type Dashboard struct {
 	// Read Only: true
 	Readonly *bool `json:"readonly,omitempty"`
 
-	// Refresh Interval
+	// Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
 	RefreshInterval string `json:"refresh_interval,omitempty"`
 
-	// Refresh Interval as Integer
+	// Refresh Interval in milliseconds
 	// Read Only: true
-	RefreshIntervalToI int64 `json:"refresh_interval_to_i,omitempty"`
+	RefreshIntervalToi int64 `json:"refresh_interval_to_i,omitempty"`
 
-	// Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/admin-options/tutorials/permissions#control_user_access_to_data)
+	// Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
 	ShowFiltersBar bool `json:"show_filters_bar,omitempty"`
 
 	// Show title
@@ -135,7 +147,7 @@ type Dashboard struct {
 	Space *SpaceBase `json:"space,omitempty"`
 
 	// Id of Space
-	SpaceID int64 `json:"space_id,omitempty"`
+	SpaceID string `json:"space_id,omitempty"`
 
 	// Color of text on text tiles
 	TextTileTextColor string `json:"text_tile_text_color,omitempty"`
@@ -165,6 +177,10 @@ type Dashboard struct {
 func (m *Dashboard) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAppearance(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreatedAt(formats); err != nil {
 		res = append(res, err)
 	}
@@ -186,6 +202,10 @@ func (m *Dashboard) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEditURI(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFolder(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -211,8 +231,24 @@ func (m *Dashboard) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Dashboard) validateCreatedAt(formats strfmt.Registry) error {
+func (m *Dashboard) validateAppearance(formats strfmt.Registry) error {
+	if swag.IsZero(m.Appearance) { // not required
+		return nil
+	}
 
+	if m.Appearance != nil {
+		if err := m.Appearance.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("appearance")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) validateCreatedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -225,7 +261,6 @@ func (m *Dashboard) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateDashboardElements(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DashboardElements) { // not required
 		return nil
 	}
@@ -250,7 +285,6 @@ func (m *Dashboard) validateDashboardElements(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateDashboardFilters(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DashboardFilters) { // not required
 		return nil
 	}
@@ -275,7 +309,6 @@ func (m *Dashboard) validateDashboardFilters(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateDashboardLayouts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DashboardLayouts) { // not required
 		return nil
 	}
@@ -300,7 +333,6 @@ func (m *Dashboard) validateDashboardLayouts(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateDeletedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeletedAt) { // not required
 		return nil
 	}
@@ -313,7 +345,6 @@ func (m *Dashboard) validateDeletedAt(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateEditURI(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EditURI) { // not required
 		return nil
 	}
@@ -325,8 +356,24 @@ func (m *Dashboard) validateEditURI(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Dashboard) validateLastAccessedAt(formats strfmt.Registry) error {
+func (m *Dashboard) validateFolder(formats strfmt.Registry) error {
+	if swag.IsZero(m.Folder) { // not required
+		return nil
+	}
 
+	if m.Folder != nil {
+		if err := m.Folder.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) validateLastAccessedAt(formats strfmt.Registry) error {
 	if swag.IsZero(m.LastAccessedAt) { // not required
 		return nil
 	}
@@ -339,7 +386,6 @@ func (m *Dashboard) validateLastAccessedAt(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateLastViewedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LastViewedAt) { // not required
 		return nil
 	}
@@ -352,7 +398,6 @@ func (m *Dashboard) validateLastViewedAt(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateModel(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Model) { // not required
 		return nil
 	}
@@ -370,7 +415,6 @@ func (m *Dashboard) validateModel(formats strfmt.Registry) error {
 }
 
 func (m *Dashboard) validateSpace(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Space) { // not required
 		return nil
 	}
@@ -382,6 +426,357 @@ func (m *Dashboard) validateSpace(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this dashboard based on the context it is used
+func (m *Dashboard) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAppearance(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentFavoriteID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardElements(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDashboardLayouts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeletedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleterID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEditURI(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFavoriteCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFolder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastAccessedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLastViewedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReadonly(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefreshIntervalToi(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Dashboard) contextValidateAppearance(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Appearance != nil {
+		if err := m.Appearance.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("appearance")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateContentFavoriteID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_favorite_id", "body", int64(m.ContentFavoriteID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateDashboardElements(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_elements", "body", []*DashboardElement(m.DashboardElements)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DashboardElements); i++ {
+
+		if m.DashboardElements[i] != nil {
+			if err := m.DashboardElements[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dashboard_elements" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateDashboardFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_filters", "body", []*DashboardFilter(m.DashboardFilters)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DashboardFilters); i++ {
+
+		if m.DashboardFilters[i] != nil {
+			if err := m.DashboardFilters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dashboard_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateDashboardLayouts(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_layouts", "body", []*DashboardLayout(m.DashboardLayouts)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DashboardLayouts); i++ {
+
+		if m.DashboardLayouts[i] != nil {
+			if err := m.DashboardLayouts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("dashboard_layouts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateDeletedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleted_at", "body", strfmt.DateTime(m.DeletedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateDeleterID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleter_id", "body", int64(m.DeleterID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateEditURI(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "edit_uri", "body", strfmt.URI(m.EditURI)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateFavoriteCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "favorite_count", "body", int64(m.FavoriteCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateFolder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Folder != nil {
+		if err := m.Folder.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("folder")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateLastAccessedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_accessed_at", "body", strfmt.DateTime(m.LastAccessedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateLastViewedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "last_viewed_at", "body", strfmt.DateTime(m.LastViewedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateModel(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Model != nil {
+		if err := m.Model.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("model")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateReadonly(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "readonly", "body", m.Readonly); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateRefreshIntervalToi(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "refresh_interval_to_i", "body", int64(m.RefreshIntervalToi)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateSpace(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Space != nil {
+		if err := m.Space.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("space")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateUserID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_id", "body", int64(m.UserID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Dashboard) contextValidateViewCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_count", "body", int64(m.ViewCount)); err != nil {
+		return err
 	}
 
 	return nil

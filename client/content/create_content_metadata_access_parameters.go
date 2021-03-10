@@ -13,65 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateContentMetadataAccessParams creates a new CreateContentMetadataAccessParams object
-// with the default values initialized.
+// NewCreateContentMetadataAccessParams creates a new CreateContentMetadataAccessParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateContentMetadataAccessParams() *CreateContentMetadataAccessParams {
-	var ()
 	return &CreateContentMetadataAccessParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateContentMetadataAccessParamsWithTimeout creates a new CreateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateContentMetadataAccessParamsWithTimeout(timeout time.Duration) *CreateContentMetadataAccessParams {
-	var ()
 	return &CreateContentMetadataAccessParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateContentMetadataAccessParamsWithContext creates a new CreateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateContentMetadataAccessParamsWithContext(ctx context.Context) *CreateContentMetadataAccessParams {
-	var ()
 	return &CreateContentMetadataAccessParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateContentMetadataAccessParamsWithHTTPClient creates a new CreateContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateContentMetadataAccessParamsWithHTTPClient(client *http.Client) *CreateContentMetadataAccessParams {
-	var ()
 	return &CreateContentMetadataAccessParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateContentMetadataAccessParams contains all the parameters to send to the API endpoint
-for the create content metadata access operation typically these are written to a http.Request
+/* CreateContentMetadataAccessParams contains all the parameters to send to the API endpoint
+   for the create content metadata access operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateContentMetadataAccessParams struct {
 
-	/*Body
-	  Content Metadata Access
+	/* Body.
 
+	   Content Metadata Access
 	*/
 	Body *models.ContentMetaGroupUser
+
+	/* SendBoardsNotificationEmail.
+
+	   Optionally sends notification email when granting access to a board.
+	*/
+	SendBoardsNotificationEmail *bool
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateContentMetadataAccessParams) WithDefaults() *CreateContentMetadataAccessParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateContentMetadataAccessParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create content metadata access params
@@ -118,6 +138,17 @@ func (o *CreateContentMetadataAccessParams) SetBody(body *models.ContentMetaGrou
 	o.Body = body
 }
 
+// WithSendBoardsNotificationEmail adds the sendBoardsNotificationEmail to the create content metadata access params
+func (o *CreateContentMetadataAccessParams) WithSendBoardsNotificationEmail(sendBoardsNotificationEmail *bool) *CreateContentMetadataAccessParams {
+	o.SetSendBoardsNotificationEmail(sendBoardsNotificationEmail)
+	return o
+}
+
+// SetSendBoardsNotificationEmail adds the sendBoardsNotificationEmail to the create content metadata access params
+func (o *CreateContentMetadataAccessParams) SetSendBoardsNotificationEmail(sendBoardsNotificationEmail *bool) {
+	o.SendBoardsNotificationEmail = sendBoardsNotificationEmail
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *CreateContentMetadataAccessParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -125,10 +156,26 @@ func (o *CreateContentMetadataAccessParams) WriteToRequest(r runtime.ClientReque
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
+		}
+	}
+
+	if o.SendBoardsNotificationEmail != nil {
+
+		// query param send_boards_notification_email
+		var qrSendBoardsNotificationEmail bool
+
+		if o.SendBoardsNotificationEmail != nil {
+			qrSendBoardsNotificationEmail = *o.SendBoardsNotificationEmail
+		}
+		qSendBoardsNotificationEmail := swag.FormatBool(qrSendBoardsNotificationEmail)
+		if qSendBoardsNotificationEmail != "" {
+
+			if err := r.SetQueryParam("send_boards_notification_email", qSendBoardsNotificationEmail); err != nil {
+				return err
+			}
 		}
 	}
 

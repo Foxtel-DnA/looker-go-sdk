@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateRoleReader is a Reader for the CreateRole structure.
@@ -24,44 +23,44 @@ type CreateRoleReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateRoleReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateRoleOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateRoleBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateRoleNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateRoleConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateRoleUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateRoleTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateRoleOK() *CreateRoleOK {
 	return &CreateRoleOK{}
 }
 
-/*CreateRoleOK handles this case with default header values.
+/* CreateRoleOK describes a response with status code 200, with default header values.
 
 Role
 */
@@ -80,6 +79,9 @@ type CreateRoleOK struct {
 
 func (o *CreateRoleOK) Error() string {
 	return fmt.Sprintf("[POST /roles][%d] createRoleOK  %+v", 200, o.Payload)
+}
+func (o *CreateRoleOK) GetPayload() *models.Role {
+	return o.Payload
 }
 
 func (o *CreateRoleOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateRoleBadRequest() *CreateRoleBadRequest {
 	return &CreateRoleBadRequest{}
 }
 
-/*CreateRoleBadRequest handles this case with default header values.
+/* CreateRoleBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateRoleBadRequest struct {
 
 func (o *CreateRoleBadRequest) Error() string {
 	return fmt.Sprintf("[POST /roles][%d] createRoleBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateRoleBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateRoleBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateRoleNotFound() *CreateRoleNotFound {
 	return &CreateRoleNotFound{}
 }
 
-/*CreateRoleNotFound handles this case with default header values.
+/* CreateRoleNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateRoleNotFound struct {
 
 func (o *CreateRoleNotFound) Error() string {
 	return fmt.Sprintf("[POST /roles][%d] createRoleNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateRoleNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateRoleNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateRoleConflict() *CreateRoleConflict {
 	return &CreateRoleConflict{}
 }
 
-/*CreateRoleConflict handles this case with default header values.
+/* CreateRoleConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateRoleConflict struct {
 
 func (o *CreateRoleConflict) Error() string {
 	return fmt.Sprintf("[POST /roles][%d] createRoleConflict  %+v", 409, o.Payload)
+}
+func (o *CreateRoleConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateRoleConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateRoleUnprocessableEntity() *CreateRoleUnprocessableEntity {
 	return &CreateRoleUnprocessableEntity{}
 }
 
-/*CreateRoleUnprocessableEntity handles this case with default header values.
+/* CreateRoleUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateRoleUnprocessableEntity struct {
 func (o *CreateRoleUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /roles][%d] createRoleUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateRoleUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateRoleUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateRoleTooManyRequests creates a CreateRoleTooManyRequests with default headers values
+func NewCreateRoleTooManyRequests() *CreateRoleTooManyRequests {
+	return &CreateRoleTooManyRequests{}
+}
+
+/* CreateRoleTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateRoleTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateRoleTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /roles][%d] createRoleTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateRoleTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateRoleTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

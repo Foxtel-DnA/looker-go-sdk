@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewValidateProjectParams creates a new ValidateProjectParams object
-// with the default values initialized.
+// NewValidateProjectParams creates a new ValidateProjectParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewValidateProjectParams() *ValidateProjectParams {
-	var ()
 	return &ValidateProjectParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewValidateProjectParamsWithTimeout creates a new ValidateProjectParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewValidateProjectParamsWithTimeout(timeout time.Duration) *ValidateProjectParams {
-	var ()
 	return &ValidateProjectParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewValidateProjectParamsWithContext creates a new ValidateProjectParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewValidateProjectParamsWithContext(ctx context.Context) *ValidateProjectParams {
-	var ()
 	return &ValidateProjectParams{
-
 		Context: ctx,
 	}
 }
 
 // NewValidateProjectParamsWithHTTPClient creates a new ValidateProjectParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewValidateProjectParamsWithHTTPClient(client *http.Client) *ValidateProjectParams {
-	var ()
 	return &ValidateProjectParams{
 		HTTPClient: client,
 	}
 }
 
-/*ValidateProjectParams contains all the parameters to send to the API endpoint
-for the validate project operation typically these are written to a http.Request
+/* ValidateProjectParams contains all the parameters to send to the API endpoint
+   for the validate project operation.
+
+   Typically these are written to a http.Request.
 */
 type ValidateProjectParams struct {
 
-	/*Fields
-	  Requested fields
+	/* Fields.
 
+	   Requested fields
 	*/
 	Fields *string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the validate project params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ValidateProjectParams) WithDefaults() *ValidateProjectParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the validate project params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ValidateProjectParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the validate project params
@@ -144,16 +158,17 @@ func (o *ValidateProjectParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param project_id

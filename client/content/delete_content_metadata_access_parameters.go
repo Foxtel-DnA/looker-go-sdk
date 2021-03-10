@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteContentMetadataAccessParams creates a new DeleteContentMetadataAccessParams object
-// with the default values initialized.
+// NewDeleteContentMetadataAccessParams creates a new DeleteContentMetadataAccessParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteContentMetadataAccessParams() *DeleteContentMetadataAccessParams {
-	var ()
 	return &DeleteContentMetadataAccessParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteContentMetadataAccessParamsWithTimeout creates a new DeleteContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteContentMetadataAccessParamsWithTimeout(timeout time.Duration) *DeleteContentMetadataAccessParams {
-	var ()
 	return &DeleteContentMetadataAccessParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteContentMetadataAccessParamsWithContext creates a new DeleteContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteContentMetadataAccessParamsWithContext(ctx context.Context) *DeleteContentMetadataAccessParams {
-	var ()
 	return &DeleteContentMetadataAccessParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteContentMetadataAccessParamsWithHTTPClient creates a new DeleteContentMetadataAccessParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteContentMetadataAccessParamsWithHTTPClient(client *http.Client) *DeleteContentMetadataAccessParams {
-	var ()
 	return &DeleteContentMetadataAccessParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteContentMetadataAccessParams contains all the parameters to send to the API endpoint
-for the delete content metadata access operation typically these are written to a http.Request
+/* DeleteContentMetadataAccessParams contains all the parameters to send to the API endpoint
+   for the delete content metadata access operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteContentMetadataAccessParams struct {
 
-	/*ContentMetadataAccessID
-	  Id of content metadata access
+	/* ContentMetadataAccessID.
 
+	   Id of content metadata access
+
+	   Format: int64
 	*/
 	ContentMetadataAccessID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteContentMetadataAccessParams) WithDefaults() *DeleteContentMetadataAccessParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete content metadata access params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteContentMetadataAccessParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete content metadata access params

@@ -6,13 +6,14 @@ package api_auth
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new api auth API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,10 +25,24 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-Login logins
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Present client credentials to obtain an authorization token
+// ClientService is the interface for Client methods
+type ClientService interface {
+	Login(params *LoginParams, opts ...ClientOption) (*LoginOK, error)
+
+	LoginUser(params *LoginUserParams, opts ...ClientOption) (*LoginUserOK, error)
+
+	Logout(params *LogoutParams, opts ...ClientOption) (*LogoutNoContent, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  Login logins
+
+  ### Present client credentials to obtain an authorization token
 
 Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
 The client credentials required for this login must be obtained by creating an API3 key on a user account
@@ -39,18 +54,30 @@ API requests, like this:
 Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4
 ```
 Replace "4QDkCy..." with the `access_token` value returned by `login`.
-The word 'token' is a string literal and must be included exactly as shown.
+The word `token` is a string literal and must be included exactly as shown.
+
+This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
+
+Example of passing credentials in the HTTP request body:
+````
+POST HTTP /login
+Content-Type: application/x-www-form-urlencoded
+
+client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
+````
+
+### Best Practice:
+Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
 
 For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
 
 */
-func (a *Client) Login(params *LoginParams) (*LoginOK, error) {
+func (a *Client) Login(params *LoginParams, opts ...ClientOption) (*LoginOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLoginParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "login",
 		Method:             "POST",
 		PathPattern:        "/login",
@@ -61,18 +88,29 @@ func (a *Client) Login(params *LoginParams) (*LoginOK, error) {
 		Reader:             &LoginReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LoginOK), nil
-
+	success, ok := result.(*LoginOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for login: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-LoginUser logins user
+  LoginUser logins user
 
-### Create an access token for a given user.
+  ### Create an access token that runs as a given user.
 
 This can only be called by an authenticated admin user. It allows that admin to generate a new
 authentication token for the user with the given user id. That token can then be used for subsequent
@@ -90,13 +128,12 @@ each of those API calls.
 See 'login' for more detail on the access token and how to use it.
 
 */
-func (a *Client) LoginUser(params *LoginUserParams) (*LoginUserOK, error) {
+func (a *Client) LoginUser(params *LoginUserParams, opts ...ClientOption) (*LoginUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLoginUserParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "login_user",
 		Method:             "POST",
 		PathPattern:        "/login/{user_id}",
@@ -107,27 +144,37 @@ func (a *Client) LoginUser(params *LoginUserParams) (*LoginUserOK, error) {
 		Reader:             &LoginUserReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LoginUserOK), nil
-
+	success, ok := result.(*LoginUserOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for login_user: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Logout logouts
+  Logout logouts
 
-### Logout of the API and invalidate the current access token.
+  ### Logout of the API and invalidate the current access token.
 
 */
-func (a *Client) Logout(params *LogoutParams) (*LogoutNoContent, error) {
+func (a *Client) Logout(params *LogoutParams, opts ...ClientOption) (*LogoutNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewLogoutParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "logout",
 		Method:             "DELETE",
 		PathPattern:        "/logout",
@@ -138,12 +185,23 @@ func (a *Client) Logout(params *LogoutParams) (*LogoutNoContent, error) {
 		Reader:             &LogoutReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*LogoutNoContent), nil
-
+	success, ok := result.(*LogoutNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for logout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSetRoleGroupsParams creates a new SetRoleGroupsParams object
-// with the default values initialized.
+// NewSetRoleGroupsParams creates a new SetRoleGroupsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSetRoleGroupsParams() *SetRoleGroupsParams {
-	var ()
 	return &SetRoleGroupsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSetRoleGroupsParamsWithTimeout creates a new SetRoleGroupsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSetRoleGroupsParamsWithTimeout(timeout time.Duration) *SetRoleGroupsParams {
-	var ()
 	return &SetRoleGroupsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSetRoleGroupsParamsWithContext creates a new SetRoleGroupsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSetRoleGroupsParamsWithContext(ctx context.Context) *SetRoleGroupsParams {
-	var ()
 	return &SetRoleGroupsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSetRoleGroupsParamsWithHTTPClient creates a new SetRoleGroupsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSetRoleGroupsParamsWithHTTPClient(client *http.Client) *SetRoleGroupsParams {
-	var ()
 	return &SetRoleGroupsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SetRoleGroupsParams contains all the parameters to send to the API endpoint
-for the set role groups operation typically these are written to a http.Request
+/* SetRoleGroupsParams contains all the parameters to send to the API endpoint
+   for the set role groups operation.
+
+   Typically these are written to a http.Request.
 */
 type SetRoleGroupsParams struct {
 
-	/*Body
-	  Array of Group Ids
+	/* Body.
 
+	   Array of Group Ids
 	*/
 	Body []int64
-	/*RoleID
-	  Id of Role
 
+	/* RoleID.
+
+	   Id of Role
+
+	   Format: int64
 	*/
 	RoleID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the set role groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetRoleGroupsParams) WithDefaults() *SetRoleGroupsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the set role groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetRoleGroupsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the set role groups params
@@ -140,7 +156,6 @@ func (o *SetRoleGroupsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

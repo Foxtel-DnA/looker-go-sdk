@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreFieldMapLayer lookml model explore field map layer
+//
 // swagger:model LookmlModelExploreFieldMapLayer
 type LookmlModelExploreFieldMapLayer struct {
 
@@ -58,6 +62,146 @@ type LookmlModelExploreFieldMapLayer struct {
 
 // Validate validates this lookml model explore field map layer
 func (m *LookmlModelExploreFieldMapLayer) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this lookml model explore field map layer based on the context it is used
+func (m *LookmlModelExploreFieldMapLayer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateExtentsJSONURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFeatureKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFormat(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMaxZoomLevel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMinZoomLevel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProjection(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePropertyKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePropertyLabelKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateExtentsJSONURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "extents_json_url", "body", string(m.ExtentsJSONURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateFeatureKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "feature_key", "body", string(m.FeatureKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateFormat(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "format", "body", string(m.Format)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateMaxZoomLevel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "max_zoom_level", "body", int64(m.MaxZoomLevel)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateMinZoomLevel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "min_zoom_level", "body", int64(m.MinZoomLevel)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateProjection(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "projection", "body", string(m.Projection)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidatePropertyKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "property_key", "body", string(m.PropertyKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidatePropertyLabelKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "property_label_key", "body", string(m.PropertyLabelKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreFieldMapLayer) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", string(m.URL)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

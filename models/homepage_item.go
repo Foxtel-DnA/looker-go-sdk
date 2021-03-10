@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // HomepageItem homepage item
+//
 // swagger:model HomepageItem
 type HomepageItem struct {
 
@@ -73,6 +77,10 @@ type HomepageItem struct {
 	// Read Only: true
 	ImageURL string `json:"image_url,omitempty"`
 
+	// The container folder name of the content
+	// Read Only: true
+	Location string `json:"location,omitempty"`
+
 	// Look to base this item on
 	LookID int64 `json:"look_id,omitempty"`
 
@@ -113,6 +121,207 @@ type HomepageItem struct {
 
 // Validate validates this homepage item
 func (m *HomepageItem) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this homepage item based on the context it is used
+func (m *HomepageItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentCreatedBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentFavoriteID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentMetadataID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContentUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCustomImageURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFavoriteCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImageURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSectionFetchTime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTitle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateViewCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *HomepageItem) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateContentCreatedBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_created_by", "body", string(m.ContentCreatedBy)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateContentFavoriteID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_favorite_id", "body", int64(m.ContentFavoriteID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateContentMetadataID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_metadata_id", "body", int64(m.ContentMetadataID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateContentUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "content_updated_at", "body", string(m.ContentUpdatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateCustomImageURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "custom_image_url", "body", string(m.CustomImageURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateFavoriteCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "favorite_count", "body", int64(m.FavoriteCount)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateImageURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "image_url", "body", string(m.ImageURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateLocation(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "location", "body", string(m.Location)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateSectionFetchTime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "section_fetch_time", "body", float32(m.SectionFetchTime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateTitle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "title", "body", string(m.Title)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", string(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageItem) contextValidateViewCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "view_count", "body", int64(m.ViewCount)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

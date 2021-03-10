@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreatePermissionSetParams creates a new CreatePermissionSetParams object
-// with the default values initialized.
+// NewCreatePermissionSetParams creates a new CreatePermissionSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreatePermissionSetParams() *CreatePermissionSetParams {
-	var ()
 	return &CreatePermissionSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreatePermissionSetParamsWithTimeout creates a new CreatePermissionSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreatePermissionSetParamsWithTimeout(timeout time.Duration) *CreatePermissionSetParams {
-	var ()
 	return &CreatePermissionSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreatePermissionSetParamsWithContext creates a new CreatePermissionSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreatePermissionSetParamsWithContext(ctx context.Context) *CreatePermissionSetParams {
-	var ()
 	return &CreatePermissionSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreatePermissionSetParamsWithHTTPClient creates a new CreatePermissionSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreatePermissionSetParamsWithHTTPClient(client *http.Client) *CreatePermissionSetParams {
-	var ()
 	return &CreatePermissionSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreatePermissionSetParams contains all the parameters to send to the API endpoint
-for the create permission set operation typically these are written to a http.Request
+/* CreatePermissionSetParams contains all the parameters to send to the API endpoint
+   for the create permission set operation.
+
+   Typically these are written to a http.Request.
 */
 type CreatePermissionSetParams struct {
 
-	/*Body
-	  Permission Set
+	/* Body.
 
+	   Permission Set
 	*/
 	Body *models.PermissionSet
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create permission set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreatePermissionSetParams) WithDefaults() *CreatePermissionSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create permission set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreatePermissionSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create permission set params
@@ -125,7 +138,6 @@ func (o *CreatePermissionSetParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

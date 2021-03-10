@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // IntegrationReader is a Reader for the Integration structure.
@@ -24,30 +23,26 @@ type IntegrationReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *IntegrationReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewIntegrationOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewIntegrationBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewIntegrationNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewIntegrationOK() *IntegrationOK {
 	return &IntegrationOK{}
 }
 
-/*IntegrationOK handles this case with default header values.
+/* IntegrationOK describes a response with status code 200, with default header values.
 
 Integration
 */
@@ -66,6 +61,9 @@ type IntegrationOK struct {
 
 func (o *IntegrationOK) Error() string {
 	return fmt.Sprintf("[GET /integrations/{integration_id}][%d] integrationOK  %+v", 200, o.Payload)
+}
+func (o *IntegrationOK) GetPayload() *models.Integration {
+	return o.Payload
 }
 
 func (o *IntegrationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewIntegrationBadRequest() *IntegrationBadRequest {
 	return &IntegrationBadRequest{}
 }
 
-/*IntegrationBadRequest handles this case with default header values.
+/* IntegrationBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type IntegrationBadRequest struct {
 
 func (o *IntegrationBadRequest) Error() string {
 	return fmt.Sprintf("[GET /integrations/{integration_id}][%d] integrationBadRequest  %+v", 400, o.Payload)
+}
+func (o *IntegrationBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *IntegrationBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewIntegrationNotFound() *IntegrationNotFound {
 	return &IntegrationNotFound{}
 }
 
-/*IntegrationNotFound handles this case with default header values.
+/* IntegrationNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type IntegrationNotFound struct {
 
 func (o *IntegrationNotFound) Error() string {
 	return fmt.Sprintf("[GET /integrations/{integration_id}][%d] integrationNotFound  %+v", 404, o.Payload)
+}
+func (o *IntegrationNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *IntegrationNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateGitBranchParams creates a new CreateGitBranchParams object
-// with the default values initialized.
+// NewCreateGitBranchParams creates a new CreateGitBranchParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateGitBranchParams() *CreateGitBranchParams {
-	var ()
 	return &CreateGitBranchParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateGitBranchParamsWithTimeout creates a new CreateGitBranchParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateGitBranchParamsWithTimeout(timeout time.Duration) *CreateGitBranchParams {
-	var ()
 	return &CreateGitBranchParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateGitBranchParamsWithContext creates a new CreateGitBranchParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateGitBranchParamsWithContext(ctx context.Context) *CreateGitBranchParams {
-	var ()
 	return &CreateGitBranchParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateGitBranchParamsWithHTTPClient creates a new CreateGitBranchParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateGitBranchParamsWithHTTPClient(client *http.Client) *CreateGitBranchParams {
-	var ()
 	return &CreateGitBranchParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateGitBranchParams contains all the parameters to send to the API endpoint
-for the create git branch operation typically these are written to a http.Request
+/* CreateGitBranchParams contains all the parameters to send to the API endpoint
+   for the create git branch operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateGitBranchParams struct {
 
-	/*Body
-	  Git Branch
+	/* Body.
 
+	   Git Branch
 	*/
 	Body *models.GitBranch
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateGitBranchParams) WithDefaults() *CreateGitBranchParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create git branch params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateGitBranchParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create git branch params
@@ -141,7 +155,6 @@ func (o *CreateGitBranchParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreError lookml model explore error
+//
 // swagger:model LookmlModelExploreError
 type LookmlModelExploreError struct {
 
@@ -34,6 +38,68 @@ type LookmlModelExploreError struct {
 
 // Validate validates this lookml model explore error
 func (m *LookmlModelExploreError) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this lookml model explore error based on the context it is used
+func (m *LookmlModelExploreError) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrorPos(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFieldError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreError) contextValidateDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "details", "body", string(m.Details)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreError) contextValidateErrorPos(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "error_pos", "body", string(m.ErrorPos)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreError) contextValidateFieldError(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field_error", "body", m.FieldError); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreError) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

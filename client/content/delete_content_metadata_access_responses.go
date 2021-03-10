@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // DeleteContentMetadataAccessReader is a Reader for the DeleteContentMetadataAccess structure.
@@ -24,30 +23,32 @@ type DeleteContentMetadataAccessReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteContentMetadataAccessReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteContentMetadataAccessNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteContentMetadataAccessBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteContentMetadataAccessNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteContentMetadataAccessTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteContentMetadataAccessNoContent() *DeleteContentMetadataAccessNoCon
 	return &DeleteContentMetadataAccessNoContent{}
 }
 
-/*DeleteContentMetadataAccessNoContent handles this case with default header values.
+/* DeleteContentMetadataAccessNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteContentMetadataAccessNoContent struct {
 
 func (o *DeleteContentMetadataAccessNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /content_metadata_access/{content_metadata_access_id}][%d] deleteContentMetadataAccessNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteContentMetadataAccessNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteContentMetadataAccessNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteContentMetadataAccessBadRequest() *DeleteContentMetadataAccessBadR
 	return &DeleteContentMetadataAccessBadRequest{}
 }
 
-/*DeleteContentMetadataAccessBadRequest handles this case with default header values.
+/* DeleteContentMetadataAccessBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteContentMetadataAccessBadRequest struct {
 
 func (o *DeleteContentMetadataAccessBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /content_metadata_access/{content_metadata_access_id}][%d] deleteContentMetadataAccessBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteContentMetadataAccessBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteContentMetadataAccessBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteContentMetadataAccessNotFound() *DeleteContentMetadataAccessNotFou
 	return &DeleteContentMetadataAccessNotFound{}
 }
 
-/*DeleteContentMetadataAccessNotFound handles this case with default header values.
+/* DeleteContentMetadataAccessNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteContentMetadataAccessNotFound struct {
 func (o *DeleteContentMetadataAccessNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /content_metadata_access/{content_metadata_access_id}][%d] deleteContentMetadataAccessNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteContentMetadataAccessNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteContentMetadataAccessNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteContentMetadataAccessTooManyRequests creates a DeleteContentMetadataAccessTooManyRequests with default headers values
+func NewDeleteContentMetadataAccessTooManyRequests() *DeleteContentMetadataAccessTooManyRequests {
+	return &DeleteContentMetadataAccessTooManyRequests{}
+}
+
+/* DeleteContentMetadataAccessTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteContentMetadataAccessTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteContentMetadataAccessTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /content_metadata_access/{content_metadata_access_id}][%d] deleteContentMetadataAccessTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteContentMetadataAccessTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteContentMetadataAccessTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

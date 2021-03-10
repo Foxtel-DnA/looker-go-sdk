@@ -6,16 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // HomepageSection homepage section
+//
 // swagger:model HomepageSection
 type HomepageSection struct {
 
@@ -32,12 +33,14 @@ type HomepageSection struct {
 	// Format: date-time
 	DeletedAt strfmt.DateTime `json:"deleted_at,omitempty"`
 
+	// Description of the content found in this section.
+	Description string `json:"description,omitempty"`
+
 	// A URL pointing to a page showing further information about the content in the section.
 	// Read Only: true
 	DetailURL string `json:"detail_url,omitempty"`
 
 	// Id reference to parent homepage
-	// Read Only: true
 	HomepageID int64 `json:"homepage_id,omitempty"`
 
 	// Items in the homepage section
@@ -91,7 +94,6 @@ func (m *HomepageSection) Validate(formats strfmt.Registry) error {
 }
 
 func (m *HomepageSection) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -104,7 +106,6 @@ func (m *HomepageSection) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *HomepageSection) validateDeletedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeletedAt) { // not required
 		return nil
 	}
@@ -117,7 +118,6 @@ func (m *HomepageSection) validateDeletedAt(formats strfmt.Registry) error {
 }
 
 func (m *HomepageSection) validateHomepageItems(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.HomepageItems) { // not required
 		return nil
 	}
@@ -142,12 +142,121 @@ func (m *HomepageSection) validateHomepageItems(formats strfmt.Registry) error {
 }
 
 func (m *HomepageSection) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("updated_at", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this homepage section based on the context it is used
+func (m *HomepageSection) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDetailURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHomepageItems(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsHeader(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *HomepageSection) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", strfmt.DateTime(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateDetailURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "detail_url", "body", string(m.DetailURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateHomepageItems(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "homepage_items", "body", []*HomepageItem(m.HomepageItems)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.HomepageItems); i++ {
+
+		if m.HomepageItems[i] != nil {
+			if err := m.HomepageItems[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("homepage_items" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateIsHeader(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_header", "body", m.IsHeader); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *HomepageSection) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "updated_at", "body", strfmt.DateTime(m.UpdatedAt)); err != nil {
 		return err
 	}
 

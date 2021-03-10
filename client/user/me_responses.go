@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // MeReader is a Reader for the Me structure.
@@ -24,23 +23,20 @@ type MeReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *MeReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewMeOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 404:
 		result := NewMeNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -49,7 +45,7 @@ func NewMeOK() *MeOK {
 	return &MeOK{}
 }
 
-/*MeOK handles this case with default header values.
+/* MeOK describes a response with status code 200, with default header values.
 
 Current user.
 */
@@ -59,6 +55,9 @@ type MeOK struct {
 
 func (o *MeOK) Error() string {
 	return fmt.Sprintf("[GET /user][%d] meOK  %+v", 200, o.Payload)
+}
+func (o *MeOK) GetPayload() *models.User {
+	return o.Payload
 }
 
 func (o *MeOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -78,7 +77,7 @@ func NewMeNotFound() *MeNotFound {
 	return &MeNotFound{}
 }
 
-/*MeNotFound handles this case with default header values.
+/* MeNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -88,6 +87,9 @@ type MeNotFound struct {
 
 func (o *MeNotFound) Error() string {
 	return fmt.Sprintf("[GET /user][%d] meNotFound  %+v", 404, o.Payload)
+}
+func (o *MeNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *MeNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

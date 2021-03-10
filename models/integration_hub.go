@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // IntegrationHub integration hub
+//
 // swagger:model IntegrationHub
 type IntegrationHub struct {
 
@@ -60,6 +64,129 @@ type IntegrationHub struct {
 
 // Validate validates this integration hub
 func (m *IntegrationHub) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this integration hub based on the context it is used
+func (m *IntegrationHub) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFetchErrorMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasAuthorizationToken(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLegalAgreementRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLegalAgreementSigned(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLegalAgreementText(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOfficial(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateFetchErrorMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "fetch_error_message", "body", string(m.FetchErrorMessage)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateHasAuthorizationToken(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_authorization_token", "body", m.HasAuthorizationToken); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateLegalAgreementRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "legal_agreement_required", "body", m.LegalAgreementRequired); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateLegalAgreementSigned(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "legal_agreement_signed", "body", m.LegalAgreementSigned); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateLegalAgreementText(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "legal_agreement_text", "body", string(m.LegalAgreementText)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationHub) contextValidateOfficial(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "official", "body", m.Official); err != nil {
+		return err
+	}
+
 	return nil
 }
 

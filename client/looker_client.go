@@ -8,17 +8,18 @@ package client
 import (
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 
 	"github.com/billtrust/looker-go-sdk/client/api_auth"
 	"github.com/billtrust/looker-go-sdk/client/auth"
+	"github.com/billtrust/looker-go-sdk/client/color_collection"
 	"github.com/billtrust/looker-go-sdk/client/config"
 	"github.com/billtrust/looker-go-sdk/client/connection"
 	"github.com/billtrust/looker-go-sdk/client/content"
 	"github.com/billtrust/looker-go-sdk/client/dashboard"
 	"github.com/billtrust/looker-go-sdk/client/data_action"
 	"github.com/billtrust/looker-go-sdk/client/datagroup"
+	"github.com/billtrust/looker-go-sdk/client/folder"
 	"github.com/billtrust/looker-go-sdk/client/group"
 	"github.com/billtrust/looker-go-sdk/client/homepage"
 	"github.com/billtrust/looker-go-sdk/client/integration"
@@ -28,39 +29,38 @@ import (
 	"github.com/billtrust/looker-go-sdk/client/query"
 	"github.com/billtrust/looker-go-sdk/client/render_task"
 	"github.com/billtrust/looker-go-sdk/client/role"
-	"github.com/billtrust/looker-go-sdk/client/running_queries"
 	"github.com/billtrust/looker-go-sdk/client/scheduled_plan"
 	"github.com/billtrust/looker-go-sdk/client/session"
 	"github.com/billtrust/looker-go-sdk/client/space"
-	"github.com/billtrust/looker-go-sdk/client/sql_query"
+	"github.com/billtrust/looker-go-sdk/client/theme"
 	"github.com/billtrust/looker-go-sdk/client/user"
 	"github.com/billtrust/looker-go-sdk/client/user_attribute"
 	"github.com/billtrust/looker-go-sdk/client/workspace"
 )
 
-// Default looker api30 reference HTTP client.
+// Default looker HTTP client.
 var Default = NewHTTPClient(nil)
 
 const (
 	// DefaultHost is the default Host
 	// found in Meta (info) section of spec file
-	DefaultHost string = "billtrustdev.looker.com:19999"
+	DefaultHost string = "foxtel.cloud.looker.com:443"
 	// DefaultBasePath is the default BasePath
 	// found in Meta (info) section of spec file
-	DefaultBasePath string = "/api/3.0"
+	DefaultBasePath string = "/api/3.1"
 )
 
 // DefaultSchemes are the default schemes found in Meta (info) section of spec file
 var DefaultSchemes = []string{"https"}
 
-// NewHTTPClient creates a new looker api30 reference HTTP client.
-func NewHTTPClient(formats strfmt.Registry) *LookerAPI30Reference {
+// NewHTTPClient creates a new looker HTTP client.
+func NewHTTPClient(formats strfmt.Registry) *Looker {
 	return NewHTTPClientWithConfig(formats, nil)
 }
 
-// NewHTTPClientWithConfig creates a new looker api30 reference HTTP client,
+// NewHTTPClientWithConfig creates a new looker HTTP client,
 // using a customizable transport config.
-func NewHTTPClientWithConfig(formats strfmt.Registry, cfg *TransportConfig) *LookerAPI30Reference {
+func NewHTTPClientWithConfig(formats strfmt.Registry, cfg *TransportConfig) *Looker {
 	// ensure nullable parameters have default
 	if cfg == nil {
 		cfg = DefaultTransportConfig()
@@ -71,66 +71,41 @@ func NewHTTPClientWithConfig(formats strfmt.Registry, cfg *TransportConfig) *Loo
 	return New(transport, formats)
 }
 
-// New creates a new looker api30 reference client
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *LookerAPI30Reference {
+// New creates a new looker client
+func New(transport runtime.ClientTransport, formats strfmt.Registry) *Looker {
 	// ensure nullable parameters have default
 	if formats == nil {
 		formats = strfmt.Default
 	}
 
-	cli := new(LookerAPI30Reference)
+	cli := new(Looker)
 	cli.Transport = transport
-
 	cli.APIAuth = api_auth.New(transport, formats)
-
 	cli.Auth = auth.New(transport, formats)
-
+	cli.ColorCollection = color_collection.New(transport, formats)
 	cli.Config = config.New(transport, formats)
-
 	cli.Connection = connection.New(transport, formats)
-
 	cli.Content = content.New(transport, formats)
-
 	cli.Dashboard = dashboard.New(transport, formats)
-
 	cli.DataAction = data_action.New(transport, formats)
-
 	cli.Datagroup = datagroup.New(transport, formats)
-
+	cli.Folder = folder.New(transport, formats)
 	cli.Group = group.New(transport, formats)
-
 	cli.Homepage = homepage.New(transport, formats)
-
 	cli.Integration = integration.New(transport, formats)
-
 	cli.Look = look.New(transport, formats)
-
 	cli.LookmlModel = lookml_model.New(transport, formats)
-
 	cli.Project = project.New(transport, formats)
-
 	cli.Query = query.New(transport, formats)
-
 	cli.RenderTask = render_task.New(transport, formats)
-
 	cli.Role = role.New(transport, formats)
-
-	cli.RunningQueries = running_queries.New(transport, formats)
-
 	cli.ScheduledPlan = scheduled_plan.New(transport, formats)
-
 	cli.Session = session.New(transport, formats)
-
 	cli.Space = space.New(transport, formats)
-
-	cli.SQLQuery = sql_query.New(transport, formats)
-
+	cli.Theme = theme.New(transport, formats)
 	cli.User = user.New(transport, formats)
-
 	cli.UserAttribute = user_attribute.New(transport, formats)
-
 	cli.Workspace = workspace.New(transport, formats)
-
 	return cli
 }
 
@@ -173,113 +148,90 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 	return cfg
 }
 
-// LookerAPI30Reference is a client for looker api30 reference
-type LookerAPI30Reference struct {
-	APIAuth *api_auth.Client
+// Looker is a client for looker
+type Looker struct {
+	APIAuth api_auth.ClientService
 
-	Auth *auth.Client
+	Auth auth.ClientService
 
-	Config *config.Client
+	ColorCollection color_collection.ClientService
 
-	Connection *connection.Client
+	Config config.ClientService
 
-	Content *content.Client
+	Connection connection.ClientService
 
-	Dashboard *dashboard.Client
+	Content content.ClientService
 
-	DataAction *data_action.Client
+	Dashboard dashboard.ClientService
 
-	Datagroup *datagroup.Client
+	DataAction data_action.ClientService
 
-	Group *group.Client
+	Datagroup datagroup.ClientService
 
-	Homepage *homepage.Client
+	Folder folder.ClientService
 
-	Integration *integration.Client
+	Group group.ClientService
 
-	Look *look.Client
+	Homepage homepage.ClientService
 
-	LookmlModel *lookml_model.Client
+	Integration integration.ClientService
 
-	Project *project.Client
+	Look look.ClientService
 
-	Query *query.Client
+	LookmlModel lookml_model.ClientService
 
-	RenderTask *render_task.Client
+	Project project.ClientService
 
-	Role *role.Client
+	Query query.ClientService
 
-	RunningQueries *running_queries.Client
+	RenderTask render_task.ClientService
 
-	ScheduledPlan *scheduled_plan.Client
+	Role role.ClientService
 
-	Session *session.Client
+	ScheduledPlan scheduled_plan.ClientService
 
-	Space *space.Client
+	Session session.ClientService
 
-	SQLQuery *sql_query.Client
+	Space space.ClientService
 
-	User *user.Client
+	Theme theme.ClientService
 
-	UserAttribute *user_attribute.Client
+	User user.ClientService
 
-	Workspace *workspace.Client
+	UserAttribute user_attribute.ClientService
+
+	Workspace workspace.ClientService
 
 	Transport runtime.ClientTransport
 }
 
 // SetTransport changes the transport on the client and all its subresources
-func (c *LookerAPI30Reference) SetTransport(transport runtime.ClientTransport) {
+func (c *Looker) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
-
 	c.APIAuth.SetTransport(transport)
-
 	c.Auth.SetTransport(transport)
-
+	c.ColorCollection.SetTransport(transport)
 	c.Config.SetTransport(transport)
-
 	c.Connection.SetTransport(transport)
-
 	c.Content.SetTransport(transport)
-
 	c.Dashboard.SetTransport(transport)
-
 	c.DataAction.SetTransport(transport)
-
 	c.Datagroup.SetTransport(transport)
-
+	c.Folder.SetTransport(transport)
 	c.Group.SetTransport(transport)
-
 	c.Homepage.SetTransport(transport)
-
 	c.Integration.SetTransport(transport)
-
 	c.Look.SetTransport(transport)
-
 	c.LookmlModel.SetTransport(transport)
-
 	c.Project.SetTransport(transport)
-
 	c.Query.SetTransport(transport)
-
 	c.RenderTask.SetTransport(transport)
-
 	c.Role.SetTransport(transport)
-
-	c.RunningQueries.SetTransport(transport)
-
 	c.ScheduledPlan.SetTransport(transport)
-
 	c.Session.SetTransport(transport)
-
 	c.Space.SetTransport(transport)
-
-	c.SQLQuery.SetTransport(transport)
-
+	c.Theme.SetTransport(transport)
 	c.User.SetTransport(transport)
-
 	c.UserAttribute.SetTransport(transport)
-
 	c.Workspace.SetTransport(transport)
-
 }

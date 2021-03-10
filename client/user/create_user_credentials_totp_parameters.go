@@ -13,76 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateUserCredentialsTotpParams creates a new CreateUserCredentialsTotpParams object
-// with the default values initialized.
+// NewCreateUserCredentialsTotpParams creates a new CreateUserCredentialsTotpParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateUserCredentialsTotpParams() *CreateUserCredentialsTotpParams {
-	var ()
 	return &CreateUserCredentialsTotpParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateUserCredentialsTotpParamsWithTimeout creates a new CreateUserCredentialsTotpParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateUserCredentialsTotpParamsWithTimeout(timeout time.Duration) *CreateUserCredentialsTotpParams {
-	var ()
 	return &CreateUserCredentialsTotpParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateUserCredentialsTotpParamsWithContext creates a new CreateUserCredentialsTotpParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateUserCredentialsTotpParamsWithContext(ctx context.Context) *CreateUserCredentialsTotpParams {
-	var ()
 	return &CreateUserCredentialsTotpParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateUserCredentialsTotpParamsWithHTTPClient creates a new CreateUserCredentialsTotpParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateUserCredentialsTotpParamsWithHTTPClient(client *http.Client) *CreateUserCredentialsTotpParams {
-	var ()
 	return &CreateUserCredentialsTotpParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateUserCredentialsTotpParams contains all the parameters to send to the API endpoint
-for the create user credentials totp operation typically these are written to a http.Request
+/* CreateUserCredentialsTotpParams contains all the parameters to send to the API endpoint
+   for the create user credentials totp operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateUserCredentialsTotpParams struct {
 
-	/*Body
-	  Two-Factor Credential
+	/* Body.
 
+	   Two-Factor Credential
 	*/
 	Body *models.CredentialsTotp
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  id of user
 
+	/* UserID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create user credentials totp params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateUserCredentialsTotpParams) WithDefaults() *CreateUserCredentialsTotpParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create user credentials totp params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateUserCredentialsTotpParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create user credentials totp params
@@ -158,7 +175,6 @@ func (o *CreateUserCredentialsTotpParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,16 +185,17 @@ func (o *CreateUserCredentialsTotpParams) WriteToRequest(r runtime.ClientRequest
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

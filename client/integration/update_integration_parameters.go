@@ -13,76 +13,90 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateIntegrationParams creates a new UpdateIntegrationParams object
-// with the default values initialized.
+// NewUpdateIntegrationParams creates a new UpdateIntegrationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateIntegrationParams() *UpdateIntegrationParams {
-	var ()
 	return &UpdateIntegrationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateIntegrationParamsWithTimeout creates a new UpdateIntegrationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateIntegrationParamsWithTimeout(timeout time.Duration) *UpdateIntegrationParams {
-	var ()
 	return &UpdateIntegrationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateIntegrationParamsWithContext creates a new UpdateIntegrationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateIntegrationParamsWithContext(ctx context.Context) *UpdateIntegrationParams {
-	var ()
 	return &UpdateIntegrationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateIntegrationParamsWithHTTPClient creates a new UpdateIntegrationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateIntegrationParamsWithHTTPClient(client *http.Client) *UpdateIntegrationParams {
-	var ()
 	return &UpdateIntegrationParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateIntegrationParams contains all the parameters to send to the API endpoint
-for the update integration operation typically these are written to a http.Request
+/* UpdateIntegrationParams contains all the parameters to send to the API endpoint
+   for the update integration operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateIntegrationParams struct {
 
-	/*Body
-	  Integration
+	/* Body.
 
+	   Integration
 	*/
 	Body *models.Integration
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*IntegrationID
-	  Id of Integration
 
+	/* IntegrationID.
+
+	   Id of integration
 	*/
-	IntegrationID int64
+	IntegrationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update integration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateIntegrationParams) WithDefaults() *UpdateIntegrationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update integration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateIntegrationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update integration params
@@ -141,13 +155,13 @@ func (o *UpdateIntegrationParams) SetFields(fields *string) {
 }
 
 // WithIntegrationID adds the integrationID to the update integration params
-func (o *UpdateIntegrationParams) WithIntegrationID(integrationID int64) *UpdateIntegrationParams {
+func (o *UpdateIntegrationParams) WithIntegrationID(integrationID string) *UpdateIntegrationParams {
 	o.SetIntegrationID(integrationID)
 	return o
 }
 
 // SetIntegrationID adds the integrationId to the update integration params
-func (o *UpdateIntegrationParams) SetIntegrationID(integrationID int64) {
+func (o *UpdateIntegrationParams) SetIntegrationID(integrationID string) {
 	o.IntegrationID = integrationID
 }
 
@@ -158,7 +172,6 @@ func (o *UpdateIntegrationParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,20 +182,21 @@ func (o *UpdateIntegrationParams) WriteToRequest(r runtime.ClientRequest, reg st
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param integration_id
-	if err := r.SetPathParam("integration_id", swag.FormatInt64(o.IntegrationID)); err != nil {
+	if err := r.SetPathParam("integration_id", o.IntegrationID); err != nil {
 		return err
 	}
 

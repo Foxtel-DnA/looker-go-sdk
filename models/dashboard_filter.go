@@ -6,18 +6,20 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // DashboardFilter dashboard filter
+//
 // swagger:model DashboardFilter
 type DashboardFilter struct {
 
-	// Whether the filter allows multiple filter values
+	// Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
 	AllowMultipleValues bool `json:"allow_multiple_values,omitempty"`
 
 	// Operations the current user is able to perform on this object
@@ -52,8 +54,7 @@ type DashboardFilter struct {
 	Model string `json:"model,omitempty"`
 
 	// Name of filter
-	// Required: true
-	Name *string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	// Whether the filter requires a value to run the dashboard
 	Required bool `json:"required,omitempty"`
@@ -62,27 +63,37 @@ type DashboardFilter struct {
 	Row int64 `json:"row,omitempty"`
 
 	// Title of filter
-	// Required: true
-	Title *string `json:"title"`
+	Title string `json:"title,omitempty"`
 
 	// Type of filter: one of date, number, string, or field
-	// Required: true
-	Type *string `json:"type"`
+	Type string `json:"type,omitempty"`
+
+	// The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+	UIConfig map[string]string `json:"ui_config,omitempty"`
 }
 
 // Validate validates this dashboard filter
 func (m *DashboardFilter) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this dashboard filter based on the context it is used
+func (m *DashboardFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateName(formats); err != nil {
+	if err := m.contextValidateCan(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateTitle(formats); err != nil {
+	if err := m.contextValidateDashboardID(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateType(formats); err != nil {
+	if err := m.contextValidateField(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -92,27 +103,28 @@ func (m *DashboardFilter) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DashboardFilter) validateName(formats strfmt.Registry) error {
+func (m *DashboardFilter) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.Required("name", "body", m.Name); err != nil {
+	return nil
+}
+
+func (m *DashboardFilter) contextValidateDashboardID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dashboard_id", "body", string(m.DashboardID)); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *DashboardFilter) validateTitle(formats strfmt.Registry) error {
-
-	if err := validate.Required("title", "body", m.Title); err != nil {
-		return err
-	}
+func (m *DashboardFilter) contextValidateField(ctx context.Context, formats strfmt.Registry) error {
 
 	return nil
 }
 
-func (m *DashboardFilter) validateType(formats strfmt.Registry) error {
+func (m *DashboardFilter) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
 
-	if err := validate.Required("type", "body", m.Type); err != nil {
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
 		return err
 	}
 

@@ -6,15 +6,17 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DBConnectionBase d b connection base
+//
 // swagger:model DBConnectionBase
 type DBConnectionBase struct {
 
@@ -29,6 +31,10 @@ type DBConnectionBase struct {
 	// Name of the connection. Also used as the unique identifier
 	// Read Only: true
 	Name string `json:"name,omitempty"`
+
+	// True if PDTs are enabled on this connection
+	// Read Only: true
+	PdtsEnabled *bool `json:"pdts_enabled,omitempty"`
 
 	// SQL Runner snippets for this connection
 	// Read Only: true
@@ -54,7 +60,6 @@ func (m *DBConnectionBase) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DBConnectionBase) validateDialect(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dialect) { // not required
 		return nil
 	}
@@ -72,7 +77,6 @@ func (m *DBConnectionBase) validateDialect(formats strfmt.Registry) error {
 }
 
 func (m *DBConnectionBase) validateSnippets(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Snippets) { // not required
 		return nil
 	}
@@ -84,6 +88,95 @@ func (m *DBConnectionBase) validateSnippets(formats strfmt.Registry) error {
 
 		if m.Snippets[i] != nil {
 			if err := m.Snippets[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("snippets" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this d b connection base based on the context it is used
+func (m *DBConnectionBase) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDialect(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePdtsEnabled(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSnippets(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DBConnectionBase) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DBConnectionBase) contextValidateDialect(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Dialect != nil {
+		if err := m.Dialect.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("dialect")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DBConnectionBase) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnectionBase) contextValidatePdtsEnabled(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "pdts_enabled", "body", m.PdtsEnabled); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DBConnectionBase) contextValidateSnippets(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "snippets", "body", []*Snippet(m.Snippets)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Snippets); i++ {
+
+		if m.Snippets[i] != nil {
+			if err := m.Snippets[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("snippets" + "." + strconv.Itoa(i))
 				}

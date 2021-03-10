@@ -13,71 +13,87 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateModelSetParams creates a new UpdateModelSetParams object
-// with the default values initialized.
+// NewUpdateModelSetParams creates a new UpdateModelSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateModelSetParams() *UpdateModelSetParams {
-	var ()
 	return &UpdateModelSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateModelSetParamsWithTimeout creates a new UpdateModelSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateModelSetParamsWithTimeout(timeout time.Duration) *UpdateModelSetParams {
-	var ()
 	return &UpdateModelSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateModelSetParamsWithContext creates a new UpdateModelSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateModelSetParamsWithContext(ctx context.Context) *UpdateModelSetParams {
-	var ()
 	return &UpdateModelSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateModelSetParamsWithHTTPClient creates a new UpdateModelSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateModelSetParamsWithHTTPClient(client *http.Client) *UpdateModelSetParams {
-	var ()
 	return &UpdateModelSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateModelSetParams contains all the parameters to send to the API endpoint
-for the update model set operation typically these are written to a http.Request
+/* UpdateModelSetParams contains all the parameters to send to the API endpoint
+   for the update model set operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateModelSetParams struct {
 
-	/*Body
-	  ModelSet
+	/* Body.
 
+	   ModelSet
 	*/
 	Body *models.ModelSet
-	/*ModelSetID
-	  id of model set
 
+	/* ModelSetID.
+
+	   id of model set
+
+	   Format: int64
 	*/
 	ModelSetID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateModelSetParams) WithDefaults() *UpdateModelSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateModelSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update model set params
@@ -142,7 +158,6 @@ func (o *UpdateModelSetParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

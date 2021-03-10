@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllUsersReader is a Reader for the AllUsers structure.
@@ -24,30 +23,26 @@ type AllUsersReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllUsersReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllUsersOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllUsersBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllUsersNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllUsersOK() *AllUsersOK {
 	return &AllUsersOK{}
 }
 
-/*AllUsersOK handles this case with default header values.
+/* AllUsersOK describes a response with status code 200, with default header values.
 
 All users.
 */
@@ -66,6 +61,9 @@ type AllUsersOK struct {
 
 func (o *AllUsersOK) Error() string {
 	return fmt.Sprintf("[GET /users][%d] allUsersOK  %+v", 200, o.Payload)
+}
+func (o *AllUsersOK) GetPayload() []*models.User {
+	return o.Payload
 }
 
 func (o *AllUsersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllUsersBadRequest() *AllUsersBadRequest {
 	return &AllUsersBadRequest{}
 }
 
-/*AllUsersBadRequest handles this case with default header values.
+/* AllUsersBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllUsersBadRequest struct {
 
 func (o *AllUsersBadRequest) Error() string {
 	return fmt.Sprintf("[GET /users][%d] allUsersBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllUsersBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUsersBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllUsersNotFound() *AllUsersNotFound {
 	return &AllUsersNotFound{}
 }
 
-/*AllUsersNotFound handles this case with default header values.
+/* AllUsersNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllUsersNotFound struct {
 
 func (o *AllUsersNotFound) Error() string {
 	return fmt.Sprintf("[GET /users][%d] allUsersNotFound  %+v", 404, o.Payload)
+}
+func (o *AllUsersNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllUsersNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

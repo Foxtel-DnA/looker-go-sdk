@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateBackupConfigurationReader is a Reader for the UpdateBackupConfiguration structure.
@@ -24,37 +23,32 @@ type UpdateBackupConfigurationReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateBackupConfigurationReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateBackupConfigurationOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateBackupConfigurationBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateBackupConfigurationNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateBackupConfigurationUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewUpdateBackupConfigurationOK() *UpdateBackupConfigurationOK {
 	return &UpdateBackupConfigurationOK{}
 }
 
-/*UpdateBackupConfigurationOK handles this case with default header values.
+/* UpdateBackupConfigurationOK describes a response with status code 200, with default header values.
 
 New state for specified model set.
 */
@@ -73,6 +67,9 @@ type UpdateBackupConfigurationOK struct {
 
 func (o *UpdateBackupConfigurationOK) Error() string {
 	return fmt.Sprintf("[PATCH /backup_configuration][%d] updateBackupConfigurationOK  %+v", 200, o.Payload)
+}
+func (o *UpdateBackupConfigurationOK) GetPayload() *models.BackupConfiguration {
+	return o.Payload
 }
 
 func (o *UpdateBackupConfigurationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewUpdateBackupConfigurationBadRequest() *UpdateBackupConfigurationBadReque
 	return &UpdateBackupConfigurationBadRequest{}
 }
 
-/*UpdateBackupConfigurationBadRequest handles this case with default header values.
+/* UpdateBackupConfigurationBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type UpdateBackupConfigurationBadRequest struct {
 
 func (o *UpdateBackupConfigurationBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /backup_configuration][%d] updateBackupConfigurationBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateBackupConfigurationBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateBackupConfigurationBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewUpdateBackupConfigurationNotFound() *UpdateBackupConfigurationNotFound {
 	return &UpdateBackupConfigurationNotFound{}
 }
 
-/*UpdateBackupConfigurationNotFound handles this case with default header values.
+/* UpdateBackupConfigurationNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type UpdateBackupConfigurationNotFound struct {
 
 func (o *UpdateBackupConfigurationNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /backup_configuration][%d] updateBackupConfigurationNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateBackupConfigurationNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateBackupConfigurationNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewUpdateBackupConfigurationUnprocessableEntity() *UpdateBackupConfiguratio
 	return &UpdateBackupConfigurationUnprocessableEntity{}
 }
 
-/*UpdateBackupConfigurationUnprocessableEntity handles this case with default header values.
+/* UpdateBackupConfigurationUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type UpdateBackupConfigurationUnprocessableEntity struct {
 
 func (o *UpdateBackupConfigurationUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /backup_configuration][%d] updateBackupConfigurationUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *UpdateBackupConfigurationUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *UpdateBackupConfigurationUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllGitConnectionTestsReader is a Reader for the AllGitConnectionTests structure.
@@ -24,30 +23,26 @@ type AllGitConnectionTestsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllGitConnectionTestsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllGitConnectionTestsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllGitConnectionTestsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllGitConnectionTestsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllGitConnectionTestsOK() *AllGitConnectionTestsOK {
 	return &AllGitConnectionTestsOK{}
 }
 
-/*AllGitConnectionTestsOK handles this case with default header values.
+/* AllGitConnectionTestsOK describes a response with status code 200, with default header values.
 
 Git Connection Test
 */
@@ -66,6 +61,9 @@ type AllGitConnectionTestsOK struct {
 
 func (o *AllGitConnectionTestsOK) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/git_connection_tests][%d] allGitConnectionTestsOK  %+v", 200, o.Payload)
+}
+func (o *AllGitConnectionTestsOK) GetPayload() []*models.GitConnectionTest {
+	return o.Payload
 }
 
 func (o *AllGitConnectionTestsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllGitConnectionTestsBadRequest() *AllGitConnectionTestsBadRequest {
 	return &AllGitConnectionTestsBadRequest{}
 }
 
-/*AllGitConnectionTestsBadRequest handles this case with default header values.
+/* AllGitConnectionTestsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllGitConnectionTestsBadRequest struct {
 
 func (o *AllGitConnectionTestsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/git_connection_tests][%d] allGitConnectionTestsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllGitConnectionTestsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllGitConnectionTestsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllGitConnectionTestsNotFound() *AllGitConnectionTestsNotFound {
 	return &AllGitConnectionTestsNotFound{}
 }
 
-/*AllGitConnectionTestsNotFound handles this case with default header values.
+/* AllGitConnectionTestsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllGitConnectionTestsNotFound struct {
 
 func (o *AllGitConnectionTestsNotFound) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/git_connection_tests][%d] allGitConnectionTestsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllGitConnectionTestsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllGitConnectionTestsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ProjectError project error
+//
 // swagger:model ProjectError
 type ProjectError struct {
 
@@ -66,6 +70,168 @@ type ProjectError struct {
 
 // Validate validates this project error
 func (m *ProjectError) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this project error based on the context it is used
+func (m *ProjectError) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExplore(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFieldName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFilePath(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHelpURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateKind(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLineNumber(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModelID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateParams(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSanitizedMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSeverity(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ProjectError) contextValidateCode(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "code", "body", string(m.Code)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateExplore(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "explore", "body", string(m.Explore)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateFieldName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field_name", "body", string(m.FieldName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateFilePath(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "file_path", "body", string(m.FilePath)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateHelpURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "help_url", "body", string(m.HelpURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateKind(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "kind", "body", string(m.Kind)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateLineNumber(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "line_number", "body", int64(m.LineNumber)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateModelID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "model_id", "body", string(m.ModelID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateParams(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateSanitizedMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sanitized_message", "body", string(m.SanitizedMessage)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *ProjectError) contextValidateSeverity(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "severity", "body", string(m.Severity)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -6,21 +6,19 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // DataActionRequest data action request
+//
 // swagger:model DataActionRequest
 type DataActionRequest struct {
 
 	// The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
 	Action map[string]string `json:"action,omitempty"`
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// User input for any form values the data action might use.
 	FormValues map[string]string `json:"form_values,omitempty"`
@@ -28,6 +26,11 @@ type DataActionRequest struct {
 
 // Validate validates this data action request
 func (m *DataActionRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this data action request based on context it is used
+func (m *DataActionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

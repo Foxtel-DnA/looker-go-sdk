@@ -6,18 +6,28 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // LDAPConfig l d a p config
+//
 // swagger:model LDAPConfig
 type LDAPConfig struct {
+
+	// Allows roles to be directly assigned to LDAP auth'd users.
+	AllowDirectRoles bool `json:"allow_direct_roles,omitempty"`
+
+	// Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+	AllowNormalGroupMembership bool `json:"allow_normal_group_membership,omitempty"`
+
+	// LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+	AllowRolesFromNormalGroups bool `json:"allow_roles_from_normal_groups,omitempty"`
 
 	// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
 	AlternateEmailLoginAllowed bool `json:"alternate_email_login_allowed,omitempty"`
@@ -189,7 +199,6 @@ func (m *LDAPConfig) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LDAPConfig) validateDefaultNewUserGroups(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DefaultNewUserGroups) { // not required
 		return nil
 	}
@@ -214,7 +223,6 @@ func (m *LDAPConfig) validateDefaultNewUserGroups(formats strfmt.Registry) error
 }
 
 func (m *LDAPConfig) validateDefaultNewUserRoles(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DefaultNewUserRoles) { // not required
 		return nil
 	}
@@ -239,7 +247,6 @@ func (m *LDAPConfig) validateDefaultNewUserRoles(formats strfmt.Registry) error 
 }
 
 func (m *LDAPConfig) validateGroups(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Groups) { // not required
 		return nil
 	}
@@ -264,7 +271,6 @@ func (m *LDAPConfig) validateGroups(formats strfmt.Registry) error {
 }
 
 func (m *LDAPConfig) validateGroupsWithRoleIds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GroupsWithRoleIds) { // not required
 		return nil
 	}
@@ -289,7 +295,6 @@ func (m *LDAPConfig) validateGroupsWithRoleIds(formats strfmt.Registry) error {
 }
 
 func (m *LDAPConfig) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
@@ -302,7 +307,6 @@ func (m *LDAPConfig) validateURL(formats strfmt.Registry) error {
 }
 
 func (m *LDAPConfig) validateUserAttributes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributes) { // not required
 		return nil
 	}
@@ -327,7 +331,6 @@ func (m *LDAPConfig) validateUserAttributes(formats strfmt.Registry) error {
 }
 
 func (m *LDAPConfig) validateUserAttributesWithIds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributesWithIds) { // not required
 		return nil
 	}
@@ -339,6 +342,225 @@ func (m *LDAPConfig) validateUserAttributesWithIds(formats strfmt.Registry) erro
 
 		if m.UserAttributesWithIds[i] != nil {
 			if err := m.UserAttributesWithIds[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes_with_ids" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this l d a p config based on the context it is used
+func (m *LDAPConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultNewUserGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDefaultNewUserRoles(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroupsWithRoleIds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasAuthPassword(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiedBy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributesWithIds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateDefaultNewUserGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_new_user_groups", "body", []*Group(m.DefaultNewUserGroups)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DefaultNewUserGroups); i++ {
+
+		if m.DefaultNewUserGroups[i] != nil {
+			if err := m.DefaultNewUserGroups[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("default_new_user_groups" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateDefaultNewUserRoles(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "default_new_user_roles", "body", []*Role(m.DefaultNewUserRoles)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.DefaultNewUserRoles); i++ {
+
+		if m.DefaultNewUserRoles[i] != nil {
+			if err := m.DefaultNewUserRoles[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("default_new_user_roles" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "groups", "body", []*LDAPGroupRead(m.Groups)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Groups); i++ {
+
+		if m.Groups[i] != nil {
+			if err := m.Groups[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("groups" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateGroupsWithRoleIds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.GroupsWithRoleIds); i++ {
+
+		if m.GroupsWithRoleIds[i] != nil {
+			if err := m.GroupsWithRoleIds[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("groups_with_role_ids" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateHasAuthPassword(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_auth_password", "body", m.HasAuthPassword); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateModifiedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "modified_at", "body", string(m.ModifiedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateModifiedBy(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "modified_by", "body", string(m.ModifiedBy)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateUserAttributes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attributes", "body", []*LDAPUserAttributeRead(m.UserAttributes)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.UserAttributes); i++ {
+
+		if m.UserAttributes[i] != nil {
+			if err := m.UserAttributes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LDAPConfig) contextValidateUserAttributesWithIds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.UserAttributesWithIds); i++ {
+
+		if m.UserAttributesWithIds[i] != nil {
+			if err := m.UserAttributesWithIds[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("user_attributes_with_ids" + "." + strconv.Itoa(i))
 				}

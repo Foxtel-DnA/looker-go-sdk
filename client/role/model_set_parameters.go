@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewModelSetParams creates a new ModelSetParams object
-// with the default values initialized.
+// NewModelSetParams creates a new ModelSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewModelSetParams() *ModelSetParams {
-	var ()
 	return &ModelSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewModelSetParamsWithTimeout creates a new ModelSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewModelSetParamsWithTimeout(timeout time.Duration) *ModelSetParams {
-	var ()
 	return &ModelSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewModelSetParamsWithContext creates a new ModelSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewModelSetParamsWithContext(ctx context.Context) *ModelSetParams {
-	var ()
 	return &ModelSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewModelSetParamsWithHTTPClient creates a new ModelSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewModelSetParamsWithHTTPClient(client *http.Client) *ModelSetParams {
-	var ()
 	return &ModelSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*ModelSetParams contains all the parameters to send to the API endpoint
-for the model set operation typically these are written to a http.Request
+/* ModelSetParams contains all the parameters to send to the API endpoint
+   for the model set operation.
+
+   Typically these are written to a http.Request.
 */
 type ModelSetParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*ModelSetID
-	  Id of model set
 
+	/* ModelSetID.
+
+	   Id of model set
+
+	   Format: int64
 	*/
 	ModelSetID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ModelSetParams) WithDefaults() *ModelSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ModelSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the model set params
@@ -145,16 +161,17 @@ func (o *ModelSetParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param model_set_id

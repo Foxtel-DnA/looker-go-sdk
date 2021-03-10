@@ -6,13 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DataActionResponse data action response
+//
 // swagger:model DataActionResponse
 type DataActionResponse struct {
 
@@ -52,7 +55,6 @@ func (m *DataActionResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DataActionResponse) validateValidationErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ValidationErrors) { // not required
 		return nil
 	}
@@ -64,6 +66,86 @@ func (m *DataActionResponse) validateValidationErrors(formats strfmt.Registry) e
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this data action response based on the context it is used
+func (m *DataActionResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefreshQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSuccess(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateValidationErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWebhookID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DataActionResponse) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DataActionResponse) contextValidateRefreshQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "refresh_query", "body", m.RefreshQuery); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DataActionResponse) contextValidateSuccess(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "success", "body", m.Success); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DataActionResponse) contextValidateValidationErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ValidationErrors != nil {
+		if err := m.ValidationErrors.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("validation_errors")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DataActionResponse) contextValidateWebhookID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "webhook_id", "body", string(m.WebhookID)); err != nil {
+		return err
 	}
 
 	return nil

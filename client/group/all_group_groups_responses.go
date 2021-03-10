@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllGroupGroupsReader is a Reader for the AllGroupGroups structure.
@@ -24,30 +23,26 @@ type AllGroupGroupsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllGroupGroupsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllGroupGroupsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllGroupGroupsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllGroupGroupsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllGroupGroupsOK() *AllGroupGroupsOK {
 	return &AllGroupGroupsOK{}
 }
 
-/*AllGroupGroupsOK handles this case with default header values.
+/* AllGroupGroupsOK describes a response with status code 200, with default header values.
 
 All groups in group.
 */
@@ -66,6 +61,9 @@ type AllGroupGroupsOK struct {
 
 func (o *AllGroupGroupsOK) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}/groups][%d] allGroupGroupsOK  %+v", 200, o.Payload)
+}
+func (o *AllGroupGroupsOK) GetPayload() []*models.Group {
+	return o.Payload
 }
 
 func (o *AllGroupGroupsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllGroupGroupsBadRequest() *AllGroupGroupsBadRequest {
 	return &AllGroupGroupsBadRequest{}
 }
 
-/*AllGroupGroupsBadRequest handles this case with default header values.
+/* AllGroupGroupsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllGroupGroupsBadRequest struct {
 
 func (o *AllGroupGroupsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}/groups][%d] allGroupGroupsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllGroupGroupsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllGroupGroupsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllGroupGroupsNotFound() *AllGroupGroupsNotFound {
 	return &AllGroupGroupsNotFound{}
 }
 
-/*AllGroupGroupsNotFound handles this case with default header values.
+/* AllGroupGroupsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllGroupGroupsNotFound struct {
 
 func (o *AllGroupGroupsNotFound) Error() string {
 	return fmt.Sprintf("[GET /groups/{group_id}/groups][%d] allGroupGroupsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllGroupGroupsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllGroupGroupsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

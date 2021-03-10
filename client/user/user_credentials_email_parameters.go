@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserCredentialsEmailParams creates a new UserCredentialsEmailParams object
-// with the default values initialized.
+// NewUserCredentialsEmailParams creates a new UserCredentialsEmailParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserCredentialsEmailParams() *UserCredentialsEmailParams {
-	var ()
 	return &UserCredentialsEmailParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserCredentialsEmailParamsWithTimeout creates a new UserCredentialsEmailParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserCredentialsEmailParamsWithTimeout(timeout time.Duration) *UserCredentialsEmailParams {
-	var ()
 	return &UserCredentialsEmailParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserCredentialsEmailParamsWithContext creates a new UserCredentialsEmailParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserCredentialsEmailParamsWithContext(ctx context.Context) *UserCredentialsEmailParams {
-	var ()
 	return &UserCredentialsEmailParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserCredentialsEmailParamsWithHTTPClient creates a new UserCredentialsEmailParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserCredentialsEmailParamsWithHTTPClient(client *http.Client) *UserCredentialsEmailParams {
-	var ()
 	return &UserCredentialsEmailParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserCredentialsEmailParams contains all the parameters to send to the API endpoint
-for the user credentials email operation typically these are written to a http.Request
+/* UserCredentialsEmailParams contains all the parameters to send to the API endpoint
+   for the user credentials email operation.
+
+   Typically these are written to a http.Request.
 */
 type UserCredentialsEmailParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  id of user
 
+	/* UserID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user credentials email params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsEmailParams) WithDefaults() *UserCredentialsEmailParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user credentials email params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsEmailParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user credentials email params
@@ -145,16 +161,17 @@ func (o *UserCredentialsEmailParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

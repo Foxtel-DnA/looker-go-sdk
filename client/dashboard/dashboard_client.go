@@ -6,13 +6,14 @@ package dashboard
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new dashboard API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,25 +25,90 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllDashboards gets all dashboards
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get information about all active dashboards.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllDashboards(params *AllDashboardsParams, opts ...ClientOption) (*AllDashboardsOK, error)
+
+	CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error)
+
+	CreateDashboardElement(params *CreateDashboardElementParams, opts ...ClientOption) (*CreateDashboardElementOK, error)
+
+	CreateDashboardFilter(params *CreateDashboardFilterParams, opts ...ClientOption) (*CreateDashboardFilterOK, error)
+
+	CreateDashboardLayout(params *CreateDashboardLayoutParams, opts ...ClientOption) (*CreateDashboardLayoutOK, error)
+
+	Dashboard(params *DashboardParams, opts ...ClientOption) (*DashboardOK, error)
+
+	DashboardAggregateTableLookml(params *DashboardAggregateTableLookmlParams, opts ...ClientOption) (*DashboardAggregateTableLookmlOK, error)
+
+	DashboardDashboardElements(params *DashboardDashboardElementsParams, opts ...ClientOption) (*DashboardDashboardElementsOK, error)
+
+	DashboardDashboardFilters(params *DashboardDashboardFiltersParams, opts ...ClientOption) (*DashboardDashboardFiltersOK, error)
+
+	DashboardDashboardLayouts(params *DashboardDashboardLayoutsParams, opts ...ClientOption) (*DashboardDashboardLayoutsOK, error)
+
+	DashboardElement(params *DashboardElementParams, opts ...ClientOption) (*DashboardElementOK, error)
+
+	DashboardFilter(params *DashboardFilterParams, opts ...ClientOption) (*DashboardFilterOK, error)
+
+	DashboardLayout(params *DashboardLayoutParams, opts ...ClientOption) (*DashboardLayoutOK, error)
+
+	DashboardLayoutComponent(params *DashboardLayoutComponentParams, opts ...ClientOption) (*DashboardLayoutComponentOK, error)
+
+	DashboardLayoutDashboardLayoutComponents(params *DashboardLayoutDashboardLayoutComponentsParams, opts ...ClientOption) (*DashboardLayoutDashboardLayoutComponentsOK, error)
+
+	DashboardLookml(params *DashboardLookmlParams, opts ...ClientOption) (*DashboardLookmlOK, error)
+
+	DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardNoContent, error)
+
+	DeleteDashboardElement(params *DeleteDashboardElementParams, opts ...ClientOption) (*DeleteDashboardElementNoContent, error)
+
+	DeleteDashboardFilter(params *DeleteDashboardFilterParams, opts ...ClientOption) (*DeleteDashboardFilterNoContent, error)
+
+	DeleteDashboardLayout(params *DeleteDashboardLayoutParams, opts ...ClientOption) (*DeleteDashboardLayoutNoContent, error)
+
+	ImportLookmlDashboard(params *ImportLookmlDashboardParams, opts ...ClientOption) (*ImportLookmlDashboardOK, *ImportLookmlDashboardCreated, error)
+
+	SearchDashboardElements(params *SearchDashboardElementsParams, opts ...ClientOption) (*SearchDashboardElementsOK, error)
+
+	SearchDashboards(params *SearchDashboardsParams, opts ...ClientOption) (*SearchDashboardsOK, error)
+
+	SyncLookmlDashboard(params *SyncLookmlDashboardParams, opts ...ClientOption) (*SyncLookmlDashboardOK, error)
+
+	UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error)
+
+	UpdateDashboardElement(params *UpdateDashboardElementParams, opts ...ClientOption) (*UpdateDashboardElementOK, error)
+
+	UpdateDashboardFilter(params *UpdateDashboardFilterParams, opts ...ClientOption) (*UpdateDashboardFilterOK, error)
+
+	UpdateDashboardLayout(params *UpdateDashboardLayoutParams, opts ...ClientOption) (*UpdateDashboardLayoutOK, error)
+
+	UpdateDashboardLayoutComponent(params *UpdateDashboardLayoutComponentParams, opts ...ClientOption) (*UpdateDashboardLayoutComponentOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllDashboards gets all dashboards
+
+  ### Get information about all active dashboards.
 
 Returns an array of **abbreviated dashboard objects**. Dashboards marked as deleted are excluded from this list.
 
-Get the **full details** of a specific dashboard by id with [Dashboard](#!/Dashboard/dashboard)
+Get the **full details** of a specific dashboard by id with [dashboard()](#!/Dashboard/dashboard)
 
-Find **deleted dashboards** with [Search Dashboards](#!/Dashboard/search_dashboards)
+Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
 
 */
-func (a *Client) AllDashboards(params *AllDashboardsParams) (*AllDashboardsOK, error) {
+func (a *Client) AllDashboards(params *AllDashboardsParams, opts ...ClientOption) (*AllDashboardsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllDashboardsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_dashboards",
 		Method:             "GET",
 		PathPattern:        "/dashboards",
@@ -53,33 +119,50 @@ func (a *Client) AllDashboards(params *AllDashboardsParams) (*AllDashboardsOK, e
 		Reader:             &AllDashboardsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllDashboardsOK), nil
-
+	success, ok := result.(*AllDashboardsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_dashboards: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateDashboard creates dashboard
+  CreateDashboard creates dashboard
 
-### Create a dashboard with the specified information
+  ### Create a new dashboard
 
-Creates a new dashboard object, returning the dashboard details, including the created id.
+Creates a new dashboard object and returns the details of the newly created dashboard.
 
-**Update** an existing dashboard with [Update Dashboard](#!/Dashboard/update_dashboard)
+`Title`, `user_id`, and `space_id` are all required fields.
+`Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+A dashboard's `title` must be unique within the space in which it resides.
 
-**Permanently delete** an existing dashboard with [Delete Dashboard](#!/Dashboard/delete_dashboard)
+If you receive a 422 error response when creating a dashboard, be sure to look at the
+response body for information about exactly which fields are missing or contain invalid data.
+
+You can **update** an existing dashboard with [update_dashboard()](#!/Dashboard/update_dashboard)
+
+You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
 
 */
-func (a *Client) CreateDashboard(params *CreateDashboardParams) (*CreateDashboardOK, error) {
+func (a *Client) CreateDashboard(params *CreateDashboardParams, opts ...ClientOption) (*CreateDashboardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_dashboard",
 		Method:             "POST",
 		PathPattern:        "/dashboards",
@@ -90,33 +173,163 @@ func (a *Client) CreateDashboard(params *CreateDashboardParams) (*CreateDashboar
 		Reader:             &CreateDashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateDashboardOK), nil
-
+	success, ok := result.(*CreateDashboardOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Dashboard gets dashboard
+  CreateDashboardElement creates dashboard element
 
-### Get information about the dashboard with the specified id
+  ### Create a dashboard element on the dashboard with a specific id.
+*/
+func (a *Client) CreateDashboardElement(params *CreateDashboardElementParams, opts ...ClientOption) (*CreateDashboardElementOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateDashboardElementParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_dashboard_element",
+		Method:             "POST",
+		PathPattern:        "/dashboard_elements",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateDashboardElementReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateDashboardElementOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_dashboard_element: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateDashboardFilter creates dashboard filter
+
+  ### Create a dashboard filter on the dashboard with a specific id.
+*/
+func (a *Client) CreateDashboardFilter(params *CreateDashboardFilterParams, opts ...ClientOption) (*CreateDashboardFilterOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateDashboardFilterParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_dashboard_filter",
+		Method:             "POST",
+		PathPattern:        "/dashboard_filters",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateDashboardFilterReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateDashboardFilterOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_dashboard_filter: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateDashboardLayout creates dashboard layout
+
+  ### Create a dashboard layout on the dashboard with a specific id.
+*/
+func (a *Client) CreateDashboardLayout(params *CreateDashboardLayoutParams, opts ...ClientOption) (*CreateDashboardLayoutOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateDashboardLayoutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_dashboard_layout",
+		Method:             "POST",
+		PathPattern:        "/dashboard_layouts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateDashboardLayoutReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateDashboardLayoutOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_dashboard_layout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  Dashboard gets dashboard
+
+  ### Get information about a dashboard
 
 Returns the full details of the identified dashboard object
 
-Get a **summary list** of all active dashboards with [All Dashboards](#!/Dashboard/all_dashboards)
+Get a **summary list** of all active dashboards with [all_dashboards()](#!/Dashboard/all_dashboards)
 
-**Search** for dashboards with [Search Dashboards](#!/Dashboard/search_dashboards)
+You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
 
 */
-func (a *Client) Dashboard(params *DashboardParams) (*DashboardOK, error) {
+func (a *Client) Dashboard(params *DashboardParams, opts ...ClientOption) (*DashboardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "dashboard",
 		Method:             "GET",
 		PathPattern:        "/dashboards/{dashboard_id}",
@@ -127,33 +340,451 @@ func (a *Client) Dashboard(params *DashboardParams) (*DashboardOK, error) {
 		Reader:             &DashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DashboardOK), nil
-
+	success, ok := result.(*DashboardOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteDashboard deletes dashboard
+  DashboardAggregateTableLookml gets aggregate table look m l for a dashboard
 
-### Delete the dashboard with the specified id
+  ### Get Aggregate Table LookML for Each Query on a Dahboard
+
+Returns a JSON object that contains the dashboard id and Aggregate Table lookml
+
+
+*/
+func (a *Client) DashboardAggregateTableLookml(params *DashboardAggregateTableLookmlParams, opts ...ClientOption) (*DashboardAggregateTableLookmlOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardAggregateTableLookmlParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_aggregate_table_lookml",
+		Method:             "GET",
+		PathPattern:        "/dashboards/aggregate_table_lookml/{dashboard_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardAggregateTableLookmlReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardAggregateTableLookmlOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_aggregate_table_lookml: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardDashboardElements gets all dashboard elements
+
+  ### Get information about all the dashboard elements on a dashboard with a specific id.
+*/
+func (a *Client) DashboardDashboardElements(params *DashboardDashboardElementsParams, opts ...ClientOption) (*DashboardDashboardElementsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardDashboardElementsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_dashboard_elements",
+		Method:             "GET",
+		PathPattern:        "/dashboards/{dashboard_id}/dashboard_elements",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardDashboardElementsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardDashboardElementsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_dashboard_elements: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardDashboardFilters gets all dashboard filters
+
+  ### Get information about all the dashboard filters on a dashboard with a specific id.
+*/
+func (a *Client) DashboardDashboardFilters(params *DashboardDashboardFiltersParams, opts ...ClientOption) (*DashboardDashboardFiltersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardDashboardFiltersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_dashboard_filters",
+		Method:             "GET",
+		PathPattern:        "/dashboards/{dashboard_id}/dashboard_filters",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardDashboardFiltersReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardDashboardFiltersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_dashboard_filters: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardDashboardLayouts gets all dashboard layouts
+
+  ### Get information about all the dashboard elements on a dashboard with a specific id.
+*/
+func (a *Client) DashboardDashboardLayouts(params *DashboardDashboardLayoutsParams, opts ...ClientOption) (*DashboardDashboardLayoutsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardDashboardLayoutsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_dashboard_layouts",
+		Method:             "GET",
+		PathPattern:        "/dashboards/{dashboard_id}/dashboard_layouts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardDashboardLayoutsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardDashboardLayoutsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_dashboard_layouts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardElement gets dashboard element
+
+  ### Get information about the dashboard element with a specific id.
+*/
+func (a *Client) DashboardElement(params *DashboardElementParams, opts ...ClientOption) (*DashboardElementOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardElementParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_element",
+		Method:             "GET",
+		PathPattern:        "/dashboard_elements/{dashboard_element_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardElementReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardElementOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_element: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardFilter gets dashboard filter
+
+  ### Get information about the dashboard filters with a specific id.
+*/
+func (a *Client) DashboardFilter(params *DashboardFilterParams, opts ...ClientOption) (*DashboardFilterOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardFilterParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_filter",
+		Method:             "GET",
+		PathPattern:        "/dashboard_filters/{dashboard_filter_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardFilterReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardFilterOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_filter: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardLayout gets dashboard layout
+
+  ### Get information about the dashboard layouts with a specific id.
+*/
+func (a *Client) DashboardLayout(params *DashboardLayoutParams, opts ...ClientOption) (*DashboardLayoutOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardLayoutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_layout",
+		Method:             "GET",
+		PathPattern:        "/dashboard_layouts/{dashboard_layout_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardLayoutReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardLayoutOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_layout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardLayoutComponent gets dashboard layout component
+
+  ### Get information about the dashboard elements with a specific id.
+*/
+func (a *Client) DashboardLayoutComponent(params *DashboardLayoutComponentParams, opts ...ClientOption) (*DashboardLayoutComponentOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardLayoutComponentParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_layout_component",
+		Method:             "GET",
+		PathPattern:        "/dashboard_layout_components/{dashboard_layout_component_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardLayoutComponentReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardLayoutComponentOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_layout_component: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardLayoutDashboardLayoutComponents gets all dashboard layout components
+
+  ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
+*/
+func (a *Client) DashboardLayoutDashboardLayoutComponents(params *DashboardLayoutDashboardLayoutComponentsParams, opts ...ClientOption) (*DashboardLayoutDashboardLayoutComponentsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardLayoutDashboardLayoutComponentsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_layout_dashboard_layout_components",
+		Method:             "GET",
+		PathPattern:        "/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardLayoutDashboardLayoutComponentsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardLayoutDashboardLayoutComponentsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_layout_dashboard_layout_components: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DashboardLookml gets lookml of a u d d
+
+  ### Get lookml of a UDD
+
+Returns a JSON object that contains the dashboard id and the full lookml
+
+
+*/
+func (a *Client) DashboardLookml(params *DashboardLookmlParams, opts ...ClientOption) (*DashboardLookmlOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDashboardLookmlParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "dashboard_lookml",
+		Method:             "GET",
+		PathPattern:        "/dashboards/lookml/{dashboard_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DashboardLookmlReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DashboardLookmlOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard_lookml: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeleteDashboard deletes dashboard
+
+  ### Delete the dashboard with the specified id
 
 Permanently **deletes** a dashboard. (The dashboard cannot be recovered after this operation.)
 
-"Soft" delete or hide a dashboard by setting its `deleted` status to `True` with [Update Dashboard](#!/Dashboard/update_dashboard).
+"Soft" delete or hide a dashboard by setting its `deleted` status to `True` with [update_dashboard()](#!/Dashboard/update_dashboard).
 
 Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
 
 */
-func (a *Client) DeleteDashboard(params *DeleteDashboardParams) (*DeleteDashboardNoContent, error) {
+func (a *Client) DeleteDashboard(params *DeleteDashboardParams, opts ...ClientOption) (*DeleteDashboardNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_dashboard",
 		Method:             "DELETE",
 		PathPattern:        "/dashboards/{dashboard_id}",
@@ -164,20 +795,151 @@ func (a *Client) DeleteDashboard(params *DeleteDashboardParams) (*DeleteDashboar
 		Reader:             &DeleteDashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteDashboardNoContent), nil
-
+	success, ok := result.(*DeleteDashboardNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ImportLookmlDashboard imports look m l dashboard
+  DeleteDashboardElement deletes dashboard element
 
-### Import a LookML dashboard to a space as a UDD
+  ### Delete a dashboard element with a specific id.
+*/
+func (a *Client) DeleteDashboardElement(params *DeleteDashboardElementParams, opts ...ClientOption) (*DeleteDashboardElementNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteDashboardElementParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_dashboard_element",
+		Method:             "DELETE",
+		PathPattern:        "/dashboard_elements/{dashboard_element_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteDashboardElementReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteDashboardElementNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_dashboard_element: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeleteDashboardFilter deletes dashboard filter
+
+  ### Delete a dashboard filter with a specific id.
+*/
+func (a *Client) DeleteDashboardFilter(params *DeleteDashboardFilterParams, opts ...ClientOption) (*DeleteDashboardFilterNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteDashboardFilterParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_dashboard_filter",
+		Method:             "DELETE",
+		PathPattern:        "/dashboard_filters/{dashboard_filter_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteDashboardFilterReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteDashboardFilterNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_dashboard_filter: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeleteDashboardLayout deletes dashboard layout
+
+  ### Delete a dashboard layout with a specific id.
+*/
+func (a *Client) DeleteDashboardLayout(params *DeleteDashboardLayoutParams, opts ...ClientOption) (*DeleteDashboardLayoutNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteDashboardLayoutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_dashboard_layout",
+		Method:             "DELETE",
+		PathPattern:        "/dashboard_layouts/{dashboard_layout_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteDashboardLayoutReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteDashboardLayoutNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_dashboard_layout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ImportLookmlDashboard imports look m l dashboard
+
+  ### Import a LookML dashboard to a space as a UDD
 Creates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard
-and puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
+and places it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
 
 To give the imported dashboard specify a (e.g. title: "my title") in the body of your request, otherwise the imported
 dashboard will have the same title as the original LookML dashboard.
@@ -185,17 +947,16 @@ dashboard will have the same title as the original LookML dashboard.
 For this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to
 create content in the space the dashboard is being imported to.
 
-**Sync** a linked UDD with [Sync LookML Dashboard] (#!/Dashboard/sync_lookml_dashboard)
-**Unlink** a linked UDD by setting lookml_link_id to null with [Update Dashboard](#!/Dashboard/update_dashboard)
+**Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)
+**Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
 
 */
-func (a *Client) ImportLookmlDashboard(params *ImportLookmlDashboardParams) (*ImportLookmlDashboardOK, *ImportLookmlDashboardCreated, error) {
+func (a *Client) ImportLookmlDashboard(params *ImportLookmlDashboardParams, opts ...ClientOption) (*ImportLookmlDashboardOK, *ImportLookmlDashboardCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewImportLookmlDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "import_lookml_dashboard",
 		Method:             "POST",
 		PathPattern:        "/dashboards/{lookml_dashboard_id}/import/{space_id}",
@@ -206,7 +967,12 @@ func (a *Client) ImportLookmlDashboard(params *ImportLookmlDashboardParams) (*Im
 		Reader:             &ImportLookmlDashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -216,29 +982,116 @@ func (a *Client) ImportLookmlDashboard(params *ImportLookmlDashboardParams) (*Im
 	case *ImportLookmlDashboardCreated:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SearchDashboards searches dashboards
+  SearchDashboardElements searches dashboard elements
 
-### Search all dashboards for matching criteria.
+  ### Search Dashboard Elements
+
+Returns an **array of DashboardElement objects** that match the specified search criteria.
+
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
+
+*/
+func (a *Client) SearchDashboardElements(params *SearchDashboardElementsParams, opts ...ClientOption) (*SearchDashboardElementsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchDashboardElementsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_dashboard_elements",
+		Method:             "GET",
+		PathPattern:        "/dashboard_elements/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchDashboardElementsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchDashboardElementsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_dashboard_elements: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SearchDashboards searches dashboards
+
+  ### Search Dashboards
 
 Returns an **array of dashboard objects** that match the specified search criteria.
 
-The parameters `limit`, and `offset` are recommended for "paging" the returned results.
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
 
-Get a **single dashboard** by id with [Dashboard](#!/Dashboard/dashboard)
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
+
+The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+
+Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
 
 */
-func (a *Client) SearchDashboards(params *SearchDashboardsParams) (*SearchDashboardsOK, error) {
+func (a *Client) SearchDashboards(params *SearchDashboardsParams, opts ...ClientOption) (*SearchDashboardsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchDashboardsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "search_dashboards",
 		Method:             "GET",
 		PathPattern:        "/dashboards/search",
@@ -249,35 +1102,45 @@ func (a *Client) SearchDashboards(params *SearchDashboardsParams) (*SearchDashbo
 		Reader:             &SearchDashboardsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SearchDashboardsOK), nil
-
+	success, ok := result.(*SearchDashboardsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_dashboards: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SyncLookmlDashboard syncs look m l dashboard
+  SyncLookmlDashboard syncs look m l dashboard
 
-### Update all linked dashboards to match the specified LookML dashboard.
+  ### Update all linked dashboards to match the specified LookML dashboard.
 
-Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a lookml_link_id
-which specifies the LookML dashboard's id will be updated so that it matches the current state of the LookML dashboard.
+Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
+property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
 
 For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
 that the user has permission to update will be synced.
 
-To **link** or **unlink** a UDD set the lookml_link_id with [Update Dashboard](#!/Dashboard/update_dashboard)
+To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
 
 */
-func (a *Client) SyncLookmlDashboard(params *SyncLookmlDashboardParams) (*SyncLookmlDashboardOK, error) {
+func (a *Client) SyncLookmlDashboard(params *SyncLookmlDashboardParams, opts ...ClientOption) (*SyncLookmlDashboardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSyncLookmlDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "sync_lookml_dashboard",
 		Method:             "PATCH",
 		PathPattern:        "/dashboards/{lookml_dashboard_id}/sync",
@@ -288,29 +1151,46 @@ func (a *Client) SyncLookmlDashboard(params *SyncLookmlDashboardParams) (*SyncLo
 		Reader:             &SyncLookmlDashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SyncLookmlDashboardOK), nil
-
+	success, ok := result.(*SyncLookmlDashboardOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for sync_lookml_dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateDashboard updates dashboard
+  UpdateDashboard updates dashboard
 
-### Update the dashboard with the specified id
+  ### Update a dashboard
 
-Changes simple (scalar) properties of the dashboard.
+You can use this function to change the string and integer properties of
+a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
+cannot be modified by this function - use the update functions for the respective
+nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+to modify nested objects referenced by a dashboard.
+
+If you receive a 422 error response when updating a dashboard, be sure to look at the
+response body for information about exactly which fields are missing or contain invalid data.
 
 */
-func (a *Client) UpdateDashboard(params *UpdateDashboardParams) (*UpdateDashboardOK, error) {
+func (a *Client) UpdateDashboard(params *UpdateDashboardParams, opts ...ClientOption) (*UpdateDashboardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateDashboardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_dashboard",
 		Method:             "PATCH",
 		PathPattern:        "/dashboards/{dashboard_id}",
@@ -321,12 +1201,183 @@ func (a *Client) UpdateDashboard(params *UpdateDashboardParams) (*UpdateDashboar
 		Reader:             &UpdateDashboardReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateDashboardOK), nil
+	success, ok := result.(*UpdateDashboardOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_dashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
 
+/*
+  UpdateDashboardElement updates dashboard element
+
+  ### Update the dashboard element with a specific id.
+*/
+func (a *Client) UpdateDashboardElement(params *UpdateDashboardElementParams, opts ...ClientOption) (*UpdateDashboardElementOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateDashboardElementParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_dashboard_element",
+		Method:             "PATCH",
+		PathPattern:        "/dashboard_elements/{dashboard_element_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateDashboardElementReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateDashboardElementOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_dashboard_element: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateDashboardFilter updates dashboard filter
+
+  ### Update the dashboard filter with a specific id.
+*/
+func (a *Client) UpdateDashboardFilter(params *UpdateDashboardFilterParams, opts ...ClientOption) (*UpdateDashboardFilterOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateDashboardFilterParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_dashboard_filter",
+		Method:             "PATCH",
+		PathPattern:        "/dashboard_filters/{dashboard_filter_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateDashboardFilterReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateDashboardFilterOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_dashboard_filter: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateDashboardLayout updates dashboard layout
+
+  ### Update the dashboard layout with a specific id.
+*/
+func (a *Client) UpdateDashboardLayout(params *UpdateDashboardLayoutParams, opts ...ClientOption) (*UpdateDashboardLayoutOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateDashboardLayoutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_dashboard_layout",
+		Method:             "PATCH",
+		PathPattern:        "/dashboard_layouts/{dashboard_layout_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateDashboardLayoutReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateDashboardLayoutOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_dashboard_layout: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateDashboardLayoutComponent updates dashboard layout component
+
+  ### Update the dashboard element with a specific id.
+*/
+func (a *Client) UpdateDashboardLayoutComponent(params *UpdateDashboardLayoutComponentParams, opts ...ClientOption) (*UpdateDashboardLayoutComponentOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateDashboardLayoutComponentParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_dashboard_layout_component",
+		Method:             "PATCH",
+		PathPattern:        "/dashboard_layout_components/{dashboard_layout_component_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateDashboardLayoutComponentReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateDashboardLayoutComponentOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_dashboard_layout_component: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

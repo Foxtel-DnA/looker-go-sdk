@@ -13,56 +13,69 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewBackupConfigurationParams creates a new BackupConfigurationParams object
-// with the default values initialized.
+// NewBackupConfigurationParams creates a new BackupConfigurationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewBackupConfigurationParams() *BackupConfigurationParams {
-
 	return &BackupConfigurationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewBackupConfigurationParamsWithTimeout creates a new BackupConfigurationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewBackupConfigurationParamsWithTimeout(timeout time.Duration) *BackupConfigurationParams {
-
 	return &BackupConfigurationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewBackupConfigurationParamsWithContext creates a new BackupConfigurationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewBackupConfigurationParamsWithContext(ctx context.Context) *BackupConfigurationParams {
-
 	return &BackupConfigurationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewBackupConfigurationParamsWithHTTPClient creates a new BackupConfigurationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewBackupConfigurationParamsWithHTTPClient(client *http.Client) *BackupConfigurationParams {
-
 	return &BackupConfigurationParams{
 		HTTPClient: client,
 	}
 }
 
-/*BackupConfigurationParams contains all the parameters to send to the API endpoint
-for the backup configuration operation typically these are written to a http.Request
+/* BackupConfigurationParams contains all the parameters to send to the API endpoint
+   for the backup configuration operation.
+
+   Typically these are written to a http.Request.
 */
 type BackupConfigurationParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the backup configuration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BackupConfigurationParams) WithDefaults() *BackupConfigurationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the backup configuration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BackupConfigurationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the backup configuration params

@@ -13,76 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateUserAttributeParams creates a new UpdateUserAttributeParams object
-// with the default values initialized.
+// NewUpdateUserAttributeParams creates a new UpdateUserAttributeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateUserAttributeParams() *UpdateUserAttributeParams {
-	var ()
 	return &UpdateUserAttributeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateUserAttributeParamsWithTimeout creates a new UpdateUserAttributeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateUserAttributeParamsWithTimeout(timeout time.Duration) *UpdateUserAttributeParams {
-	var ()
 	return &UpdateUserAttributeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateUserAttributeParamsWithContext creates a new UpdateUserAttributeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateUserAttributeParamsWithContext(ctx context.Context) *UpdateUserAttributeParams {
-	var ()
 	return &UpdateUserAttributeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateUserAttributeParamsWithHTTPClient creates a new UpdateUserAttributeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateUserAttributeParamsWithHTTPClient(client *http.Client) *UpdateUserAttributeParams {
-	var ()
 	return &UpdateUserAttributeParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateUserAttributeParams contains all the parameters to send to the API endpoint
-for the update user attribute operation typically these are written to a http.Request
+/* UpdateUserAttributeParams contains all the parameters to send to the API endpoint
+   for the update user attribute operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateUserAttributeParams struct {
 
-	/*Body
-	  User Attribute
+	/* Body.
 
+	   User Attribute
 	*/
 	Body *models.UserAttribute
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserAttributeID
-	  Id of user attribute
 
+	/* UserAttributeID.
+
+	   Id of user attribute
+
+	   Format: int64
 	*/
 	UserAttributeID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update user attribute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateUserAttributeParams) WithDefaults() *UpdateUserAttributeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update user attribute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateUserAttributeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update user attribute params
@@ -158,7 +175,6 @@ func (o *UpdateUserAttributeParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,16 +185,17 @@ func (o *UpdateUserAttributeParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_attribute_id

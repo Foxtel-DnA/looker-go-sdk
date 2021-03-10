@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Group group
+//
 // swagger:model Group
 type Group struct {
 
@@ -52,6 +56,103 @@ type Group struct {
 
 // Validate validates this group
 func (m *Group) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this group based on the context it is used
+func (m *Group) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateContainsCurrentUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExternalGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExternallyManaged(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIncludeByDefault(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Group) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *Group) contextValidateContainsCurrentUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "contains_current_user", "body", m.ContainsCurrentUser); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) contextValidateExternalGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "external_group_id", "body", string(m.ExternalGroupID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) contextValidateExternallyManaged(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "externally_managed", "body", m.ExternallyManaged); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) contextValidateIncludeByDefault(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "include_by_default", "body", m.IncludeByDefault); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) contextValidateUserCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_count", "body", int64(m.UserCount)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

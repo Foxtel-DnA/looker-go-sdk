@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateConnectionReader is a Reader for the UpdateConnection structure.
@@ -24,37 +23,38 @@ type UpdateConnectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateConnectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateConnectionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateConnectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateConnectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateConnectionUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateConnectionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateConnectionOK() *UpdateConnectionOK {
 	return &UpdateConnectionOK{}
 }
 
-/*UpdateConnectionOK handles this case with default header values.
+/* UpdateConnectionOK describes a response with status code 200, with default header values.
 
 Connection
 */
@@ -73,6 +73,9 @@ type UpdateConnectionOK struct {
 
 func (o *UpdateConnectionOK) Error() string {
 	return fmt.Sprintf("[PATCH /connections/{connection_name}][%d] updateConnectionOK  %+v", 200, o.Payload)
+}
+func (o *UpdateConnectionOK) GetPayload() *models.DBConnection {
+	return o.Payload
 }
 
 func (o *UpdateConnectionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateConnectionBadRequest() *UpdateConnectionBadRequest {
 	return &UpdateConnectionBadRequest{}
 }
 
-/*UpdateConnectionBadRequest handles this case with default header values.
+/* UpdateConnectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateConnectionBadRequest struct {
 
 func (o *UpdateConnectionBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /connections/{connection_name}][%d] updateConnectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateConnectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateConnectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateConnectionNotFound() *UpdateConnectionNotFound {
 	return &UpdateConnectionNotFound{}
 }
 
-/*UpdateConnectionNotFound handles this case with default header values.
+/* UpdateConnectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateConnectionNotFound struct {
 
 func (o *UpdateConnectionNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /connections/{connection_name}][%d] updateConnectionNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateConnectionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateConnectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateConnectionUnprocessableEntity() *UpdateConnectionUnprocessableEnti
 	return &UpdateConnectionUnprocessableEntity{}
 }
 
-/*UpdateConnectionUnprocessableEntity handles this case with default header values.
+/* UpdateConnectionUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateConnectionUnprocessableEntity struct {
 func (o *UpdateConnectionUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /connections/{connection_name}][%d] updateConnectionUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateConnectionUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateConnectionUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateConnectionTooManyRequests creates a UpdateConnectionTooManyRequests with default headers values
+func NewUpdateConnectionTooManyRequests() *UpdateConnectionTooManyRequests {
+	return &UpdateConnectionTooManyRequests{}
+}
+
+/* UpdateConnectionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateConnectionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateConnectionTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /connections/{connection_name}][%d] updateConnectionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateConnectionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateConnectionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

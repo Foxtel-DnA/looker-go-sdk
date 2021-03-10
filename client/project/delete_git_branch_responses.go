@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // DeleteGitBranchReader is a Reader for the DeleteGitBranch structure.
@@ -24,30 +23,32 @@ type DeleteGitBranchReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteGitBranchReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteGitBranchNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteGitBranchBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteGitBranchNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteGitBranchTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteGitBranchNoContent() *DeleteGitBranchNoContent {
 	return &DeleteGitBranchNoContent{}
 }
 
-/*DeleteGitBranchNoContent handles this case with default header values.
+/* DeleteGitBranchNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteGitBranchNoContent struct {
 
 func (o *DeleteGitBranchNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /projects/{project_id}/git_branch/{branch_name}][%d] deleteGitBranchNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteGitBranchNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteGitBranchNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteGitBranchBadRequest() *DeleteGitBranchBadRequest {
 	return &DeleteGitBranchBadRequest{}
 }
 
-/*DeleteGitBranchBadRequest handles this case with default header values.
+/* DeleteGitBranchBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteGitBranchBadRequest struct {
 
 func (o *DeleteGitBranchBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /projects/{project_id}/git_branch/{branch_name}][%d] deleteGitBranchBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteGitBranchBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteGitBranchBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteGitBranchNotFound() *DeleteGitBranchNotFound {
 	return &DeleteGitBranchNotFound{}
 }
 
-/*DeleteGitBranchNotFound handles this case with default header values.
+/* DeleteGitBranchNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteGitBranchNotFound struct {
 func (o *DeleteGitBranchNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /projects/{project_id}/git_branch/{branch_name}][%d] deleteGitBranchNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteGitBranchNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteGitBranchNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteGitBranchTooManyRequests creates a DeleteGitBranchTooManyRequests with default headers values
+func NewDeleteGitBranchTooManyRequests() *DeleteGitBranchTooManyRequests {
+	return &DeleteGitBranchTooManyRequests{}
+}
+
+/* DeleteGitBranchTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteGitBranchTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteGitBranchTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /projects/{project_id}/git_branch/{branch_name}][%d] deleteGitBranchTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteGitBranchTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteGitBranchTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

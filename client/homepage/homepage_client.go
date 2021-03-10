@@ -6,13 +6,14 @@ package homepage
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new homepage API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,60 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllHomepageItems gets all homepage items
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get information about all homepage items.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllHomepageItems(params *AllHomepageItemsParams, opts ...ClientOption) (*AllHomepageItemsOK, error)
+
+	AllHomepageSections(params *AllHomepageSectionsParams, opts ...ClientOption) (*AllHomepageSectionsOK, error)
+
+	AllHomepages(params *AllHomepagesParams, opts ...ClientOption) (*AllHomepagesOK, error)
+
+	AllPrimaryHomepageSections(params *AllPrimaryHomepageSectionsParams, opts ...ClientOption) (*AllPrimaryHomepageSectionsOK, error)
+
+	CreateHomepage(params *CreateHomepageParams, opts ...ClientOption) (*CreateHomepageOK, error)
+
+	CreateHomepageItem(params *CreateHomepageItemParams, opts ...ClientOption) (*CreateHomepageItemOK, error)
+
+	CreateHomepageSection(params *CreateHomepageSectionParams, opts ...ClientOption) (*CreateHomepageSectionOK, error)
+
+	DeleteHomepage(params *DeleteHomepageParams, opts ...ClientOption) (*DeleteHomepageNoContent, error)
+
+	DeleteHomepageItem(params *DeleteHomepageItemParams, opts ...ClientOption) (*DeleteHomepageItemNoContent, error)
+
+	DeleteHomepageSection(params *DeleteHomepageSectionParams, opts ...ClientOption) (*DeleteHomepageSectionNoContent, error)
+
+	Homepage(params *HomepageParams, opts ...ClientOption) (*HomepageOK, error)
+
+	HomepageItem(params *HomepageItemParams, opts ...ClientOption) (*HomepageItemOK, error)
+
+	HomepageSection(params *HomepageSectionParams, opts ...ClientOption) (*HomepageSectionOK, error)
+
+	SearchHomepages(params *SearchHomepagesParams, opts ...ClientOption) (*SearchHomepagesOK, error)
+
+	UpdateHomepage(params *UpdateHomepageParams, opts ...ClientOption) (*UpdateHomepageOK, error)
+
+	UpdateHomepageItem(params *UpdateHomepageItemParams, opts ...ClientOption) (*UpdateHomepageItemOK, error)
+
+	UpdateHomepageSection(params *UpdateHomepageSectionParams, opts ...ClientOption) (*UpdateHomepageSectionOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllHomepageItems gets all homepage items
+
+  ### Get information about all homepage items.
 
 */
-func (a *Client) AllHomepageItems(params *AllHomepageItemsParams) (*AllHomepageItemsOK, error) {
+func (a *Client) AllHomepageItems(params *AllHomepageItemsParams, opts ...ClientOption) (*AllHomepageItemsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllHomepageItemsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_homepage_items",
 		Method:             "GET",
 		PathPattern:        "/homepage_items",
@@ -47,27 +89,37 @@ func (a *Client) AllHomepageItems(params *AllHomepageItemsParams) (*AllHomepageI
 		Reader:             &AllHomepageItemsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllHomepageItemsOK), nil
-
+	success, ok := result.(*AllHomepageItemsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_homepage_items: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllHomepageSections gets all homepage sections
+  AllHomepageSections gets all homepage sections
 
-### Get information about all homepage sections.
+  ### Get information about all homepage sections.
 
 */
-func (a *Client) AllHomepageSections(params *AllHomepageSectionsParams) (*AllHomepageSectionsOK, error) {
+func (a *Client) AllHomepageSections(params *AllHomepageSectionsParams, opts ...ClientOption) (*AllHomepageSectionsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllHomepageSectionsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_homepage_sections",
 		Method:             "GET",
 		PathPattern:        "/homepage_sections",
@@ -78,27 +130,160 @@ func (a *Client) AllHomepageSections(params *AllHomepageSectionsParams) (*AllHom
 		Reader:             &AllHomepageSectionsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllHomepageSectionsOK), nil
-
+	success, ok := result.(*AllHomepageSectionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_homepage_sections: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateHomepageItem creates homepage item
+  AllHomepages gets all homepages
 
-### Create a new homepage item.
+  ### Get information about all homepages.
 
 */
-func (a *Client) CreateHomepageItem(params *CreateHomepageItemParams) (*CreateHomepageItemOK, error) {
+func (a *Client) AllHomepages(params *AllHomepagesParams, opts ...ClientOption) (*AllHomepagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAllHomepagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "all_homepages",
+		Method:             "GET",
+		PathPattern:        "/homepages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AllHomepagesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AllHomepagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_homepages: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  AllPrimaryHomepageSections gets all primary homepage sections
+
+  ### Get information about the primary homepage's sections.
+
+*/
+func (a *Client) AllPrimaryHomepageSections(params *AllPrimaryHomepageSectionsParams, opts ...ClientOption) (*AllPrimaryHomepageSectionsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAllPrimaryHomepageSectionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "all_primary_homepage_sections",
+		Method:             "GET",
+		PathPattern:        "/primary_homepage_sections",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AllPrimaryHomepageSectionsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AllPrimaryHomepageSectionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_primary_homepage_sections: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateHomepage creates homepage
+
+  ### Create a new homepage.
+
+*/
+func (a *Client) CreateHomepage(params *CreateHomepageParams, opts ...ClientOption) (*CreateHomepageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateHomepageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_homepage",
+		Method:             "POST",
+		PathPattern:        "/homepages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateHomepageReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateHomepageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_homepage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateHomepageItem creates homepage item
+
+  ### Create a new homepage item.
+
+*/
+func (a *Client) CreateHomepageItem(params *CreateHomepageItemParams, opts ...ClientOption) (*CreateHomepageItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateHomepageItemParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_homepage_item",
 		Method:             "POST",
 		PathPattern:        "/homepage_items",
@@ -109,27 +294,37 @@ func (a *Client) CreateHomepageItem(params *CreateHomepageItemParams) (*CreateHo
 		Reader:             &CreateHomepageItemReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateHomepageItemOK), nil
-
+	success, ok := result.(*CreateHomepageItemOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_homepage_item: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateHomepageSection creates homepage section
+  CreateHomepageSection creates homepage section
 
-### Create a new homepage section.
+  ### Create a new homepage section.
 
 */
-func (a *Client) CreateHomepageSection(params *CreateHomepageSectionParams) (*CreateHomepageSectionOK, error) {
+func (a *Client) CreateHomepageSection(params *CreateHomepageSectionParams, opts ...ClientOption) (*CreateHomepageSectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateHomepageSectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_homepage_section",
 		Method:             "POST",
 		PathPattern:        "/homepage_sections",
@@ -140,27 +335,78 @@ func (a *Client) CreateHomepageSection(params *CreateHomepageSectionParams) (*Cr
 		Reader:             &CreateHomepageSectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateHomepageSectionOK), nil
-
+	success, ok := result.(*CreateHomepageSectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_homepage_section: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteHomepageItem deletes homepage item
+  DeleteHomepage deletes homepage
 
-### Delete a homepage item.
+  ### Delete a homepage.
 
 */
-func (a *Client) DeleteHomepageItem(params *DeleteHomepageItemParams) (*DeleteHomepageItemNoContent, error) {
+func (a *Client) DeleteHomepage(params *DeleteHomepageParams, opts ...ClientOption) (*DeleteHomepageNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteHomepageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "delete_homepage",
+		Method:             "DELETE",
+		PathPattern:        "/homepages/{homepage_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteHomepageReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteHomepageNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_homepage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  DeleteHomepageItem deletes homepage item
+
+  ### Delete a homepage item.
+
+*/
+func (a *Client) DeleteHomepageItem(params *DeleteHomepageItemParams, opts ...ClientOption) (*DeleteHomepageItemNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteHomepageItemParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_homepage_item",
 		Method:             "DELETE",
 		PathPattern:        "/homepage_items/{homepage_item_id}",
@@ -171,27 +417,37 @@ func (a *Client) DeleteHomepageItem(params *DeleteHomepageItemParams) (*DeleteHo
 		Reader:             &DeleteHomepageItemReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteHomepageItemNoContent), nil
-
+	success, ok := result.(*DeleteHomepageItemNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_homepage_item: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteHomepageSection deletes homepage section
+  DeleteHomepageSection deletes homepage section
 
-### Delete a homepage section.
+  ### Delete a homepage section.
 
 */
-func (a *Client) DeleteHomepageSection(params *DeleteHomepageSectionParams) (*DeleteHomepageSectionNoContent, error) {
+func (a *Client) DeleteHomepageSection(params *DeleteHomepageSectionParams, opts ...ClientOption) (*DeleteHomepageSectionNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteHomepageSectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_homepage_section",
 		Method:             "DELETE",
 		PathPattern:        "/homepage_sections/{homepage_section_id}",
@@ -202,27 +458,78 @@ func (a *Client) DeleteHomepageSection(params *DeleteHomepageSectionParams) (*De
 		Reader:             &DeleteHomepageSectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteHomepageSectionNoContent), nil
-
+	success, ok := result.(*DeleteHomepageSectionNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_homepage_section: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-HomepageItem gets homepage item
+  Homepage gets homepage
 
-### Get information about a homepage item.
+  ### Get information about a homepage.
 
 */
-func (a *Client) HomepageItem(params *HomepageItemParams) (*HomepageItemOK, error) {
+func (a *Client) Homepage(params *HomepageParams, opts ...ClientOption) (*HomepageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewHomepageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "homepage",
+		Method:             "GET",
+		PathPattern:        "/homepages/{homepage_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &HomepageReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*HomepageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for homepage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  HomepageItem gets homepage item
+
+  ### Get information about a homepage item.
+
+*/
+func (a *Client) HomepageItem(params *HomepageItemParams, opts ...ClientOption) (*HomepageItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewHomepageItemParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "homepage_item",
 		Method:             "GET",
 		PathPattern:        "/homepage_items/{homepage_item_id}",
@@ -233,27 +540,37 @@ func (a *Client) HomepageItem(params *HomepageItemParams) (*HomepageItemOK, erro
 		Reader:             &HomepageItemReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*HomepageItemOK), nil
-
+	success, ok := result.(*HomepageItemOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for homepage_item: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-HomepageSection gets homepage section
+  HomepageSection gets homepage section
 
-### Get information about a homepage section.
+  ### Get information about a homepage section.
 
 */
-func (a *Client) HomepageSection(params *HomepageSectionParams) (*HomepageSectionOK, error) {
+func (a *Client) HomepageSection(params *HomepageSectionParams, opts ...ClientOption) (*HomepageSectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewHomepageSectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "homepage_section",
 		Method:             "GET",
 		PathPattern:        "/homepage_sections/{homepage_section_id}",
@@ -264,27 +581,141 @@ func (a *Client) HomepageSection(params *HomepageSectionParams) (*HomepageSectio
 		Reader:             &HomepageSectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*HomepageSectionOK), nil
-
+	success, ok := result.(*HomepageSectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for homepage_section: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateHomepageItem updates homepage item
+  SearchHomepages searches homepages
 
-### Update a homepage item definition.
+  ### Search Homepages
+
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
 
 */
-func (a *Client) UpdateHomepageItem(params *UpdateHomepageItemParams) (*UpdateHomepageItemOK, error) {
+func (a *Client) SearchHomepages(params *SearchHomepagesParams, opts ...ClientOption) (*SearchHomepagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchHomepagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_homepages",
+		Method:             "GET",
+		PathPattern:        "/homepages/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchHomepagesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchHomepagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_homepages: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateHomepage updates homepage
+
+  ### Update a homepage definition.
+
+*/
+func (a *Client) UpdateHomepage(params *UpdateHomepageParams, opts ...ClientOption) (*UpdateHomepageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateHomepageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "update_homepage",
+		Method:             "PATCH",
+		PathPattern:        "/homepages/{homepage_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateHomepageReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateHomepageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_homepage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  UpdateHomepageItem updates homepage item
+
+  ### Update a homepage item definition.
+
+*/
+func (a *Client) UpdateHomepageItem(params *UpdateHomepageItemParams, opts ...ClientOption) (*UpdateHomepageItemOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateHomepageItemParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_homepage_item",
 		Method:             "PATCH",
 		PathPattern:        "/homepage_items/{homepage_item_id}",
@@ -295,27 +726,37 @@ func (a *Client) UpdateHomepageItem(params *UpdateHomepageItemParams) (*UpdateHo
 		Reader:             &UpdateHomepageItemReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateHomepageItemOK), nil
-
+	success, ok := result.(*UpdateHomepageItemOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_homepage_item: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateHomepageSection updates homepage section
+  UpdateHomepageSection updates homepage section
 
-### Update a homepage section definition.
+  ### Update a homepage section definition.
 
 */
-func (a *Client) UpdateHomepageSection(params *UpdateHomepageSectionParams) (*UpdateHomepageSectionOK, error) {
+func (a *Client) UpdateHomepageSection(params *UpdateHomepageSectionParams, opts ...ClientOption) (*UpdateHomepageSectionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateHomepageSectionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_homepage_section",
 		Method:             "PATCH",
 		PathPattern:        "/homepage_sections/{homepage_section_id}",
@@ -326,12 +767,23 @@ func (a *Client) UpdateHomepageSection(params *UpdateHomepageSectionParams) (*Up
 		Reader:             &UpdateHomepageSectionReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateHomepageSectionOK), nil
-
+	success, ok := result.(*UpdateHomepageSectionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_homepage_section: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

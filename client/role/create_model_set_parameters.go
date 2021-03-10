@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateModelSetParams creates a new CreateModelSetParams object
-// with the default values initialized.
+// NewCreateModelSetParams creates a new CreateModelSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateModelSetParams() *CreateModelSetParams {
-	var ()
 	return &CreateModelSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateModelSetParamsWithTimeout creates a new CreateModelSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateModelSetParamsWithTimeout(timeout time.Duration) *CreateModelSetParams {
-	var ()
 	return &CreateModelSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateModelSetParamsWithContext creates a new CreateModelSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateModelSetParamsWithContext(ctx context.Context) *CreateModelSetParams {
-	var ()
 	return &CreateModelSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateModelSetParamsWithHTTPClient creates a new CreateModelSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateModelSetParamsWithHTTPClient(client *http.Client) *CreateModelSetParams {
-	var ()
 	return &CreateModelSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateModelSetParams contains all the parameters to send to the API endpoint
-for the create model set operation typically these are written to a http.Request
+/* CreateModelSetParams contains all the parameters to send to the API endpoint
+   for the create model set operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateModelSetParams struct {
 
-	/*Body
-	  ModelSet
+	/* Body.
 
+	   ModelSet
 	*/
 	Body *models.ModelSet
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateModelSetParams) WithDefaults() *CreateModelSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateModelSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create model set params
@@ -125,7 +138,6 @@ func (o *CreateModelSetParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

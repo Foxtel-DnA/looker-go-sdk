@@ -13,70 +13,84 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateLookmlModelParams creates a new UpdateLookmlModelParams object
-// with the default values initialized.
+// NewUpdateLookmlModelParams creates a new UpdateLookmlModelParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateLookmlModelParams() *UpdateLookmlModelParams {
-	var ()
 	return &UpdateLookmlModelParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateLookmlModelParamsWithTimeout creates a new UpdateLookmlModelParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateLookmlModelParamsWithTimeout(timeout time.Duration) *UpdateLookmlModelParams {
-	var ()
 	return &UpdateLookmlModelParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateLookmlModelParamsWithContext creates a new UpdateLookmlModelParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateLookmlModelParamsWithContext(ctx context.Context) *UpdateLookmlModelParams {
-	var ()
 	return &UpdateLookmlModelParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateLookmlModelParamsWithHTTPClient creates a new UpdateLookmlModelParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateLookmlModelParamsWithHTTPClient(client *http.Client) *UpdateLookmlModelParams {
-	var ()
 	return &UpdateLookmlModelParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateLookmlModelParams contains all the parameters to send to the API endpoint
-for the update lookml model operation typically these are written to a http.Request
+/* UpdateLookmlModelParams contains all the parameters to send to the API endpoint
+   for the update lookml model operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateLookmlModelParams struct {
 
-	/*Body
-	  LookML Model
+	/* Body.
 
+	   LookML Model
 	*/
 	Body *models.LookmlModel
-	/*LookmlModelName
-	  Name of lookml model.
 
+	/* LookmlModelName.
+
+	   Name of lookml model.
 	*/
 	LookmlModelName string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update lookml model params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLookmlModelParams) WithDefaults() *UpdateLookmlModelParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update lookml model params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLookmlModelParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update lookml model params
@@ -141,7 +155,6 @@ func (o *UpdateLookmlModelParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

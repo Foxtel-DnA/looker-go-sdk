@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserParams creates a new UserParams object
-// with the default values initialized.
+// NewUserParams creates a new UserParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserParams() *UserParams {
-	var ()
 	return &UserParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserParamsWithTimeout creates a new UserParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserParamsWithTimeout(timeout time.Duration) *UserParams {
-	var ()
 	return &UserParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserParamsWithContext creates a new UserParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserParamsWithContext(ctx context.Context) *UserParams {
-	var ()
 	return &UserParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserParamsWithHTTPClient creates a new UserParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserParamsWithHTTPClient(client *http.Client) *UserParams {
-	var ()
 	return &UserParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserParams contains all the parameters to send to the API endpoint
-for the user operation typically these are written to a http.Request
+/* UserParams contains all the parameters to send to the API endpoint
+   for the user operation.
+
+   Typically these are written to a http.Request.
 */
 type UserParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  Id of user
 
+	/* UserID.
+
+	   Id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserParams) WithDefaults() *UserParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user params
@@ -145,16 +161,17 @@ func (o *UserParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

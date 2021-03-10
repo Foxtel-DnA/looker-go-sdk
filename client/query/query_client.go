@@ -6,13 +6,14 @@ package query
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new query API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,10 +25,150 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-CreateQuery creates query
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Create a query.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllRunningQueries(params *AllRunningQueriesParams, opts ...ClientOption) (*AllRunningQueriesOK, error)
+
+	CreateMergeQuery(params *CreateMergeQueryParams, opts ...ClientOption) (*CreateMergeQueryOK, error)
+
+	CreateQuery(params *CreateQueryParams, opts ...ClientOption) (*CreateQueryOK, error)
+
+	CreateQueryTask(params *CreateQueryTaskParams, opts ...ClientOption) (*CreateQueryTaskOK, error)
+
+	CreateSQLQuery(params *CreateSQLQueryParams, opts ...ClientOption) (*CreateSQLQueryOK, error)
+
+	KillQuery(params *KillQueryParams, opts ...ClientOption) (*KillQueryNoContent, error)
+
+	MergeQuery(params *MergeQueryParams, opts ...ClientOption) (*MergeQueryOK, error)
+
+	Query(params *QueryParams, opts ...ClientOption) (*QueryOK, error)
+
+	QueryForSlug(params *QueryForSlugParams, opts ...ClientOption) (*QueryForSlugOK, error)
+
+	QueryTask(params *QueryTaskParams, opts ...ClientOption) (*QueryTaskOK, error)
+
+	QueryTaskMultiResults(params *QueryTaskMultiResultsParams, opts ...ClientOption) (*QueryTaskMultiResultsOK, error)
+
+	QueryTaskResults(params *QueryTaskResultsParams, opts ...ClientOption) (*QueryTaskResultsOK, *QueryTaskResultsNoContent, error)
+
+	RunInlineQuery(params *RunInlineQueryParams, opts ...ClientOption) (*RunInlineQueryOK, error)
+
+	RunQuery(params *RunQueryParams, opts ...ClientOption) (*RunQueryOK, error)
+
+	RunSQLQuery(params *RunSQLQueryParams, opts ...ClientOption) (*RunSQLQueryOK, error)
+
+	RunURLEncodedQuery(params *RunURLEncodedQueryParams, opts ...ClientOption) (*RunURLEncodedQueryOK, error)
+
+	SQLQuery(params *SQLQueryParams, opts ...ClientOption) (*SQLQueryOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllRunningQueries gets all running queries
+
+  Get information about all running queries.
+
+*/
+func (a *Client) AllRunningQueries(params *AllRunningQueriesParams, opts ...ClientOption) (*AllRunningQueriesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewAllRunningQueriesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "all_running_queries",
+		Method:             "GET",
+		PathPattern:        "/running_queries",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &AllRunningQueriesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*AllRunningQueriesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_running_queries: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateMergeQuery creates merge query
+
+  ### Create Merge Query
+
+Creates a new merge query object.
+
+A merge query takes the results of one or more queries and combines (merges) the results
+according to field mapping definitions. The result is similar to a SQL left outer join.
+
+A merge query can merge results of queries from different SQL databases.
+
+The order that queries are defined in the source_queries array property is significant. The
+first query in the array defines the primary key into which the results of subsequent
+queries will be merged.
+
+Like model/view query objects, merge queries are immutable and have structural identity - if
+you make a request to create a new merge query that is identical to an existing merge query,
+the existing merge query will be returned instead of creating a duplicate. Conversely, any
+change to the contents of a merge query will produce a new object with a new id.
+
+*/
+func (a *Client) CreateMergeQuery(params *CreateMergeQueryParams, opts ...ClientOption) (*CreateMergeQueryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateMergeQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_merge_query",
+		Method:             "POST",
+		PathPattern:        "/merge_queries",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateMergeQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateMergeQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_merge_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  CreateQuery creates query
+
+  ### Create a query.
 
 This allows you to create a new query that you can later run. Looker queries are immutable once created
 and are not deleted. If you create a query that is exactly like an existing query then the existing query
@@ -38,13 +179,12 @@ The query parameters are passed as json in the body of the request.
 
 
 */
-func (a *Client) CreateQuery(params *CreateQueryParams) (*CreateQueryOK, error) {
+func (a *Client) CreateQuery(params *CreateQueryParams, opts ...ClientOption) (*CreateQueryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateQueryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_query",
 		Method:             "POST",
 		PathPattern:        "/queries",
@@ -55,30 +195,42 @@ func (a *Client) CreateQuery(params *CreateQueryParams) (*CreateQueryOK, error) 
 		Reader:             &CreateQueryReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateQueryOK), nil
-
+	success, ok := result.(*CreateQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateQueryTask runs query async
+  CreateQueryTask runs query async
 
-### Run a saved query asynchronously.
+  ### Create an async query task
 
-Runs a previously created query asynchronously. Returns a Query Task ID
-which can be used to fetch the results from the Query Tasks results endpoint.
+Creates a query task (job) to run a previously created query asynchronously. Returns a Query Task ID.
+
+Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
+After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
 
 */
-func (a *Client) CreateQueryTask(params *CreateQueryTaskParams) (*CreateQueryTaskOK, error) {
+func (a *Client) CreateQueryTask(params *CreateQueryTaskParams, opts ...ClientOption) (*CreateQueryTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateQueryTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_query_task",
 		Method:             "POST",
 		PathPattern:        "/query_tasks",
@@ -89,18 +241,156 @@ func (a *Client) CreateQueryTask(params *CreateQueryTaskParams) (*CreateQueryTas
 		Reader:             &CreateQueryTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateQueryTaskOK), nil
-
+	success, ok := result.(*CreateQueryTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_query_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Query gets query
+  CreateSQLQuery creates SQL runner query
 
-### Get a previously created query by id.
+  ### Create a SQL Runner Query
+
+Either the `connection_name` or `model_name` parameter MUST be provided.
+
+*/
+func (a *Client) CreateSQLQuery(params *CreateSQLQueryParams, opts ...ClientOption) (*CreateSQLQueryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSQLQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "create_sql_query",
+		Method:             "POST",
+		PathPattern:        "/sql_queries",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateSQLQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSQLQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_sql_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  KillQuery kills running query
+
+  Kill a query with a specific query_task_id.
+
+*/
+func (a *Client) KillQuery(params *KillQueryParams, opts ...ClientOption) (*KillQueryNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewKillQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "kill_query",
+		Method:             "DELETE",
+		PathPattern:        "/running_queries/{query_task_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &KillQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*KillQueryNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for kill_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  MergeQuery gets merge query
+
+  ### Get Merge Query
+
+Returns a merge query object given its id.
+
+*/
+func (a *Client) MergeQuery(params *MergeQueryParams, opts ...ClientOption) (*MergeQueryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewMergeQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "merge_query",
+		Method:             "GET",
+		PathPattern:        "/merge_queries/{merge_query_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &MergeQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*MergeQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for merge_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  Query gets query
+
+  ### Get a previously created query by id.
 
 A Looker query object includes the various parameters that define a database query that has been run or
 could be run in the future. These parameters include: model, view, fields, filters, pivots, etc.
@@ -120,13 +410,12 @@ creating new queries and can usually just be ignored.
 
 
 */
-func (a *Client) Query(params *QueryParams) (*QueryOK, error) {
+func (a *Client) Query(params *QueryParams, opts ...ClientOption) (*QueryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewQueryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "query",
 		Method:             "GET",
 		PathPattern:        "/queries/{query_id}",
@@ -137,18 +426,29 @@ func (a *Client) Query(params *QueryParams) (*QueryOK, error) {
 		Reader:             &QueryReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*QueryOK), nil
-
+	success, ok := result.(*QueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-QueryForSlug gets query for slug
+  QueryForSlug gets query for slug
 
-### Get the query for a given query slug.
+  ### Get the query for a given query slug.
 
 This returns the query for the 'slug' in a query share URL.
 
@@ -167,13 +467,12 @@ This will also work with slugs from Looker explore urls like
 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
 
 */
-func (a *Client) QueryForSlug(params *QueryForSlugParams) (*QueryForSlugOK, error) {
+func (a *Client) QueryForSlug(params *QueryForSlugParams, opts ...ClientOption) (*QueryForSlugOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewQueryForSlugParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "query_for_slug",
 		Method:             "GET",
 		PathPattern:        "/queries/slug/{slug}",
@@ -184,30 +483,43 @@ func (a *Client) QueryForSlug(params *QueryForSlugParams) (*QueryForSlugOK, erro
 		Reader:             &QueryForSlugReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*QueryForSlugOK), nil
-
+	success, ok := result.(*QueryForSlugOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for query_for_slug: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-QueryTask gets async query info
+  QueryTask gets async query info
 
-Returns information about a Query Task.
+  ### Get Query Task details
 
-Query Tasks are generated by running queries asynchronously. They are represented by a GUID returned
-from one of the async query endpoints.
+Use this function to check the status of an async query task. After the status
+reaches "Complete", you can call [query_task_results(query_task_id)](#!/Query/query_task_results) to
+retrieve the results of the query.
+
+Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
 
 */
-func (a *Client) QueryTask(params *QueryTaskParams) (*QueryTaskOK, error) {
+func (a *Client) QueryTask(params *QueryTaskParams, opts ...ClientOption) (*QueryTaskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewQueryTaskParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "query_task",
 		Method:             "GET",
 		PathPattern:        "/query_tasks/{query_task_id}",
@@ -218,31 +530,43 @@ func (a *Client) QueryTask(params *QueryTaskParams) (*QueryTaskOK, error) {
 		Reader:             &QueryTaskReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*QueryTaskOK), nil
-
+	success, ok := result.(*QueryTaskOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for query_task: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-QueryTaskMultiResults gets multiple async query results
+  QueryTaskMultiResults gets multiple async query results
 
-Fetch the results of multiple async Query Tasks in one response.
+  ### Fetch results of multiple async queries
 
-Query Tasks that are not ready will be skipped and will not appear in the response.
+Returns the results of multiple async queries in one request.
+
+For Query Tasks that are not completed, the response will include the execution status of the Query Task but will not include query results.
 Query Tasks whose results have expired will have a status of 'expired'.
 If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
 
 */
-func (a *Client) QueryTaskMultiResults(params *QueryTaskMultiResultsParams) (*QueryTaskMultiResultsOK, error) {
+func (a *Client) QueryTaskMultiResults(params *QueryTaskMultiResultsParams, opts ...ClientOption) (*QueryTaskMultiResultsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewQueryTaskMultiResultsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "query_task_multi_results",
 		Method:             "GET",
 		PathPattern:        "/query_tasks/multi_results",
@@ -253,27 +577,59 @@ func (a *Client) QueryTaskMultiResults(params *QueryTaskMultiResultsParams) (*Qu
 		Reader:             &QueryTaskMultiResultsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*QueryTaskMultiResultsOK), nil
-
+	success, ok := result.(*QueryTaskMultiResultsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for query_task_multi_results: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-QueryTaskResults gets async query results
+  QueryTaskResults gets async query results
 
-Returns the results of an async Query Task if the query has completed.
+  ### Get Async Query Results
+
+Returns the results of an async query task if the query has completed.
+
+If the query task is still running or waiting to run, this function returns 204 No Content.
+
+If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
+
+Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task
+Call query_task_results only after the query task status reaches "Complete".
+
+You can also use [query_task_multi_results()](#!/Query/query_task_multi_results) retrieve the
+results of multiple async query tasks at the same time.
+
+#### SQL Error Handling:
+If the query fails due to a SQL db error, how this is communicated depends on the result_format you requested in `create_query_task()`.
+
+For `json_detail` result_format: `query_task_results()` will respond with HTTP status '200 OK' and db SQL error info
+will be in the `errors` property of the response object. The 'data' property will be empty.
+
+For all other result formats: `query_task_results()` will respond with HTTP status `400 Bad Request` and some db SQL error info
+will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
+These data formats can only carry row data, and error info is not row data.
 
 */
-func (a *Client) QueryTaskResults(params *QueryTaskResultsParams) (*QueryTaskResultsOK, *QueryTaskResultsNoContent, error) {
+func (a *Client) QueryTaskResults(params *QueryTaskResultsParams, opts ...ClientOption) (*QueryTaskResultsOK, *QueryTaskResultsNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewQueryTaskResultsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "query_task_results",
 		Method:             "GET",
 		PathPattern:        "/query_tasks/{query_task_id}/results",
@@ -284,7 +640,12 @@ func (a *Client) QueryTaskResults(params *QueryTaskResultsParams) (*QueryTaskRes
 		Reader:             &QueryTaskResultsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -294,14 +655,15 @@ func (a *Client) QueryTaskResults(params *QueryTaskResultsParams) (*QueryTaskRes
 	case *QueryTaskResultsNoContent:
 		return nil, value, nil
 	}
-	return nil, nil, nil
-
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RunInlineQuery runs inline query
+  RunInlineQuery runs inline query
 
-### Run the query that is specified inline in the posted body.
+  ### Run the query that is specified inline in the posted body.
 
 This allows running a query as defined in json in the posted body. This combines
 the two actions of posting & running a query into one step.
@@ -355,35 +717,45 @@ Supported formats:
 
 
 */
-func (a *Client) RunInlineQuery(params *RunInlineQueryParams) (*RunInlineQueryOK, error) {
+func (a *Client) RunInlineQuery(params *RunInlineQueryParams, opts ...ClientOption) (*RunInlineQueryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRunInlineQueryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "run_inline_query",
 		Method:             "POST",
 		PathPattern:        "/queries/run/{result_format}",
-		ProducesMediaTypes: []string{"application/json", "image/jpg", "image/png", "text"},
+		ProducesMediaTypes: []string{"application/json", "image/jpeg", "image/png", "text"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RunInlineQueryReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RunInlineQueryOK), nil
-
+	success, ok := result.(*RunInlineQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_inline_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RunQuery runs query
+  RunQuery runs query
 
-### Run a saved query.
+  ### Run a saved query.
 
 This runs a previously saved query. You can use this on a query that was generated in the Looker UI
 or one that you have explicitly created using the API. You can also use a query 'id' from a saved 'Look'.
@@ -408,35 +780,85 @@ Supported formats:
 
 
 */
-func (a *Client) RunQuery(params *RunQueryParams) (*RunQueryOK, error) {
+func (a *Client) RunQuery(params *RunQueryParams, opts ...ClientOption) (*RunQueryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRunQueryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "run_query",
 		Method:             "GET",
 		PathPattern:        "/queries/{query_id}/run/{result_format}",
-		ProducesMediaTypes: []string{"application/json", "image/jpg", "image/png", "text"},
+		ProducesMediaTypes: []string{"application/json", "image/jpeg", "image/png", "text"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RunQueryReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RunQueryOK), nil
-
+	success, ok := result.(*RunQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RunURLEncodedQuery runs Url encoded query
+  RunSQLQuery runs SQL runner query
 
-### Run an URL encoded query.
+  Execute a SQL Runner query in a given result_format.
+*/
+func (a *Client) RunSQLQuery(params *RunSQLQueryParams, opts ...ClientOption) (*RunSQLQueryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewRunSQLQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "run_sql_query",
+		Method:             "POST",
+		PathPattern:        "/sql_queries/{slug}/run/{result_format}",
+		ProducesMediaTypes: []string{"application/json", "image/jpeg", "image/png", "text"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &RunSQLQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*RunSQLQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_sql_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  RunURLEncodedQuery runs Url encoded query
+
+  ### Run an URL encoded query.
 
 This requires the caller to encode the specifiers for the query into the URL query part using
 Looker-specific syntax as explained below.
@@ -447,8 +869,8 @@ parameters into the URL of a single 'GET' request. This matches the way that the
 'explore' URLs etc.
 
 The parameters here are very similar to the json body formatting except that the filter syntax is
-tricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button
-in this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.
+tricky. Unfortunately, this format makes this method not currently callable via the 'Try it out!' button
+in this documentation page. But, this is callable when creating URLs manually or when using the Looker SDK.
 
 Here is an example inline query URL:
 
@@ -492,29 +914,79 @@ Supported formats:
 
 
 */
-func (a *Client) RunURLEncodedQuery(params *RunURLEncodedQueryParams) (*RunURLEncodedQueryOK, error) {
+func (a *Client) RunURLEncodedQuery(params *RunURLEncodedQueryParams, opts ...ClientOption) (*RunURLEncodedQueryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRunURLEncodedQueryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "run_url_encoded_query",
 		Method:             "GET",
 		PathPattern:        "/queries/models/{model_name}/views/{view_name}/run/{result_format}",
-		ProducesMediaTypes: []string{"application/json", "image/jpg", "image/png", "text"},
+		ProducesMediaTypes: []string{"application/json", "image/jpeg", "image/png", "text"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
 		Reader:             &RunURLEncodedQueryReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RunURLEncodedQueryOK), nil
+	success, ok := result.(*RunURLEncodedQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for run_url_encoded_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
 
+/*
+  SQLQuery gets SQL runner query
+
+  Get a SQL Runner query.
+*/
+func (a *Client) SQLQuery(params *SQLQueryParams, opts ...ClientOption) (*SQLQueryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSQLQueryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "sql_query",
+		Method:             "GET",
+		PathPattern:        "/sql_queries/{slug}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SQLQueryReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SQLQueryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for sql_query: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

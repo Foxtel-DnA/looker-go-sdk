@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // SearchDashboardsReader is a Reader for the SearchDashboards structure.
@@ -24,30 +23,26 @@ type SearchDashboardsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SearchDashboardsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSearchDashboardsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSearchDashboardsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSearchDashboardsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSearchDashboardsOK() *SearchDashboardsOK {
 	return &SearchDashboardsOK{}
 }
 
-/*SearchDashboardsOK handles this case with default header values.
+/* SearchDashboardsOK describes a response with status code 200, with default header values.
 
 dashboards
 */
@@ -66,6 +61,9 @@ type SearchDashboardsOK struct {
 
 func (o *SearchDashboardsOK) Error() string {
 	return fmt.Sprintf("[GET /dashboards/search][%d] searchDashboardsOK  %+v", 200, o.Payload)
+}
+func (o *SearchDashboardsOK) GetPayload() []*models.Dashboard {
+	return o.Payload
 }
 
 func (o *SearchDashboardsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSearchDashboardsBadRequest() *SearchDashboardsBadRequest {
 	return &SearchDashboardsBadRequest{}
 }
 
-/*SearchDashboardsBadRequest handles this case with default header values.
+/* SearchDashboardsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SearchDashboardsBadRequest struct {
 
 func (o *SearchDashboardsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /dashboards/search][%d] searchDashboardsBadRequest  %+v", 400, o.Payload)
+}
+func (o *SearchDashboardsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchDashboardsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSearchDashboardsNotFound() *SearchDashboardsNotFound {
 	return &SearchDashboardsNotFound{}
 }
 
-/*SearchDashboardsNotFound handles this case with default header values.
+/* SearchDashboardsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SearchDashboardsNotFound struct {
 
 func (o *SearchDashboardsNotFound) Error() string {
 	return fmt.Sprintf("[GET /dashboards/search][%d] searchDashboardsNotFound  %+v", 404, o.Payload)
+}
+func (o *SearchDashboardsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchDashboardsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

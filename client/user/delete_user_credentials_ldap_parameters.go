@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteUserCredentialsLdapParams creates a new DeleteUserCredentialsLdapParams object
-// with the default values initialized.
+// NewDeleteUserCredentialsLdapParams creates a new DeleteUserCredentialsLdapParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteUserCredentialsLdapParams() *DeleteUserCredentialsLdapParams {
-	var ()
 	return &DeleteUserCredentialsLdapParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteUserCredentialsLdapParamsWithTimeout creates a new DeleteUserCredentialsLdapParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteUserCredentialsLdapParamsWithTimeout(timeout time.Duration) *DeleteUserCredentialsLdapParams {
-	var ()
 	return &DeleteUserCredentialsLdapParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteUserCredentialsLdapParamsWithContext creates a new DeleteUserCredentialsLdapParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteUserCredentialsLdapParamsWithContext(ctx context.Context) *DeleteUserCredentialsLdapParams {
-	var ()
 	return &DeleteUserCredentialsLdapParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteUserCredentialsLdapParamsWithHTTPClient creates a new DeleteUserCredentialsLdapParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteUserCredentialsLdapParamsWithHTTPClient(client *http.Client) *DeleteUserCredentialsLdapParams {
-	var ()
 	return &DeleteUserCredentialsLdapParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteUserCredentialsLdapParams contains all the parameters to send to the API endpoint
-for the delete user credentials ldap operation typically these are written to a http.Request
+/* DeleteUserCredentialsLdapParams contains all the parameters to send to the API endpoint
+   for the delete user credentials ldap operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteUserCredentialsLdapParams struct {
 
-	/*UserID
-	  id of user
+	/* UserID.
 
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete user credentials ldap params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsLdapParams) WithDefaults() *DeleteUserCredentialsLdapParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete user credentials ldap params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteUserCredentialsLdapParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete user credentials ldap params

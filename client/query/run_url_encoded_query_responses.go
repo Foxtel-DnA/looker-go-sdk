@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // RunURLEncodedQueryReader is a Reader for the RunURLEncodedQuery structure.
@@ -24,37 +23,38 @@ type RunURLEncodedQueryReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *RunURLEncodedQueryReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewRunURLEncodedQueryOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewRunURLEncodedQueryBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewRunURLEncodedQueryNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewRunURLEncodedQueryUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewRunURLEncodedQueryTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewRunURLEncodedQueryOK() *RunURLEncodedQueryOK {
 	return &RunURLEncodedQueryOK{}
 }
 
-/*RunURLEncodedQueryOK handles this case with default header values.
+/* RunURLEncodedQueryOK describes a response with status code 200, with default header values.
 
 Query
 */
@@ -73,6 +73,9 @@ type RunURLEncodedQueryOK struct {
 
 func (o *RunURLEncodedQueryOK) Error() string {
 	return fmt.Sprintf("[GET /queries/models/{model_name}/views/{view_name}/run/{result_format}][%d] runUrlEncodedQueryOK  %+v", 200, o.Payload)
+}
+func (o *RunURLEncodedQueryOK) GetPayload() string {
+	return o.Payload
 }
 
 func (o *RunURLEncodedQueryOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewRunURLEncodedQueryBadRequest() *RunURLEncodedQueryBadRequest {
 	return &RunURLEncodedQueryBadRequest{}
 }
 
-/*RunURLEncodedQueryBadRequest handles this case with default header values.
+/* RunURLEncodedQueryBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type RunURLEncodedQueryBadRequest struct {
 
 func (o *RunURLEncodedQueryBadRequest) Error() string {
 	return fmt.Sprintf("[GET /queries/models/{model_name}/views/{view_name}/run/{result_format}][%d] runUrlEncodedQueryBadRequest  %+v", 400, o.Payload)
+}
+func (o *RunURLEncodedQueryBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RunURLEncodedQueryBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewRunURLEncodedQueryNotFound() *RunURLEncodedQueryNotFound {
 	return &RunURLEncodedQueryNotFound{}
 }
 
-/*RunURLEncodedQueryNotFound handles this case with default header values.
+/* RunURLEncodedQueryNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type RunURLEncodedQueryNotFound struct {
 
 func (o *RunURLEncodedQueryNotFound) Error() string {
 	return fmt.Sprintf("[GET /queries/models/{model_name}/views/{view_name}/run/{result_format}][%d] runUrlEncodedQueryNotFound  %+v", 404, o.Payload)
+}
+func (o *RunURLEncodedQueryNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RunURLEncodedQueryNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewRunURLEncodedQueryUnprocessableEntity() *RunURLEncodedQueryUnprocessable
 	return &RunURLEncodedQueryUnprocessableEntity{}
 }
 
-/*RunURLEncodedQueryUnprocessableEntity handles this case with default header values.
+/* RunURLEncodedQueryUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -159,10 +168,45 @@ type RunURLEncodedQueryUnprocessableEntity struct {
 func (o *RunURLEncodedQueryUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[GET /queries/models/{model_name}/views/{view_name}/run/{result_format}][%d] runUrlEncodedQueryUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *RunURLEncodedQueryUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *RunURLEncodedQueryUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewRunURLEncodedQueryTooManyRequests creates a RunURLEncodedQueryTooManyRequests with default headers values
+func NewRunURLEncodedQueryTooManyRequests() *RunURLEncodedQueryTooManyRequests {
+	return &RunURLEncodedQueryTooManyRequests{}
+}
+
+/* RunURLEncodedQueryTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type RunURLEncodedQueryTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *RunURLEncodedQueryTooManyRequests) Error() string {
+	return fmt.Sprintf("[GET /queries/models/{model_name}/views/{view_name}/run/{result_format}][%d] runUrlEncodedQueryTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *RunURLEncodedQueryTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *RunURLEncodedQueryTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // AccessToken access token
+//
 // swagger:model AccessToken
 type AccessToken struct {
 
@@ -30,6 +34,55 @@ type AccessToken struct {
 
 // Validate validates this access token
 func (m *AccessToken) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this access token based on the context it is used
+func (m *AccessToken) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAccessToken(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpiresIn(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTokenType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AccessToken) contextValidateAccessToken(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "access_token", "body", string(m.AccessToken)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *AccessToken) contextValidateExpiresIn(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "expires_in", "body", int64(m.ExpiresIn)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *AccessToken) contextValidateTokenType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "token_type", "body", string(m.TokenType)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

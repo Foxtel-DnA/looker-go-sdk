@@ -13,69 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewIntegrationParams creates a new IntegrationParams object
-// with the default values initialized.
+// NewIntegrationParams creates a new IntegrationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewIntegrationParams() *IntegrationParams {
-	var ()
 	return &IntegrationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewIntegrationParamsWithTimeout creates a new IntegrationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewIntegrationParamsWithTimeout(timeout time.Duration) *IntegrationParams {
-	var ()
 	return &IntegrationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewIntegrationParamsWithContext creates a new IntegrationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewIntegrationParamsWithContext(ctx context.Context) *IntegrationParams {
-	var ()
 	return &IntegrationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewIntegrationParamsWithHTTPClient creates a new IntegrationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewIntegrationParamsWithHTTPClient(client *http.Client) *IntegrationParams {
-	var ()
 	return &IntegrationParams{
 		HTTPClient: client,
 	}
 }
 
-/*IntegrationParams contains all the parameters to send to the API endpoint
-for the integration operation typically these are written to a http.Request
+/* IntegrationParams contains all the parameters to send to the API endpoint
+   for the integration operation.
+
+   Typically these are written to a http.Request.
 */
 type IntegrationParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*IntegrationID
-	  Id of Integration
 
+	/* IntegrationID.
+
+	   Id of integration
 	*/
-	IntegrationID int64
+	IntegrationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the integration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *IntegrationParams) WithDefaults() *IntegrationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the integration params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *IntegrationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the integration params
@@ -123,13 +136,13 @@ func (o *IntegrationParams) SetFields(fields *string) {
 }
 
 // WithIntegrationID adds the integrationID to the integration params
-func (o *IntegrationParams) WithIntegrationID(integrationID int64) *IntegrationParams {
+func (o *IntegrationParams) WithIntegrationID(integrationID string) *IntegrationParams {
 	o.SetIntegrationID(integrationID)
 	return o
 }
 
 // SetIntegrationID adds the integrationId to the integration params
-func (o *IntegrationParams) SetIntegrationID(integrationID int64) {
+func (o *IntegrationParams) SetIntegrationID(integrationID string) {
 	o.IntegrationID = integrationID
 }
 
@@ -145,20 +158,21 @@ func (o *IntegrationParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param integration_id
-	if err := r.SetPathParam("integration_id", swag.FormatInt64(o.IntegrationID)); err != nil {
+	if err := r.SetPathParam("integration_id", o.IntegrationID); err != nil {
 		return err
 	}
 

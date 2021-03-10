@@ -13,74 +13,91 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSetUserRolesParams creates a new SetUserRolesParams object
-// with the default values initialized.
+// NewSetUserRolesParams creates a new SetUserRolesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSetUserRolesParams() *SetUserRolesParams {
-	var ()
 	return &SetUserRolesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSetUserRolesParamsWithTimeout creates a new SetUserRolesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSetUserRolesParamsWithTimeout(timeout time.Duration) *SetUserRolesParams {
-	var ()
 	return &SetUserRolesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSetUserRolesParamsWithContext creates a new SetUserRolesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSetUserRolesParamsWithContext(ctx context.Context) *SetUserRolesParams {
-	var ()
 	return &SetUserRolesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSetUserRolesParamsWithHTTPClient creates a new SetUserRolesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSetUserRolesParamsWithHTTPClient(client *http.Client) *SetUserRolesParams {
-	var ()
 	return &SetUserRolesParams{
 		HTTPClient: client,
 	}
 }
 
-/*SetUserRolesParams contains all the parameters to send to the API endpoint
-for the set user roles operation typically these are written to a http.Request
+/* SetUserRolesParams contains all the parameters to send to the API endpoint
+   for the set user roles operation.
+
+   Typically these are written to a http.Request.
 */
 type SetUserRolesParams struct {
 
-	/*Body
-	  array of roles ids for user
+	/* Body.
 
+	   array of roles ids for user
 	*/
 	Body []int64
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  id of user
 
+	/* UserID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the set user roles params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetUserRolesParams) WithDefaults() *SetUserRolesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the set user roles params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SetUserRolesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the set user roles params
@@ -156,7 +173,6 @@ func (o *SetUserRolesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -167,16 +183,17 @@ func (o *SetUserRolesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

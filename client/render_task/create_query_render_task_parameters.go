@@ -13,84 +13,107 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewCreateQueryRenderTaskParams creates a new CreateQueryRenderTaskParams object
-// with the default values initialized.
+// NewCreateQueryRenderTaskParams creates a new CreateQueryRenderTaskParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateQueryRenderTaskParams() *CreateQueryRenderTaskParams {
-	var ()
 	return &CreateQueryRenderTaskParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateQueryRenderTaskParamsWithTimeout creates a new CreateQueryRenderTaskParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateQueryRenderTaskParamsWithTimeout(timeout time.Duration) *CreateQueryRenderTaskParams {
-	var ()
 	return &CreateQueryRenderTaskParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateQueryRenderTaskParamsWithContext creates a new CreateQueryRenderTaskParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateQueryRenderTaskParamsWithContext(ctx context.Context) *CreateQueryRenderTaskParams {
-	var ()
 	return &CreateQueryRenderTaskParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateQueryRenderTaskParamsWithHTTPClient creates a new CreateQueryRenderTaskParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateQueryRenderTaskParamsWithHTTPClient(client *http.Client) *CreateQueryRenderTaskParams {
-	var ()
 	return &CreateQueryRenderTaskParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateQueryRenderTaskParams contains all the parameters to send to the API endpoint
-for the create query render task operation typically these are written to a http.Request
+/* CreateQueryRenderTaskParams contains all the parameters to send to the API endpoint
+   for the create query render task operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateQueryRenderTaskParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*Height
-	  Output height in pixels
 
+	/* Height.
+
+	   Output height in pixels
+
+	   Format: int64
 	*/
 	Height int64
-	/*QueryID
-	  Id of the query to render
 
+	/* QueryID.
+
+	   Id of the query to render
+
+	   Format: int64
 	*/
 	QueryID int64
-	/*ResultFormat
-	  Output type: png or jpg
 
+	/* ResultFormat.
+
+	   Output type: png or jpg
 	*/
 	ResultFormat string
-	/*Width
-	  Output width in pixels
 
+	/* Width.
+
+	   Output width in pixels
+
+	   Format: int64
 	*/
 	Width int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create query render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateQueryRenderTaskParams) WithDefaults() *CreateQueryRenderTaskParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create query render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateQueryRenderTaskParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create query render task params
@@ -193,22 +216,24 @@ func (o *CreateQueryRenderTaskParams) WriteToRequest(r runtime.ClientRequest, re
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param height
 	qrHeight := o.Height
 	qHeight := swag.FormatInt64(qrHeight)
 	if qHeight != "" {
+
 		if err := r.SetQueryParam("height", qHeight); err != nil {
 			return err
 		}
@@ -228,6 +253,7 @@ func (o *CreateQueryRenderTaskParams) WriteToRequest(r runtime.ClientRequest, re
 	qrWidth := o.Width
 	qWidth := swag.FormatInt64(qrWidth)
 	if qWidth != "" {
+
 		if err := r.SetQueryParam("width", qWidth); err != nil {
 			return err
 		}

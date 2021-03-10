@@ -13,101 +13,127 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateDashboardRenderTaskParams creates a new CreateDashboardRenderTaskParams object
-// with the default values initialized.
+// NewCreateDashboardRenderTaskParams creates a new CreateDashboardRenderTaskParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateDashboardRenderTaskParams() *CreateDashboardRenderTaskParams {
-	var ()
 	return &CreateDashboardRenderTaskParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateDashboardRenderTaskParamsWithTimeout creates a new CreateDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateDashboardRenderTaskParamsWithTimeout(timeout time.Duration) *CreateDashboardRenderTaskParams {
-	var ()
 	return &CreateDashboardRenderTaskParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateDashboardRenderTaskParamsWithContext creates a new CreateDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateDashboardRenderTaskParamsWithContext(ctx context.Context) *CreateDashboardRenderTaskParams {
-	var ()
 	return &CreateDashboardRenderTaskParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateDashboardRenderTaskParamsWithHTTPClient creates a new CreateDashboardRenderTaskParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateDashboardRenderTaskParamsWithHTTPClient(client *http.Client) *CreateDashboardRenderTaskParams {
-	var ()
 	return &CreateDashboardRenderTaskParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateDashboardRenderTaskParams contains all the parameters to send to the API endpoint
-for the create dashboard render task operation typically these are written to a http.Request
+/* CreateDashboardRenderTaskParams contains all the parameters to send to the API endpoint
+   for the create dashboard render task operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateDashboardRenderTaskParams struct {
 
-	/*Body
-	  Dashboard render task parameters
+	/* Body.
 
+	   Dashboard render task parameters
 	*/
 	Body *models.CreateDashboardRenderTask
-	/*DashboardID
-	  Id of dashboard to render
 
+	/* DashboardID.
+
+	   Id of dashboard to render
+
+	   Format: int64
 	*/
 	DashboardID int64
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*Height
-	  Output height in pixels
 
+	/* Height.
+
+	   Output height in pixels
+
+	   Format: int64
 	*/
 	Height int64
-	/*PdfLandscape
-	  Whether to render pdf in landscape
 
+	/* PdfLandscape.
+
+	   Whether to render pdf in landscape paper orientation
 	*/
 	PdfLandscape *bool
-	/*PdfPaperSize
-	  Paper size for pdf
 
+	/* PdfPaperSize.
+
+	   Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
 	*/
 	PdfPaperSize *string
-	/*ResultFormat
-	  Output type: pdf, png, or jpg
 
+	/* ResultFormat.
+
+	   Output type: pdf, png, or jpg
 	*/
 	ResultFormat string
-	/*Width
-	  Output width in pixels
 
+	/* Width.
+
+	   Output width in pixels
+
+	   Format: int64
 	*/
 	Width int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create dashboard render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateDashboardRenderTaskParams) WithDefaults() *CreateDashboardRenderTaskParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create dashboard render task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateDashboardRenderTaskParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create dashboard render task params
@@ -238,7 +264,6 @@ func (o *CreateDashboardRenderTaskParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -254,22 +279,24 @@ func (o *CreateDashboardRenderTaskParams) WriteToRequest(r runtime.ClientRequest
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param height
 	qrHeight := o.Height
 	qHeight := swag.FormatInt64(qrHeight)
 	if qHeight != "" {
+
 		if err := r.SetQueryParam("height", qHeight); err != nil {
 			return err
 		}
@@ -279,32 +306,34 @@ func (o *CreateDashboardRenderTaskParams) WriteToRequest(r runtime.ClientRequest
 
 		// query param pdf_landscape
 		var qrPdfLandscape bool
+
 		if o.PdfLandscape != nil {
 			qrPdfLandscape = *o.PdfLandscape
 		}
 		qPdfLandscape := swag.FormatBool(qrPdfLandscape)
 		if qPdfLandscape != "" {
+
 			if err := r.SetQueryParam("pdf_landscape", qPdfLandscape); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PdfPaperSize != nil {
 
 		// query param pdf_paper_size
 		var qrPdfPaperSize string
+
 		if o.PdfPaperSize != nil {
 			qrPdfPaperSize = *o.PdfPaperSize
 		}
 		qPdfPaperSize := qrPdfPaperSize
 		if qPdfPaperSize != "" {
+
 			if err := r.SetQueryParam("pdf_paper_size", qPdfPaperSize); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param result_format
@@ -316,6 +345,7 @@ func (o *CreateDashboardRenderTaskParams) WriteToRequest(r runtime.ClientRequest
 	qrWidth := o.Width
 	qWidth := swag.FormatInt64(qrWidth)
 	if qWidth != "" {
+
 		if err := r.SetQueryParam("width", qWidth); err != nil {
 			return err
 		}

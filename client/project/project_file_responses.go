@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // ProjectFileReader is a Reader for the ProjectFile structure.
@@ -24,30 +23,26 @@ type ProjectFileReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ProjectFileReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewProjectFileOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewProjectFileBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewProjectFileNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewProjectFileOK() *ProjectFileOK {
 	return &ProjectFileOK{}
 }
 
-/*ProjectFileOK handles this case with default header values.
+/* ProjectFileOK describes a response with status code 200, with default header values.
 
 Project File
 */
@@ -66,6 +61,9 @@ type ProjectFileOK struct {
 
 func (o *ProjectFileOK) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/files/file][%d] projectFileOK  %+v", 200, o.Payload)
+}
+func (o *ProjectFileOK) GetPayload() *models.ProjectFile {
+	return o.Payload
 }
 
 func (o *ProjectFileOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewProjectFileBadRequest() *ProjectFileBadRequest {
 	return &ProjectFileBadRequest{}
 }
 
-/*ProjectFileBadRequest handles this case with default header values.
+/* ProjectFileBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ProjectFileBadRequest struct {
 
 func (o *ProjectFileBadRequest) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/files/file][%d] projectFileBadRequest  %+v", 400, o.Payload)
+}
+func (o *ProjectFileBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ProjectFileBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewProjectFileNotFound() *ProjectFileNotFound {
 	return &ProjectFileNotFound{}
 }
 
-/*ProjectFileNotFound handles this case with default header values.
+/* ProjectFileNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ProjectFileNotFound struct {
 
 func (o *ProjectFileNotFound) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/files/file][%d] projectFileNotFound  %+v", 404, o.Payload)
+}
+func (o *ProjectFileNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ProjectFileNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewAllContentMetadatasParams creates a new AllContentMetadatasParams object
-// with the default values initialized.
+// NewAllContentMetadatasParams creates a new AllContentMetadatasParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllContentMetadatasParams() *AllContentMetadatasParams {
-	var ()
 	return &AllContentMetadatasParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllContentMetadatasParamsWithTimeout creates a new AllContentMetadatasParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllContentMetadatasParamsWithTimeout(timeout time.Duration) *AllContentMetadatasParams {
-	var ()
 	return &AllContentMetadatasParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllContentMetadatasParamsWithContext creates a new AllContentMetadatasParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllContentMetadatasParamsWithContext(ctx context.Context) *AllContentMetadatasParams {
-	var ()
 	return &AllContentMetadatasParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllContentMetadatasParamsWithHTTPClient creates a new AllContentMetadatasParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllContentMetadatasParamsWithHTTPClient(client *http.Client) *AllContentMetadatasParams {
-	var ()
 	return &AllContentMetadatasParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllContentMetadatasParams contains all the parameters to send to the API endpoint
-for the all content metadatas operation typically these are written to a http.Request
+/* AllContentMetadatasParams contains all the parameters to send to the API endpoint
+   for the all content metadatas operation.
+
+   Typically these are written to a http.Request.
 */
 type AllContentMetadatasParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*ParentID
-	  Parent space of content.
 
+	/* ParentID.
+
+	   Parent space of content.
+
+	   Format: int64
 	*/
 	ParentID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all content metadatas params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllContentMetadatasParams) WithDefaults() *AllContentMetadatasParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all content metadatas params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllContentMetadatasParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all content metadatas params
@@ -145,22 +161,24 @@ func (o *AllContentMetadatasParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param parent_id
 	qrParentID := o.ParentID
 	qParentID := swag.FormatInt64(qrParentID)
 	if qParentID != "" {
+
 		if err := r.SetQueryParam("parent_id", qParentID); err != nil {
 			return err
 		}

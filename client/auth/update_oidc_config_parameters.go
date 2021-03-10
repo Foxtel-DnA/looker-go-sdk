@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateOidcConfigParams creates a new UpdateOidcConfigParams object
-// with the default values initialized.
+// NewUpdateOidcConfigParams creates a new UpdateOidcConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateOidcConfigParams() *UpdateOidcConfigParams {
-	var ()
 	return &UpdateOidcConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateOidcConfigParamsWithTimeout creates a new UpdateOidcConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateOidcConfigParamsWithTimeout(timeout time.Duration) *UpdateOidcConfigParams {
-	var ()
 	return &UpdateOidcConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateOidcConfigParamsWithContext creates a new UpdateOidcConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateOidcConfigParamsWithContext(ctx context.Context) *UpdateOidcConfigParams {
-	var ()
 	return &UpdateOidcConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateOidcConfigParamsWithHTTPClient creates a new UpdateOidcConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateOidcConfigParamsWithHTTPClient(client *http.Client) *UpdateOidcConfigParams {
-	var ()
 	return &UpdateOidcConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateOidcConfigParams contains all the parameters to send to the API endpoint
-for the update oidc config operation typically these are written to a http.Request
+/* UpdateOidcConfigParams contains all the parameters to send to the API endpoint
+   for the update oidc config operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateOidcConfigParams struct {
 
-	/*Body
-	  OIDC Config
+	/* Body.
 
+	   OIDC Config
 	*/
 	Body *models.OIDCConfig
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update oidc config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateOidcConfigParams) WithDefaults() *UpdateOidcConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update oidc config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateOidcConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update oidc config params
@@ -125,7 +138,6 @@ func (o *UpdateOidcConfigParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

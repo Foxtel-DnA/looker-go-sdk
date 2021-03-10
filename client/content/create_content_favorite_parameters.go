@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewCreateContentFavoriteParams creates a new CreateContentFavoriteParams object
-// with the default values initialized.
+// NewCreateContentFavoriteParams creates a new CreateContentFavoriteParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateContentFavoriteParams() *CreateContentFavoriteParams {
-	var ()
 	return &CreateContentFavoriteParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateContentFavoriteParamsWithTimeout creates a new CreateContentFavoriteParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateContentFavoriteParamsWithTimeout(timeout time.Duration) *CreateContentFavoriteParams {
-	var ()
 	return &CreateContentFavoriteParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateContentFavoriteParamsWithContext creates a new CreateContentFavoriteParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateContentFavoriteParamsWithContext(ctx context.Context) *CreateContentFavoriteParams {
-	var ()
 	return &CreateContentFavoriteParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateContentFavoriteParamsWithHTTPClient creates a new CreateContentFavoriteParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateContentFavoriteParamsWithHTTPClient(client *http.Client) *CreateContentFavoriteParams {
-	var ()
 	return &CreateContentFavoriteParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateContentFavoriteParams contains all the parameters to send to the API endpoint
-for the create content favorite operation typically these are written to a http.Request
+/* CreateContentFavoriteParams contains all the parameters to send to the API endpoint
+   for the create content favorite operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateContentFavoriteParams struct {
 
-	/*Body
-	  Favorite Content
+	/* Body.
 
+	   Favorite Content
 	*/
 	Body *models.ContentFavorite
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create content favorite params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateContentFavoriteParams) WithDefaults() *CreateContentFavoriteParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create content favorite params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateContentFavoriteParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create content favorite params
@@ -125,7 +138,6 @@ func (o *CreateContentFavoriteParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

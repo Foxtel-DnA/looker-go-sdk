@@ -6,21 +6,21 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DBConnectionOverride d b connection override
+//
 // swagger:model DBConnectionOverride
 type DBConnectionOverride struct {
 
 	// SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
 	AfterConnectStatements string `json:"after_connect_statements,omitempty"`
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
 	Certificate string `json:"certificate,omitempty"`
@@ -59,6 +59,29 @@ type DBConnectionOverride struct {
 
 // Validate validates this d b connection override
 func (m *DBConnectionOverride) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this d b connection override based on the context it is used
+func (m *DBConnectionOverride) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateHasPassword(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DBConnectionOverride) contextValidateHasPassword(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_password", "body", m.HasPassword); err != nil {
+		return err
+	}
+
 	return nil
 }
 

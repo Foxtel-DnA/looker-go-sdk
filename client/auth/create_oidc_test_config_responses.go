@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateOidcTestConfigReader is a Reader for the CreateOidcTestConfig structure.
@@ -24,37 +23,32 @@ type CreateOidcTestConfigReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateOidcTestConfigReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateOidcTestConfigOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateOidcTestConfigBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateOidcTestConfigNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateOidcTestConfigUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewCreateOidcTestConfigOK() *CreateOidcTestConfigOK {
 	return &CreateOidcTestConfigOK{}
 }
 
-/*CreateOidcTestConfigOK handles this case with default header values.
+/* CreateOidcTestConfigOK describes a response with status code 200, with default header values.
 
 OIDC test config
 */
@@ -73,6 +67,9 @@ type CreateOidcTestConfigOK struct {
 
 func (o *CreateOidcTestConfigOK) Error() string {
 	return fmt.Sprintf("[POST /oidc_test_configs][%d] createOidcTestConfigOK  %+v", 200, o.Payload)
+}
+func (o *CreateOidcTestConfigOK) GetPayload() *models.OIDCConfig {
+	return o.Payload
 }
 
 func (o *CreateOidcTestConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewCreateOidcTestConfigBadRequest() *CreateOidcTestConfigBadRequest {
 	return &CreateOidcTestConfigBadRequest{}
 }
 
-/*CreateOidcTestConfigBadRequest handles this case with default header values.
+/* CreateOidcTestConfigBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type CreateOidcTestConfigBadRequest struct {
 
 func (o *CreateOidcTestConfigBadRequest) Error() string {
 	return fmt.Sprintf("[POST /oidc_test_configs][%d] createOidcTestConfigBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateOidcTestConfigBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateOidcTestConfigBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewCreateOidcTestConfigNotFound() *CreateOidcTestConfigNotFound {
 	return &CreateOidcTestConfigNotFound{}
 }
 
-/*CreateOidcTestConfigNotFound handles this case with default header values.
+/* CreateOidcTestConfigNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +131,9 @@ type CreateOidcTestConfigNotFound struct {
 
 func (o *CreateOidcTestConfigNotFound) Error() string {
 	return fmt.Sprintf("[POST /oidc_test_configs][%d] createOidcTestConfigNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateOidcTestConfigNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateOidcTestConfigNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewCreateOidcTestConfigUnprocessableEntity() *CreateOidcTestConfigUnprocess
 	return &CreateOidcTestConfigUnprocessableEntity{}
 }
 
-/*CreateOidcTestConfigUnprocessableEntity handles this case with default header values.
+/* CreateOidcTestConfigUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -160,6 +163,9 @@ type CreateOidcTestConfigUnprocessableEntity struct {
 
 func (o *CreateOidcTestConfigUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /oidc_test_configs][%d] createOidcTestConfigUnprocessableEntity  %+v", 422, o.Payload)
+}
+func (o *CreateOidcTestConfigUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
 }
 
 func (o *CreateOidcTestConfigUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

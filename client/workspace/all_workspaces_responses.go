@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllWorkspacesReader is a Reader for the AllWorkspaces structure.
@@ -24,30 +23,26 @@ type AllWorkspacesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllWorkspacesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllWorkspacesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllWorkspacesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllWorkspacesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllWorkspacesOK() *AllWorkspacesOK {
 	return &AllWorkspacesOK{}
 }
 
-/*AllWorkspacesOK handles this case with default header values.
+/* AllWorkspacesOK describes a response with status code 200, with default header values.
 
 Workspace
 */
@@ -66,6 +61,9 @@ type AllWorkspacesOK struct {
 
 func (o *AllWorkspacesOK) Error() string {
 	return fmt.Sprintf("[GET /workspaces][%d] allWorkspacesOK  %+v", 200, o.Payload)
+}
+func (o *AllWorkspacesOK) GetPayload() []*models.Workspace {
+	return o.Payload
 }
 
 func (o *AllWorkspacesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllWorkspacesBadRequest() *AllWorkspacesBadRequest {
 	return &AllWorkspacesBadRequest{}
 }
 
-/*AllWorkspacesBadRequest handles this case with default header values.
+/* AllWorkspacesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllWorkspacesBadRequest struct {
 
 func (o *AllWorkspacesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /workspaces][%d] allWorkspacesBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllWorkspacesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllWorkspacesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllWorkspacesNotFound() *AllWorkspacesNotFound {
 	return &AllWorkspacesNotFound{}
 }
 
-/*AllWorkspacesNotFound handles this case with default header values.
+/* AllWorkspacesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllWorkspacesNotFound struct {
 
 func (o *AllWorkspacesNotFound) Error() string {
 	return fmt.Sprintf("[GET /workspaces][%d] allWorkspacesNotFound  %+v", 404, o.Payload)
+}
+func (o *AllWorkspacesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllWorkspacesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

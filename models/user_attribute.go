@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // UserAttribute user attribute
+//
 // swagger:model UserAttribute
 type UserAttribute struct {
 
@@ -28,6 +32,10 @@ type UserAttribute struct {
 	// Unique Id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
+
+	// Attribute is permanent and cannot be deleted
+	// Read Only: true
+	IsPermanent *bool `json:"is_permanent,omitempty"`
 
 	// Attribute is a system default
 	// Read Only: true
@@ -54,6 +62,64 @@ type UserAttribute struct {
 
 // Validate validates this user attribute
 func (m *UserAttribute) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this user attribute based on the context it is used
+func (m *UserAttribute) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsPermanent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIsSystem(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UserAttribute) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *UserAttribute) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttribute) contextValidateIsPermanent(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_permanent", "body", m.IsPermanent); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *UserAttribute) contextValidateIsSystem(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "is_system", "body", m.IsSystem); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -13,134 +13,199 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewSearchDashboardsParams creates a new SearchDashboardsParams object
-// with the default values initialized.
+// NewSearchDashboardsParams creates a new SearchDashboardsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchDashboardsParams() *SearchDashboardsParams {
-	var ()
 	return &SearchDashboardsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchDashboardsParamsWithTimeout creates a new SearchDashboardsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchDashboardsParamsWithTimeout(timeout time.Duration) *SearchDashboardsParams {
-	var ()
 	return &SearchDashboardsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchDashboardsParamsWithContext creates a new SearchDashboardsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchDashboardsParamsWithContext(ctx context.Context) *SearchDashboardsParams {
-	var ()
 	return &SearchDashboardsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchDashboardsParamsWithHTTPClient creates a new SearchDashboardsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchDashboardsParamsWithHTTPClient(client *http.Client) *SearchDashboardsParams {
-	var ()
 	return &SearchDashboardsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchDashboardsParams contains all the parameters to send to the API endpoint
-for the search dashboards operation typically these are written to a http.Request
+/* SearchDashboardsParams contains all the parameters to send to the API endpoint
+   for the search dashboards operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchDashboardsParams struct {
 
-	/*ContentFavoriteID
-	  Filter on a content favorite id.
+	/* ContentFavoriteID.
 
+	   Filter on a content favorite id.
+
+	   Format: int64
 	*/
 	ContentFavoriteID *int64
-	/*Deleted
-	  Filter on dashboards deleted status.
 
+	/* ContentMetadataID.
+
+	   Filter on a content favorite id.
+
+	   Format: int64
+	*/
+	ContentMetadataID *int64
+
+	/* Curate.
+
+	   Exclude items that exist only in personal spaces other than the users
+	*/
+	Curate *bool
+
+	/* Deleted.
+
+	   Filter on dashboards deleted status.
 	*/
 	Deleted *string
-	/*Description
-	  Match Dashboard description.
 
+	/* Description.
+
+	   Match Dashboard description.
 	*/
 	Description *string
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*ID
-	  Match dashboard id.
 
+	/* FilterOr.
+
+	   Combine given search criteria in a boolean OR expression
+	*/
+	FilterOr *bool
+
+	/* FolderID.
+
+	   Filter on a particular space.
+	*/
+	FolderID *string
+
+	/* ID.
+
+	   Match dashboard id.
+
+	   Format: int64
 	*/
 	ID *int64
-	/*Limit
-	  Number of results to return. (used with offset and takes priority over page and per_page)
 
+	/* Limit.
+
+	   Number of results to return. (used with offset and takes priority over page and per_page)
+
+	   Format: int64
 	*/
 	Limit *int64
-	/*Offset
-	  Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
 
+	/* Offset.
+
+	   Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+
+	   Format: int64
 	*/
 	Offset *int64
-	/*Page
-	  Requested page.
 
+	/* Page.
+
+	   Requested page.
+
+	   Format: int64
 	*/
 	Page *int64
-	/*PerPage
-	  Results per page.
 
+	/* PerPage.
+
+	   Results per page.
+
+	   Format: int64
 	*/
 	PerPage *int64
-	/*Slug
-	  Match dashboard slug.
 
+	/* Slug.
+
+	   Match dashboard slug.
 	*/
 	Slug *string
-	/*Sorts
-	  Fields to sort by.
 
+	/* Sorts.
+
+	   One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
 	*/
 	Sorts *string
-	/*SpaceID
-	  Filter on a particular space.
 
+	/* SpaceID.
+
+	   Filter on a particular space.
 	*/
 	SpaceID *string
-	/*Title
-	  Match Dashboard title.
 
+	/* Title.
+
+	   Match Dashboard title.
 	*/
 	Title *string
-	/*UserID
-	  Filter on dashboards created by a particular user.
 
+	/* UserID.
+
+	   Filter on dashboards created by a particular user.
 	*/
 	UserID *string
-	/*ViewCount
-	  Filter on a particular value of view_count
 
+	/* ViewCount.
+
+	   Filter on a particular value of view_count
 	*/
 	ViewCount *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search dashboards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchDashboardsParams) WithDefaults() *SearchDashboardsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search dashboards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchDashboardsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search dashboards params
@@ -187,6 +252,28 @@ func (o *SearchDashboardsParams) SetContentFavoriteID(contentFavoriteID *int64) 
 	o.ContentFavoriteID = contentFavoriteID
 }
 
+// WithContentMetadataID adds the contentMetadataID to the search dashboards params
+func (o *SearchDashboardsParams) WithContentMetadataID(contentMetadataID *int64) *SearchDashboardsParams {
+	o.SetContentMetadataID(contentMetadataID)
+	return o
+}
+
+// SetContentMetadataID adds the contentMetadataId to the search dashboards params
+func (o *SearchDashboardsParams) SetContentMetadataID(contentMetadataID *int64) {
+	o.ContentMetadataID = contentMetadataID
+}
+
+// WithCurate adds the curate to the search dashboards params
+func (o *SearchDashboardsParams) WithCurate(curate *bool) *SearchDashboardsParams {
+	o.SetCurate(curate)
+	return o
+}
+
+// SetCurate adds the curate to the search dashboards params
+func (o *SearchDashboardsParams) SetCurate(curate *bool) {
+	o.Curate = curate
+}
+
 // WithDeleted adds the deleted to the search dashboards params
 func (o *SearchDashboardsParams) WithDeleted(deleted *string) *SearchDashboardsParams {
 	o.SetDeleted(deleted)
@@ -218,6 +305,28 @@ func (o *SearchDashboardsParams) WithFields(fields *string) *SearchDashboardsPar
 // SetFields adds the fields to the search dashboards params
 func (o *SearchDashboardsParams) SetFields(fields *string) {
 	o.Fields = fields
+}
+
+// WithFilterOr adds the filterOr to the search dashboards params
+func (o *SearchDashboardsParams) WithFilterOr(filterOr *bool) *SearchDashboardsParams {
+	o.SetFilterOr(filterOr)
+	return o
+}
+
+// SetFilterOr adds the filterOr to the search dashboards params
+func (o *SearchDashboardsParams) SetFilterOr(filterOr *bool) {
+	o.FilterOr = filterOr
+}
+
+// WithFolderID adds the folderID to the search dashboards params
+func (o *SearchDashboardsParams) WithFolderID(folderID *string) *SearchDashboardsParams {
+	o.SetFolderID(folderID)
+	return o
+}
+
+// SetFolderID adds the folderId to the search dashboards params
+func (o *SearchDashboardsParams) SetFolderID(folderID *string) {
+	o.FolderID = folderID
 }
 
 // WithID adds the id to the search dashboards params
@@ -353,240 +462,323 @@ func (o *SearchDashboardsParams) WriteToRequest(r runtime.ClientRequest, reg str
 
 		// query param content_favorite_id
 		var qrContentFavoriteID int64
+
 		if o.ContentFavoriteID != nil {
 			qrContentFavoriteID = *o.ContentFavoriteID
 		}
 		qContentFavoriteID := swag.FormatInt64(qrContentFavoriteID)
 		if qContentFavoriteID != "" {
+
 			if err := r.SetQueryParam("content_favorite_id", qContentFavoriteID); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.ContentMetadataID != nil {
+
+		// query param content_metadata_id
+		var qrContentMetadataID int64
+
+		if o.ContentMetadataID != nil {
+			qrContentMetadataID = *o.ContentMetadataID
+		}
+		qContentMetadataID := swag.FormatInt64(qrContentMetadataID)
+		if qContentMetadataID != "" {
+
+			if err := r.SetQueryParam("content_metadata_id", qContentMetadataID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Curate != nil {
+
+		// query param curate
+		var qrCurate bool
+
+		if o.Curate != nil {
+			qrCurate = *o.Curate
+		}
+		qCurate := swag.FormatBool(qrCurate)
+		if qCurate != "" {
+
+			if err := r.SetQueryParam("curate", qCurate); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.Deleted != nil {
 
 		// query param deleted
 		var qrDeleted string
+
 		if o.Deleted != nil {
 			qrDeleted = *o.Deleted
 		}
 		qDeleted := qrDeleted
 		if qDeleted != "" {
+
 			if err := r.SetQueryParam("deleted", qDeleted); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Description != nil {
 
 		// query param description
 		var qrDescription string
+
 		if o.Description != nil {
 			qrDescription = *o.Description
 		}
 		qDescription := qrDescription
 		if qDescription != "" {
+
 			if err := r.SetQueryParam("description", qDescription); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.FilterOr != nil {
+
+		// query param filter_or
+		var qrFilterOr bool
+
+		if o.FilterOr != nil {
+			qrFilterOr = *o.FilterOr
+		}
+		qFilterOr := swag.FormatBool(qrFilterOr)
+		if qFilterOr != "" {
+
+			if err := r.SetQueryParam("filter_or", qFilterOr); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.FolderID != nil {
+
+		// query param folder_id
+		var qrFolderID string
+
+		if o.FolderID != nil {
+			qrFolderID = *o.FolderID
+		}
+		qFolderID := qrFolderID
+		if qFolderID != "" {
+
+			if err := r.SetQueryParam("folder_id", qFolderID); err != nil {
+				return err
+			}
+		}
 	}
 
 	if o.ID != nil {
 
 		// query param id
 		var qrID int64
+
 		if o.ID != nil {
 			qrID = *o.ID
 		}
 		qID := swag.FormatInt64(qrID)
 		if qID != "" {
+
 			if err := r.SetQueryParam("id", qID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Offset != nil {
 
 		// query param offset
 		var qrOffset int64
+
 		if o.Offset != nil {
 			qrOffset = *o.Offset
 		}
 		qOffset := swag.FormatInt64(qrOffset)
 		if qOffset != "" {
+
 			if err := r.SetQueryParam("offset", qOffset); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Page != nil {
 
 		// query param page
 		var qrPage int64
+
 		if o.Page != nil {
 			qrPage = *o.Page
 		}
 		qPage := swag.FormatInt64(qrPage)
 		if qPage != "" {
+
 			if err := r.SetQueryParam("page", qPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.PerPage != nil {
 
 		// query param per_page
 		var qrPerPage int64
+
 		if o.PerPage != nil {
 			qrPerPage = *o.PerPage
 		}
 		qPerPage := swag.FormatInt64(qrPerPage)
 		if qPerPage != "" {
+
 			if err := r.SetQueryParam("per_page", qPerPage); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Slug != nil {
 
 		// query param slug
 		var qrSlug string
+
 		if o.Slug != nil {
 			qrSlug = *o.Slug
 		}
 		qSlug := qrSlug
 		if qSlug != "" {
+
 			if err := r.SetQueryParam("slug", qSlug); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Sorts != nil {
 
 		// query param sorts
 		var qrSorts string
+
 		if o.Sorts != nil {
 			qrSorts = *o.Sorts
 		}
 		qSorts := qrSorts
 		if qSorts != "" {
+
 			if err := r.SetQueryParam("sorts", qSorts); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SpaceID != nil {
 
 		// query param space_id
 		var qrSpaceID string
+
 		if o.SpaceID != nil {
 			qrSpaceID = *o.SpaceID
 		}
 		qSpaceID := qrSpaceID
 		if qSpaceID != "" {
+
 			if err := r.SetQueryParam("space_id", qSpaceID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Title != nil {
 
 		// query param title
 		var qrTitle string
+
 		if o.Title != nil {
 			qrTitle = *o.Title
 		}
 		qTitle := qrTitle
 		if qTitle != "" {
+
 			if err := r.SetQueryParam("title", qTitle); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.UserID != nil {
 
 		// query param user_id
 		var qrUserID string
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := qrUserID
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ViewCount != nil {
 
 		// query param view_count
 		var qrViewCount string
+
 		if o.ViewCount != nil {
 			qrViewCount = *o.ViewCount
 		}
 		qViewCount := qrViewCount
 		if qViewCount != "" {
+
 			if err := r.SetQueryParam("view_count", qViewCount); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

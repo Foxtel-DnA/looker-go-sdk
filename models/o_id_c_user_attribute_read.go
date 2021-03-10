@@ -6,22 +6,19 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // OIDCUserAttributeRead o ID c user attribute read
+//
 // swagger:model OIDCUserAttributeRead
 type OIDCUserAttributeRead struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Name of User Attribute in OIDC
 	// Read Only: true
@@ -31,11 +28,6 @@ type OIDCUserAttributeRead struct {
 	// Read Only: true
 	Required *bool `json:"required,omitempty"`
 
-	// Link to oidc config
-	// Read Only: true
-	// Format: uri
-	URL strfmt.URI `json:"url,omitempty"`
-
 	// Looker User Attributes
 	// Read Only: true
 	UserAttributes []*UserAttribute `json:"user_attributes"`
@@ -44,10 +36,6 @@ type OIDCUserAttributeRead struct {
 // Validate validates this o ID c user attribute read
 func (m *OIDCUserAttributeRead) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateURL(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateUserAttributes(formats); err != nil {
 		res = append(res, err)
@@ -59,21 +47,7 @@ func (m *OIDCUserAttributeRead) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *OIDCUserAttributeRead) validateURL(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.URL) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (m *OIDCUserAttributeRead) validateUserAttributes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributes) { // not required
 		return nil
 	}
@@ -85,6 +59,68 @@ func (m *OIDCUserAttributeRead) validateUserAttributes(formats strfmt.Registry) 
 
 		if m.UserAttributes[i] != nil {
 			if err := m.UserAttributes[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this o ID c user attribute read based on the context it is used
+func (m *OIDCUserAttributeRead) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OIDCUserAttributeRead) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCUserAttributeRead) contextValidateRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "required", "body", m.Required); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCUserAttributeRead) contextValidateUserAttributes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attributes", "body", []*UserAttribute(m.UserAttributes)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.UserAttributes); i++ {
+
+		if m.UserAttributes[i] != nil {
+			if err := m.UserAttributes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
 				}

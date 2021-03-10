@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // LookmlModelExploreAccessFilter lookml model explore access filter
+//
 // swagger:model LookmlModelExploreAccessFilter
 type LookmlModelExploreAccessFilter struct {
 
@@ -26,6 +30,42 @@ type LookmlModelExploreAccessFilter struct {
 
 // Validate validates this lookml model explore access filter
 func (m *LookmlModelExploreAccessFilter) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this lookml model explore access filter based on the context it is used
+func (m *LookmlModelExploreAccessFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateField(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttribute(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LookmlModelExploreAccessFilter) contextValidateField(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "field", "body", string(m.Field)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *LookmlModelExploreAccessFilter) contextValidateUserAttribute(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attribute", "body", string(m.UserAttribute)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

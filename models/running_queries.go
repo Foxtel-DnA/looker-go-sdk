@@ -6,13 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // RunningQueries running queries
+//
 // swagger:model RunningQueries
 type RunningQueries struct {
 
@@ -128,7 +131,6 @@ func (m *RunningQueries) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RunningQueries) validateLook(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Look) { // not required
 		return nil
 	}
@@ -146,7 +148,6 @@ func (m *RunningQueries) validateLook(formats strfmt.Registry) error {
 }
 
 func (m *RunningQueries) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
@@ -164,7 +165,6 @@ func (m *RunningQueries) validateQuery(formats strfmt.Registry) error {
 }
 
 func (m *RunningQueries) validateSQLQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SQLQuery) { // not required
 		return nil
 	}
@@ -182,13 +182,311 @@ func (m *RunningQueries) validateSQLQuery(formats strfmt.Registry) error {
 }
 
 func (m *RunningQueries) validateUser(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.User) { // not required
 		return nil
 	}
 
 	if m.User != nil {
 		if err := m.User.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("user")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this running queries based on the context it is used
+func (m *RunningQueries) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCacheKey(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCompletedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateConnectionID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateConnectionName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDialect(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLook(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMessage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNodeID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQueryTaskID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRuntime(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSlug(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSQLQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RunningQueries) contextValidateCacheKey(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "cache_key", "body", string(m.CacheKey)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateCompletedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "completed_at", "body", string(m.CompletedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateConnectionID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "connection_id", "body", string(m.ConnectionID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateConnectionName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "connection_name", "body", string(m.ConnectionName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "created_at", "body", string(m.CreatedAt)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateDialect(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "dialect", "body", string(m.Dialect)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateLook(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Look != nil {
+		if err := m.Look.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("look")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateMessage(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "message", "body", string(m.Message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateNodeID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "node_id", "body", string(m.NodeID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateQueryID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_id", "body", string(m.QueryID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateQueryTaskID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "query_task_id", "body", string(m.QueryTaskID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateRuntime(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "runtime", "body", float64(m.Runtime)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateSlug(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "slug", "body", string(m.Slug)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "source", "body", string(m.Source)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateSQL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sql", "body", string(m.SQL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateSQLQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SQLQuery != nil {
+		if err := m.SQLQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sql_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "status", "body", string(m.Status)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *RunningQueries) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.User != nil {
+		if err := m.User.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("user")
 			}

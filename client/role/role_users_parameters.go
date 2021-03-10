@@ -13,74 +13,91 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewRoleUsersParams creates a new RoleUsersParams object
-// with the default values initialized.
+// NewRoleUsersParams creates a new RoleUsersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRoleUsersParams() *RoleUsersParams {
-	var ()
 	return &RoleUsersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRoleUsersParamsWithTimeout creates a new RoleUsersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRoleUsersParamsWithTimeout(timeout time.Duration) *RoleUsersParams {
-	var ()
 	return &RoleUsersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRoleUsersParamsWithContext creates a new RoleUsersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRoleUsersParamsWithContext(ctx context.Context) *RoleUsersParams {
-	var ()
 	return &RoleUsersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRoleUsersParamsWithHTTPClient creates a new RoleUsersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRoleUsersParamsWithHTTPClient(client *http.Client) *RoleUsersParams {
-	var ()
 	return &RoleUsersParams{
 		HTTPClient: client,
 	}
 }
 
-/*RoleUsersParams contains all the parameters to send to the API endpoint
-for the role users operation typically these are written to a http.Request
+/* RoleUsersParams contains all the parameters to send to the API endpoint
+   for the role users operation.
+
+   Typically these are written to a http.Request.
 */
 type RoleUsersParams struct {
 
-	/*DirectAssociationOnly
-	  Get only users associated directly with the role: exclude those only associated through groups.
+	/* DirectAssociationOnly.
 
+	   Get only users associated directly with the role: exclude those only associated through groups.
 	*/
 	DirectAssociationOnly *bool
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*RoleID
-	  id of user
 
+	/* RoleID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	RoleID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the role users params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RoleUsersParams) WithDefaults() *RoleUsersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the role users params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RoleUsersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the role users params
@@ -161,32 +178,34 @@ func (o *RoleUsersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 
 		// query param direct_association_only
 		var qrDirectAssociationOnly bool
+
 		if o.DirectAssociationOnly != nil {
 			qrDirectAssociationOnly = *o.DirectAssociationOnly
 		}
 		qDirectAssociationOnly := swag.FormatBool(qrDirectAssociationOnly)
 		if qDirectAssociationOnly != "" {
+
 			if err := r.SetQueryParam("direct_association_only", qDirectAssociationOnly); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param role_id

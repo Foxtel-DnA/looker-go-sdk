@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewQueryForSlugParams creates a new QueryForSlugParams object
-// with the default values initialized.
+// NewQueryForSlugParams creates a new QueryForSlugParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewQueryForSlugParams() *QueryForSlugParams {
-	var ()
 	return &QueryForSlugParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewQueryForSlugParamsWithTimeout creates a new QueryForSlugParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewQueryForSlugParamsWithTimeout(timeout time.Duration) *QueryForSlugParams {
-	var ()
 	return &QueryForSlugParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewQueryForSlugParamsWithContext creates a new QueryForSlugParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewQueryForSlugParamsWithContext(ctx context.Context) *QueryForSlugParams {
-	var ()
 	return &QueryForSlugParams{
-
 		Context: ctx,
 	}
 }
 
 // NewQueryForSlugParamsWithHTTPClient creates a new QueryForSlugParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewQueryForSlugParamsWithHTTPClient(client *http.Client) *QueryForSlugParams {
-	var ()
 	return &QueryForSlugParams{
 		HTTPClient: client,
 	}
 }
 
-/*QueryForSlugParams contains all the parameters to send to the API endpoint
-for the query for slug operation typically these are written to a http.Request
+/* QueryForSlugParams contains all the parameters to send to the API endpoint
+   for the query for slug operation.
+
+   Typically these are written to a http.Request.
 */
 type QueryForSlugParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*Slug
-	  Slug of query
 
+	/* Slug.
+
+	   Slug of query
 	*/
 	Slug string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the query for slug params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryForSlugParams) WithDefaults() *QueryForSlugParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the query for slug params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryForSlugParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the query for slug params
@@ -144,16 +158,17 @@ func (o *QueryForSlugParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param slug

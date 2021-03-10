@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateContentMetadataAccessReader is a Reader for the CreateContentMetadataAccess structure.
@@ -24,44 +23,44 @@ type CreateContentMetadataAccessReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateContentMetadataAccessReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateContentMetadataAccessOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateContentMetadataAccessBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateContentMetadataAccessNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateContentMetadataAccessConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateContentMetadataAccessUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateContentMetadataAccessTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateContentMetadataAccessOK() *CreateContentMetadataAccessOK {
 	return &CreateContentMetadataAccessOK{}
 }
 
-/*CreateContentMetadataAccessOK handles this case with default header values.
+/* CreateContentMetadataAccessOK describes a response with status code 200, with default header values.
 
 Content Metadata Access
 */
@@ -80,6 +79,9 @@ type CreateContentMetadataAccessOK struct {
 
 func (o *CreateContentMetadataAccessOK) Error() string {
 	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessOK  %+v", 200, o.Payload)
+}
+func (o *CreateContentMetadataAccessOK) GetPayload() *models.ContentMetaGroupUser {
+	return o.Payload
 }
 
 func (o *CreateContentMetadataAccessOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateContentMetadataAccessBadRequest() *CreateContentMetadataAccessBadR
 	return &CreateContentMetadataAccessBadRequest{}
 }
 
-/*CreateContentMetadataAccessBadRequest handles this case with default header values.
+/* CreateContentMetadataAccessBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateContentMetadataAccessBadRequest struct {
 
 func (o *CreateContentMetadataAccessBadRequest) Error() string {
 	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateContentMetadataAccessBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateContentMetadataAccessBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateContentMetadataAccessNotFound() *CreateContentMetadataAccessNotFou
 	return &CreateContentMetadataAccessNotFound{}
 }
 
-/*CreateContentMetadataAccessNotFound handles this case with default header values.
+/* CreateContentMetadataAccessNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateContentMetadataAccessNotFound struct {
 
 func (o *CreateContentMetadataAccessNotFound) Error() string {
 	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateContentMetadataAccessNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateContentMetadataAccessNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateContentMetadataAccessConflict() *CreateContentMetadataAccessConfli
 	return &CreateContentMetadataAccessConflict{}
 }
 
-/*CreateContentMetadataAccessConflict handles this case with default header values.
+/* CreateContentMetadataAccessConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateContentMetadataAccessConflict struct {
 
 func (o *CreateContentMetadataAccessConflict) Error() string {
 	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessConflict  %+v", 409, o.Payload)
+}
+func (o *CreateContentMetadataAccessConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateContentMetadataAccessConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateContentMetadataAccessUnprocessableEntity() *CreateContentMetadataA
 	return &CreateContentMetadataAccessUnprocessableEntity{}
 }
 
-/*CreateContentMetadataAccessUnprocessableEntity handles this case with default header values.
+/* CreateContentMetadataAccessUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateContentMetadataAccessUnprocessableEntity struct {
 func (o *CreateContentMetadataAccessUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateContentMetadataAccessUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateContentMetadataAccessUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateContentMetadataAccessTooManyRequests creates a CreateContentMetadataAccessTooManyRequests with default headers values
+func NewCreateContentMetadataAccessTooManyRequests() *CreateContentMetadataAccessTooManyRequests {
+	return &CreateContentMetadataAccessTooManyRequests{}
+}
+
+/* CreateContentMetadataAccessTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateContentMetadataAccessTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateContentMetadataAccessTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /content_metadata_access][%d] createContentMetadataAccessTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateContentMetadataAccessTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateContentMetadataAccessTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

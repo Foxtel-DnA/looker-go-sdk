@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserCredentialsOidcParams creates a new UserCredentialsOidcParams object
-// with the default values initialized.
+// NewUserCredentialsOidcParams creates a new UserCredentialsOidcParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserCredentialsOidcParams() *UserCredentialsOidcParams {
-	var ()
 	return &UserCredentialsOidcParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserCredentialsOidcParamsWithTimeout creates a new UserCredentialsOidcParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserCredentialsOidcParamsWithTimeout(timeout time.Duration) *UserCredentialsOidcParams {
-	var ()
 	return &UserCredentialsOidcParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserCredentialsOidcParamsWithContext creates a new UserCredentialsOidcParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserCredentialsOidcParamsWithContext(ctx context.Context) *UserCredentialsOidcParams {
-	var ()
 	return &UserCredentialsOidcParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserCredentialsOidcParamsWithHTTPClient creates a new UserCredentialsOidcParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserCredentialsOidcParamsWithHTTPClient(client *http.Client) *UserCredentialsOidcParams {
-	var ()
 	return &UserCredentialsOidcParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserCredentialsOidcParams contains all the parameters to send to the API endpoint
-for the user credentials oidc operation typically these are written to a http.Request
+/* UserCredentialsOidcParams contains all the parameters to send to the API endpoint
+   for the user credentials oidc operation.
+
+   Typically these are written to a http.Request.
 */
 type UserCredentialsOidcParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserID
-	  id of user
 
+	/* UserID.
+
+	   id of user
+
+	   Format: int64
 	*/
 	UserID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user credentials oidc params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsOidcParams) WithDefaults() *UserCredentialsOidcParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user credentials oidc params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserCredentialsOidcParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user credentials oidc params
@@ -145,16 +161,17 @@ func (o *UserCredentialsOidcParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_id

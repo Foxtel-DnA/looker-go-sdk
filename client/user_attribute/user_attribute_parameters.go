@@ -13,69 +13,85 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewUserAttributeParams creates a new UserAttributeParams object
-// with the default values initialized.
+// NewUserAttributeParams creates a new UserAttributeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUserAttributeParams() *UserAttributeParams {
-	var ()
 	return &UserAttributeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUserAttributeParamsWithTimeout creates a new UserAttributeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUserAttributeParamsWithTimeout(timeout time.Duration) *UserAttributeParams {
-	var ()
 	return &UserAttributeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUserAttributeParamsWithContext creates a new UserAttributeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUserAttributeParamsWithContext(ctx context.Context) *UserAttributeParams {
-	var ()
 	return &UserAttributeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUserAttributeParamsWithHTTPClient creates a new UserAttributeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUserAttributeParamsWithHTTPClient(client *http.Client) *UserAttributeParams {
-	var ()
 	return &UserAttributeParams{
 		HTTPClient: client,
 	}
 }
 
-/*UserAttributeParams contains all the parameters to send to the API endpoint
-for the user attribute operation typically these are written to a http.Request
+/* UserAttributeParams contains all the parameters to send to the API endpoint
+   for the user attribute operation.
+
+   Typically these are written to a http.Request.
 */
 type UserAttributeParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*UserAttributeID
-	  Id of user attribute
 
+	/* UserAttributeID.
+
+	   Id of user attribute
+
+	   Format: int64
 	*/
 	UserAttributeID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the user attribute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserAttributeParams) WithDefaults() *UserAttributeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the user attribute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UserAttributeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the user attribute params
@@ -145,16 +161,17 @@ func (o *UserAttributeParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param user_attribute_id

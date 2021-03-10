@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // SearchSpacesReader is a Reader for the SearchSpaces structure.
@@ -24,30 +23,26 @@ type SearchSpacesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SearchSpacesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSearchSpacesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSearchSpacesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSearchSpacesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSearchSpacesOK() *SearchSpacesOK {
 	return &SearchSpacesOK{}
 }
 
-/*SearchSpacesOK handles this case with default header values.
+/* SearchSpacesOK describes a response with status code 200, with default header values.
 
 spaces
 */
@@ -66,6 +61,9 @@ type SearchSpacesOK struct {
 
 func (o *SearchSpacesOK) Error() string {
 	return fmt.Sprintf("[GET /spaces/search][%d] searchSpacesOK  %+v", 200, o.Payload)
+}
+func (o *SearchSpacesOK) GetPayload() []*models.Space {
+	return o.Payload
 }
 
 func (o *SearchSpacesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSearchSpacesBadRequest() *SearchSpacesBadRequest {
 	return &SearchSpacesBadRequest{}
 }
 
-/*SearchSpacesBadRequest handles this case with default header values.
+/* SearchSpacesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SearchSpacesBadRequest struct {
 
 func (o *SearchSpacesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /spaces/search][%d] searchSpacesBadRequest  %+v", 400, o.Payload)
+}
+func (o *SearchSpacesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchSpacesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSearchSpacesNotFound() *SearchSpacesNotFound {
 	return &SearchSpacesNotFound{}
 }
 
-/*SearchSpacesNotFound handles this case with default header values.
+/* SearchSpacesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SearchSpacesNotFound struct {
 
 func (o *SearchSpacesNotFound) Error() string {
 	return fmt.Sprintf("[GET /spaces/search][%d] searchSpacesNotFound  %+v", 404, o.Payload)
+}
+func (o *SearchSpacesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SearchSpacesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

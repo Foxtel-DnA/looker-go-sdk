@@ -13,71 +13,87 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewAddGroupGroupParams creates a new AddGroupGroupParams object
-// with the default values initialized.
+// NewAddGroupGroupParams creates a new AddGroupGroupParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAddGroupGroupParams() *AddGroupGroupParams {
-	var ()
 	return &AddGroupGroupParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAddGroupGroupParamsWithTimeout creates a new AddGroupGroupParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAddGroupGroupParamsWithTimeout(timeout time.Duration) *AddGroupGroupParams {
-	var ()
 	return &AddGroupGroupParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAddGroupGroupParamsWithContext creates a new AddGroupGroupParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAddGroupGroupParamsWithContext(ctx context.Context) *AddGroupGroupParams {
-	var ()
 	return &AddGroupGroupParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAddGroupGroupParamsWithHTTPClient creates a new AddGroupGroupParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAddGroupGroupParamsWithHTTPClient(client *http.Client) *AddGroupGroupParams {
-	var ()
 	return &AddGroupGroupParams{
 		HTTPClient: client,
 	}
 }
 
-/*AddGroupGroupParams contains all the parameters to send to the API endpoint
-for the add group group operation typically these are written to a http.Request
+/* AddGroupGroupParams contains all the parameters to send to the API endpoint
+   for the add group group operation.
+
+   Typically these are written to a http.Request.
 */
 type AddGroupGroupParams struct {
 
-	/*Body
-	  Group id to add
+	/* Body.
 
+	   Group id to add
 	*/
 	Body *models.GroupIDForGroupInclusion
-	/*GroupID
-	  Id of group
 
+	/* GroupID.
+
+	   Id of group
+
+	   Format: int64
 	*/
 	GroupID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the add group group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AddGroupGroupParams) WithDefaults() *AddGroupGroupParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the add group group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AddGroupGroupParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the add group group params
@@ -142,7 +158,6 @@ func (o *AddGroupGroupParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

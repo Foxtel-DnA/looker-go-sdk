@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateGroupReader is a Reader for the CreateGroup structure.
@@ -24,44 +23,44 @@ type CreateGroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateGroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateGroupOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateGroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateGroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateGroupConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateGroupUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateGroupTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateGroupOK() *CreateGroupOK {
 	return &CreateGroupOK{}
 }
 
-/*CreateGroupOK handles this case with default header values.
+/* CreateGroupOK describes a response with status code 200, with default header values.
 
 Group
 */
@@ -80,6 +79,9 @@ type CreateGroupOK struct {
 
 func (o *CreateGroupOK) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] createGroupOK  %+v", 200, o.Payload)
+}
+func (o *CreateGroupOK) GetPayload() *models.Group {
+	return o.Payload
 }
 
 func (o *CreateGroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateGroupBadRequest() *CreateGroupBadRequest {
 	return &CreateGroupBadRequest{}
 }
 
-/*CreateGroupBadRequest handles this case with default header values.
+/* CreateGroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateGroupBadRequest struct {
 
 func (o *CreateGroupBadRequest) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] createGroupBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateGroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateGroupNotFound() *CreateGroupNotFound {
 	return &CreateGroupNotFound{}
 }
 
-/*CreateGroupNotFound handles this case with default header values.
+/* CreateGroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateGroupNotFound struct {
 
 func (o *CreateGroupNotFound) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] createGroupNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateGroupNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateGroupConflict() *CreateGroupConflict {
 	return &CreateGroupConflict{}
 }
 
-/*CreateGroupConflict handles this case with default header values.
+/* CreateGroupConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateGroupConflict struct {
 
 func (o *CreateGroupConflict) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] createGroupConflict  %+v", 409, o.Payload)
+}
+func (o *CreateGroupConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateGroupConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateGroupUnprocessableEntity() *CreateGroupUnprocessableEntity {
 	return &CreateGroupUnprocessableEntity{}
 }
 
-/*CreateGroupUnprocessableEntity handles this case with default header values.
+/* CreateGroupUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateGroupUnprocessableEntity struct {
 func (o *CreateGroupUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] createGroupUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateGroupUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateGroupUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateGroupTooManyRequests creates a CreateGroupTooManyRequests with default headers values
+func NewCreateGroupTooManyRequests() *CreateGroupTooManyRequests {
+	return &CreateGroupTooManyRequests{}
+}
+
+/* CreateGroupTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateGroupTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateGroupTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] createGroupTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateGroupTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateGroupTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

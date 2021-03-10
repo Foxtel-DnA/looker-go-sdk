@@ -13,69 +13,91 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewAllScheduledPlansParams creates a new AllScheduledPlansParams object
-// with the default values initialized.
+// NewAllScheduledPlansParams creates a new AllScheduledPlansParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllScheduledPlansParams() *AllScheduledPlansParams {
-	var ()
 	return &AllScheduledPlansParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllScheduledPlansParamsWithTimeout creates a new AllScheduledPlansParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllScheduledPlansParamsWithTimeout(timeout time.Duration) *AllScheduledPlansParams {
-	var ()
 	return &AllScheduledPlansParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllScheduledPlansParamsWithContext creates a new AllScheduledPlansParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllScheduledPlansParamsWithContext(ctx context.Context) *AllScheduledPlansParams {
-	var ()
 	return &AllScheduledPlansParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllScheduledPlansParamsWithHTTPClient creates a new AllScheduledPlansParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllScheduledPlansParamsWithHTTPClient(client *http.Client) *AllScheduledPlansParams {
-	var ()
 	return &AllScheduledPlansParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllScheduledPlansParams contains all the parameters to send to the API endpoint
-for the all scheduled plans operation typically these are written to a http.Request
+/* AllScheduledPlansParams contains all the parameters to send to the API endpoint
+   for the all scheduled plans operation.
+
+   Typically these are written to a http.Request.
 */
 type AllScheduledPlansParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* AllUsers.
 
+	   Return scheduled plans belonging to all users (caller needs see_schedules permission)
+	*/
+	AllUsers *bool
+
+	/* Fields.
+
+	   Comma delimited list of field names. If provided, only the fields specified will be included in the response
 	*/
 	Fields *string
-	/*UserID
-	  User Id (default is requesting user if not specified)
 
+	/* UserID.
+
+	   Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
+
+	   Format: int64
 	*/
 	UserID *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all scheduled plans params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllScheduledPlansParams) WithDefaults() *AllScheduledPlansParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all scheduled plans params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllScheduledPlansParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all scheduled plans params
@@ -111,6 +133,17 @@ func (o *AllScheduledPlansParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithAllUsers adds the allUsers to the all scheduled plans params
+func (o *AllScheduledPlansParams) WithAllUsers(allUsers *bool) *AllScheduledPlansParams {
+	o.SetAllUsers(allUsers)
+	return o
+}
+
+// SetAllUsers adds the allUsers to the all scheduled plans params
+func (o *AllScheduledPlansParams) SetAllUsers(allUsers *bool) {
+	o.AllUsers = allUsers
+}
+
 // WithFields adds the fields to the all scheduled plans params
 func (o *AllScheduledPlansParams) WithFields(fields *string) *AllScheduledPlansParams {
 	o.SetFields(fields)
@@ -141,36 +174,55 @@ func (o *AllScheduledPlansParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 	var res []error
 
+	if o.AllUsers != nil {
+
+		// query param all_users
+		var qrAllUsers bool
+
+		if o.AllUsers != nil {
+			qrAllUsers = *o.AllUsers
+		}
+		qAllUsers := swag.FormatBool(qrAllUsers)
+		if qAllUsers != "" {
+
+			if err := r.SetQueryParam("all_users", qAllUsers); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.Fields != nil {
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.UserID != nil {
 
 		// query param user_id
 		var qrUserID int64
+
 		if o.UserID != nil {
 			qrUserID = *o.UserID
 		}
 		qUserID := swag.FormatInt64(qrUserID)
 		if qUserID != "" {
+
 			if err := r.SetQueryParam("user_id", qUserID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

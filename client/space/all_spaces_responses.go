@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllSpacesReader is a Reader for the AllSpaces structure.
@@ -24,30 +23,26 @@ type AllSpacesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllSpacesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllSpacesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllSpacesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllSpacesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllSpacesOK() *AllSpacesOK {
 	return &AllSpacesOK{}
 }
 
-/*AllSpacesOK handles this case with default header values.
+/* AllSpacesOK describes a response with status code 200, with default header values.
 
 Space
 */
@@ -66,6 +61,9 @@ type AllSpacesOK struct {
 
 func (o *AllSpacesOK) Error() string {
 	return fmt.Sprintf("[GET /spaces][%d] allSpacesOK  %+v", 200, o.Payload)
+}
+func (o *AllSpacesOK) GetPayload() []*models.SpaceBase {
+	return o.Payload
 }
 
 func (o *AllSpacesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllSpacesBadRequest() *AllSpacesBadRequest {
 	return &AllSpacesBadRequest{}
 }
 
-/*AllSpacesBadRequest handles this case with default header values.
+/* AllSpacesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllSpacesBadRequest struct {
 
 func (o *AllSpacesBadRequest) Error() string {
 	return fmt.Sprintf("[GET /spaces][%d] allSpacesBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllSpacesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllSpacesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllSpacesNotFound() *AllSpacesNotFound {
 	return &AllSpacesNotFound{}
 }
 
-/*AllSpacesNotFound handles this case with default header values.
+/* AllSpacesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllSpacesNotFound struct {
 
 func (o *AllSpacesNotFound) Error() string {
 	return fmt.Sprintf("[GET /spaces][%d] allSpacesNotFound  %+v", 404, o.Payload)
+}
+func (o *AllSpacesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllSpacesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

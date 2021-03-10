@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteIntegrationHubParams creates a new DeleteIntegrationHubParams object
-// with the default values initialized.
+// NewDeleteIntegrationHubParams creates a new DeleteIntegrationHubParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteIntegrationHubParams() *DeleteIntegrationHubParams {
-	var ()
 	return &DeleteIntegrationHubParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteIntegrationHubParamsWithTimeout creates a new DeleteIntegrationHubParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteIntegrationHubParamsWithTimeout(timeout time.Duration) *DeleteIntegrationHubParams {
-	var ()
 	return &DeleteIntegrationHubParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteIntegrationHubParamsWithContext creates a new DeleteIntegrationHubParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteIntegrationHubParamsWithContext(ctx context.Context) *DeleteIntegrationHubParams {
-	var ()
 	return &DeleteIntegrationHubParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteIntegrationHubParamsWithHTTPClient creates a new DeleteIntegrationHubParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteIntegrationHubParamsWithHTTPClient(client *http.Client) *DeleteIntegrationHubParams {
-	var ()
 	return &DeleteIntegrationHubParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteIntegrationHubParams contains all the parameters to send to the API endpoint
-for the delete integration hub operation typically these are written to a http.Request
+/* DeleteIntegrationHubParams contains all the parameters to send to the API endpoint
+   for the delete integration hub operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteIntegrationHubParams struct {
 
-	/*IntegrationHubID
-	  Id of integration_hub
+	/* IntegrationHubID.
 
+	   Id of integration_hub
+
+	   Format: int64
 	*/
 	IntegrationHubID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteIntegrationHubParams) WithDefaults() *DeleteIntegrationHubParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteIntegrationHubParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete integration hub params

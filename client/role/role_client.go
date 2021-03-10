@@ -6,13 +6,14 @@ package role
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/runtime"
+	"fmt"
 
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 )
 
 // New creates a new role API client.
-func New(transport runtime.ClientTransport, formats strfmt.Registry) *Client {
+func New(transport runtime.ClientTransport, formats strfmt.Registry) ClientService {
 	return &Client{transport: transport, formats: formats}
 }
 
@@ -24,19 +25,72 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
-/*
-AllModelSets gets all model sets
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
 
-### Get information about all model sets.
+// ClientService is the interface for Client methods
+type ClientService interface {
+	AllModelSets(params *AllModelSetsParams, opts ...ClientOption) (*AllModelSetsOK, error)
+
+	AllPermissionSets(params *AllPermissionSetsParams, opts ...ClientOption) (*AllPermissionSetsOK, error)
+
+	AllPermissions(params *AllPermissionsParams, opts ...ClientOption) (*AllPermissionsOK, error)
+
+	AllRoles(params *AllRolesParams, opts ...ClientOption) (*AllRolesOK, error)
+
+	CreateModelSet(params *CreateModelSetParams, opts ...ClientOption) (*CreateModelSetOK, error)
+
+	CreatePermissionSet(params *CreatePermissionSetParams, opts ...ClientOption) (*CreatePermissionSetOK, error)
+
+	CreateRole(params *CreateRoleParams, opts ...ClientOption) (*CreateRoleOK, error)
+
+	DeleteModelSet(params *DeleteModelSetParams, opts ...ClientOption) (*DeleteModelSetNoContent, error)
+
+	DeletePermissionSet(params *DeletePermissionSetParams, opts ...ClientOption) (*DeletePermissionSetNoContent, error)
+
+	DeleteRole(params *DeleteRoleParams, opts ...ClientOption) (*DeleteRoleNoContent, error)
+
+	ModelSet(params *ModelSetParams, opts ...ClientOption) (*ModelSetOK, error)
+
+	PermissionSet(params *PermissionSetParams, opts ...ClientOption) (*PermissionSetOK, error)
+
+	Role(params *RoleParams, opts ...ClientOption) (*RoleOK, error)
+
+	RoleGroups(params *RoleGroupsParams, opts ...ClientOption) (*RoleGroupsOK, error)
+
+	RoleUsers(params *RoleUsersParams, opts ...ClientOption) (*RoleUsersOK, error)
+
+	SearchModelSets(params *SearchModelSetsParams, opts ...ClientOption) (*SearchModelSetsOK, error)
+
+	SearchPermissionSets(params *SearchPermissionSetsParams, opts ...ClientOption) (*SearchPermissionSetsOK, error)
+
+	SearchRoles(params *SearchRolesParams, opts ...ClientOption) (*SearchRolesOK, error)
+
+	SetRoleGroups(params *SetRoleGroupsParams, opts ...ClientOption) (*SetRoleGroupsOK, error)
+
+	SetRoleUsers(params *SetRoleUsersParams, opts ...ClientOption) (*SetRoleUsersOK, error)
+
+	UpdateModelSet(params *UpdateModelSetParams, opts ...ClientOption) (*UpdateModelSetOK, error)
+
+	UpdatePermissionSet(params *UpdatePermissionSetParams, opts ...ClientOption) (*UpdatePermissionSetOK, error)
+
+	UpdateRole(params *UpdateRoleParams, opts ...ClientOption) (*UpdateRoleOK, error)
+
+	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+  AllModelSets gets all model sets
+
+  ### Get information about all model sets.
 
 */
-func (a *Client) AllModelSets(params *AllModelSetsParams) (*AllModelSetsOK, error) {
+func (a *Client) AllModelSets(params *AllModelSetsParams, opts ...ClientOption) (*AllModelSetsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllModelSetsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_model_sets",
 		Method:             "GET",
 		PathPattern:        "/model_sets",
@@ -47,27 +101,37 @@ func (a *Client) AllModelSets(params *AllModelSetsParams) (*AllModelSetsOK, erro
 		Reader:             &AllModelSetsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllModelSetsOK), nil
-
+	success, ok := result.(*AllModelSetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_model_sets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllPermissionSets gets all permission sets
+  AllPermissionSets gets all permission sets
 
-### Get information about all permission sets.
+  ### Get information about all permission sets.
 
 */
-func (a *Client) AllPermissionSets(params *AllPermissionSetsParams) (*AllPermissionSetsOK, error) {
+func (a *Client) AllPermissionSets(params *AllPermissionSetsParams, opts ...ClientOption) (*AllPermissionSetsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllPermissionSetsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_permission_sets",
 		Method:             "GET",
 		PathPattern:        "/permission_sets",
@@ -78,27 +142,37 @@ func (a *Client) AllPermissionSets(params *AllPermissionSetsParams) (*AllPermiss
 		Reader:             &AllPermissionSetsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllPermissionSetsOK), nil
-
+	success, ok := result.(*AllPermissionSetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_permission_sets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllPermissions gets all permissions
+  AllPermissions gets all permissions
 
-### Get all supported permissions.
+  ### Get all supported permissions.
 
 */
-func (a *Client) AllPermissions(params *AllPermissionsParams) (*AllPermissionsOK, error) {
+func (a *Client) AllPermissions(params *AllPermissionsParams, opts ...ClientOption) (*AllPermissionsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllPermissionsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_permissions",
 		Method:             "GET",
 		PathPattern:        "/permissions",
@@ -109,27 +183,37 @@ func (a *Client) AllPermissions(params *AllPermissionsParams) (*AllPermissionsOK
 		Reader:             &AllPermissionsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllPermissionsOK), nil
-
+	success, ok := result.(*AllPermissionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_permissions: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-AllRoles gets all roles
+  AllRoles gets all roles
 
-### Get information about all roles.
+  ### Get information about all roles.
 
 */
-func (a *Client) AllRoles(params *AllRolesParams) (*AllRolesOK, error) {
+func (a *Client) AllRoles(params *AllRolesParams, opts ...ClientOption) (*AllRolesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAllRolesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "all_roles",
 		Method:             "GET",
 		PathPattern:        "/roles",
@@ -140,27 +224,37 @@ func (a *Client) AllRoles(params *AllRolesParams) (*AllRolesOK, error) {
 		Reader:             &AllRolesReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*AllRolesOK), nil
-
+	success, ok := result.(*AllRolesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for all_roles: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateModelSet creates model set
+  CreateModelSet creates model set
 
-### Create a model set with the specified information. Model sets are used by Roles.
+  ### Create a model set with the specified information. Model sets are used by Roles.
 
 */
-func (a *Client) CreateModelSet(params *CreateModelSetParams) (*CreateModelSetOK, error) {
+func (a *Client) CreateModelSet(params *CreateModelSetParams, opts ...ClientOption) (*CreateModelSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateModelSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_model_set",
 		Method:             "POST",
 		PathPattern:        "/model_sets",
@@ -171,27 +265,37 @@ func (a *Client) CreateModelSet(params *CreateModelSetParams) (*CreateModelSetOK
 		Reader:             &CreateModelSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateModelSetOK), nil
-
+	success, ok := result.(*CreateModelSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_model_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreatePermissionSet creates permission set
+  CreatePermissionSet creates permission set
 
-### Create a permission set with the specified information. Permission sets are used by Roles.
+  ### Create a permission set with the specified information. Permission sets are used by Roles.
 
 */
-func (a *Client) CreatePermissionSet(params *CreatePermissionSetParams) (*CreatePermissionSetOK, error) {
+func (a *Client) CreatePermissionSet(params *CreatePermissionSetParams, opts ...ClientOption) (*CreatePermissionSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePermissionSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_permission_set",
 		Method:             "POST",
 		PathPattern:        "/permission_sets",
@@ -202,27 +306,37 @@ func (a *Client) CreatePermissionSet(params *CreatePermissionSetParams) (*Create
 		Reader:             &CreatePermissionSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreatePermissionSetOK), nil
-
+	success, ok := result.(*CreatePermissionSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_permission_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-CreateRole creates role
+  CreateRole creates role
 
-### Create a role with the specified information.
+  ### Create a role with the specified information.
 
 */
-func (a *Client) CreateRole(params *CreateRoleParams) (*CreateRoleOK, error) {
+func (a *Client) CreateRole(params *CreateRoleParams, opts ...ClientOption) (*CreateRoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "create_role",
 		Method:             "POST",
 		PathPattern:        "/roles",
@@ -233,27 +347,37 @@ func (a *Client) CreateRole(params *CreateRoleParams) (*CreateRoleOK, error) {
 		Reader:             &CreateRoleReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*CreateRoleOK), nil
-
+	success, ok := result.(*CreateRoleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for create_role: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteModelSet deletes model set
+  DeleteModelSet deletes model set
 
-### Delete the model set with a specific id.
+  ### Delete the model set with a specific id.
 
 */
-func (a *Client) DeleteModelSet(params *DeleteModelSetParams) (*DeleteModelSetNoContent, error) {
+func (a *Client) DeleteModelSet(params *DeleteModelSetParams, opts ...ClientOption) (*DeleteModelSetNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteModelSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_model_set",
 		Method:             "DELETE",
 		PathPattern:        "/model_sets/{model_set_id}",
@@ -264,27 +388,37 @@ func (a *Client) DeleteModelSet(params *DeleteModelSetParams) (*DeleteModelSetNo
 		Reader:             &DeleteModelSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteModelSetNoContent), nil
-
+	success, ok := result.(*DeleteModelSetNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_model_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeletePermissionSet deletes permission set
+  DeletePermissionSet deletes permission set
 
-### Delete the permission set with a specific id.
+  ### Delete the permission set with a specific id.
 
 */
-func (a *Client) DeletePermissionSet(params *DeletePermissionSetParams) (*DeletePermissionSetNoContent, error) {
+func (a *Client) DeletePermissionSet(params *DeletePermissionSetParams, opts ...ClientOption) (*DeletePermissionSetNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePermissionSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_permission_set",
 		Method:             "DELETE",
 		PathPattern:        "/permission_sets/{permission_set_id}",
@@ -295,27 +429,37 @@ func (a *Client) DeletePermissionSet(params *DeletePermissionSetParams) (*Delete
 		Reader:             &DeletePermissionSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeletePermissionSetNoContent), nil
-
+	success, ok := result.(*DeletePermissionSetNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_permission_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-DeleteRole deletes role
+  DeleteRole deletes role
 
-### Delete the role with a specific id.
+  ### Delete the role with a specific id.
 
 */
-func (a *Client) DeleteRole(params *DeleteRoleParams) (*DeleteRoleNoContent, error) {
+func (a *Client) DeleteRole(params *DeleteRoleParams, opts ...ClientOption) (*DeleteRoleNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "delete_role",
 		Method:             "DELETE",
 		PathPattern:        "/roles/{role_id}",
@@ -326,27 +470,37 @@ func (a *Client) DeleteRole(params *DeleteRoleParams) (*DeleteRoleNoContent, err
 		Reader:             &DeleteRoleReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*DeleteRoleNoContent), nil
-
+	success, ok := result.(*DeleteRoleNoContent)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for delete_role: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-ModelSet gets model set
+  ModelSet gets model set
 
-### Get information about the model set with a specific id.
+  ### Get information about the model set with a specific id.
 
 */
-func (a *Client) ModelSet(params *ModelSetParams) (*ModelSetOK, error) {
+func (a *Client) ModelSet(params *ModelSetParams, opts ...ClientOption) (*ModelSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewModelSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "model_set",
 		Method:             "GET",
 		PathPattern:        "/model_sets/{model_set_id}",
@@ -357,27 +511,37 @@ func (a *Client) ModelSet(params *ModelSetParams) (*ModelSetOK, error) {
 		Reader:             &ModelSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*ModelSetOK), nil
-
+	success, ok := result.(*ModelSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for model_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PermissionSet gets permission set
+  PermissionSet gets permission set
 
-### Get information about the permission set with a specific id.
+  ### Get information about the permission set with a specific id.
 
 */
-func (a *Client) PermissionSet(params *PermissionSetParams) (*PermissionSetOK, error) {
+func (a *Client) PermissionSet(params *PermissionSetParams, opts ...ClientOption) (*PermissionSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPermissionSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "permission_set",
 		Method:             "GET",
 		PathPattern:        "/permission_sets/{permission_set_id}",
@@ -388,27 +552,37 @@ func (a *Client) PermissionSet(params *PermissionSetParams) (*PermissionSetOK, e
 		Reader:             &PermissionSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*PermissionSetOK), nil
-
+	success, ok := result.(*PermissionSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for permission_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-Role gets role
+  Role gets role
 
-### Get information about the role with a specific id.
+  ### Get information about the role with a specific id.
 
 */
-func (a *Client) Role(params *RoleParams) (*RoleOK, error) {
+func (a *Client) Role(params *RoleParams, opts ...ClientOption) (*RoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "role",
 		Method:             "GET",
 		PathPattern:        "/roles/{role_id}",
@@ -419,27 +593,37 @@ func (a *Client) Role(params *RoleParams) (*RoleOK, error) {
 		Reader:             &RoleReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RoleOK), nil
-
+	success, ok := result.(*RoleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for role: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RoleGroups gets role groups
+  RoleGroups gets role groups
 
-### Get information about all the groups with the role that has a specific id.
+  ### Get information about all the groups with the role that has a specific id.
 
 */
-func (a *Client) RoleGroups(params *RoleGroupsParams) (*RoleGroupsOK, error) {
+func (a *Client) RoleGroups(params *RoleGroupsParams, opts ...ClientOption) (*RoleGroupsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRoleGroupsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "role_groups",
 		Method:             "GET",
 		PathPattern:        "/roles/{role_id}/groups",
@@ -450,27 +634,37 @@ func (a *Client) RoleGroups(params *RoleGroupsParams) (*RoleGroupsOK, error) {
 		Reader:             &RoleGroupsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RoleGroupsOK), nil
-
+	success, ok := result.(*RoleGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for role_groups: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-RoleUsers gets role users
+  RoleUsers gets role users
 
-### Get information about all the users with the role that has a specific id.
+  ### Get information about all the users with the role that has a specific id.
 
 */
-func (a *Client) RoleUsers(params *RoleUsersParams) (*RoleUsersOK, error) {
+func (a *Client) RoleUsers(params *RoleUsersParams, opts ...ClientOption) (*RoleUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRoleUsersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "role_users",
 		Method:             "GET",
 		PathPattern:        "/roles/{role_id}/users",
@@ -481,27 +675,228 @@ func (a *Client) RoleUsers(params *RoleUsersParams) (*RoleUsersOK, error) {
 		Reader:             &RoleUsersReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*RoleUsersOK), nil
-
+	success, ok := result.(*RoleUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for role_users: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SetRoleGroups updates role groups
+  SearchModelSets searches model sets
 
-### Set all groups for a role, removing all existing group associations from that role.
+  ### Search model sets
+Returns all model set records that match the given search criteria.
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
 
 */
-func (a *Client) SetRoleGroups(params *SetRoleGroupsParams) (*SetRoleGroupsOK, error) {
+func (a *Client) SearchModelSets(params *SearchModelSetsParams, opts ...ClientOption) (*SearchModelSetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchModelSetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_model_sets",
+		Method:             "GET",
+		PathPattern:        "/model_sets/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchModelSetsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchModelSetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_model_sets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SearchPermissionSets searches permission sets
+
+  ### Search permission sets
+Returns all permission set records that match the given search criteria.
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
+
+*/
+func (a *Client) SearchPermissionSets(params *SearchPermissionSetsParams, opts ...ClientOption) (*SearchPermissionSetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchPermissionSetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_permission_sets",
+		Method:             "GET",
+		PathPattern:        "/permission_sets/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchPermissionSetsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchPermissionSetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_permission_sets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SearchRoles searches roles
+
+  ### Search roles
+
+Returns all role records that match the given search criteria.
+
+If multiple search params are given and `filter_or` is FALSE or not specified,
+search params are combined in a logical AND operation.
+Only rows that match *all* search param criteria will be returned.
+
+If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+Results will include rows that match **any** of the search criteria.
+
+String search params use case-insensitive matching.
+String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+example="dan%" will match "danger" and "Danzig" but not "David"
+example="D_m%" will match "Damage" and "dump"
+
+Integer search params can accept a single value or a comma separated list of values. The multiple
+values will be combined under a logical OR operation - results will match at least one of
+the given values.
+
+Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+or exclude (respectively) rows where the column is null.
+
+Boolean search params accept only "true" and "false" as values.
+
+
+*/
+func (a *Client) SearchRoles(params *SearchRolesParams, opts ...ClientOption) (*SearchRolesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchRolesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "search_roles",
+		Method:             "GET",
+		PathPattern:        "/roles/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchRolesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchRolesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for search_roles: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SetRoleGroups updates role groups
+
+  ### Set all groups for a role, removing all existing group associations from that role.
+
+*/
+func (a *Client) SetRoleGroups(params *SetRoleGroupsParams, opts ...ClientOption) (*SetRoleGroupsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSetRoleGroupsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "set_role_groups",
 		Method:             "PUT",
 		PathPattern:        "/roles/{role_id}/groups",
@@ -512,27 +907,37 @@ func (a *Client) SetRoleGroups(params *SetRoleGroupsParams) (*SetRoleGroupsOK, e
 		Reader:             &SetRoleGroupsReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SetRoleGroupsOK), nil
-
+	success, ok := result.(*SetRoleGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for set_role_groups: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-SetRoleUsers updates role users
+  SetRoleUsers updates role users
 
-### Set all the users of the role with a specific id.
+  ### Set all the users of the role with a specific id.
 
 */
-func (a *Client) SetRoleUsers(params *SetRoleUsersParams) (*SetRoleUsersOK, error) {
+func (a *Client) SetRoleUsers(params *SetRoleUsersParams, opts ...ClientOption) (*SetRoleUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSetRoleUsersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "set_role_users",
 		Method:             "PUT",
 		PathPattern:        "/roles/{role_id}/users",
@@ -543,27 +948,37 @@ func (a *Client) SetRoleUsers(params *SetRoleUsersParams) (*SetRoleUsersOK, erro
 		Reader:             &SetRoleUsersReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*SetRoleUsersOK), nil
-
+	success, ok := result.(*SetRoleUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for set_role_users: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateModelSet updates model set
+  UpdateModelSet updates model set
 
-### Update information about the model set with a specific id.
+  ### Update information about the model set with a specific id.
 
 */
-func (a *Client) UpdateModelSet(params *UpdateModelSetParams) (*UpdateModelSetOK, error) {
+func (a *Client) UpdateModelSet(params *UpdateModelSetParams, opts ...ClientOption) (*UpdateModelSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateModelSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_model_set",
 		Method:             "PATCH",
 		PathPattern:        "/model_sets/{model_set_id}",
@@ -574,27 +989,37 @@ func (a *Client) UpdateModelSet(params *UpdateModelSetParams) (*UpdateModelSetOK
 		Reader:             &UpdateModelSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateModelSetOK), nil
-
+	success, ok := result.(*UpdateModelSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_model_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdatePermissionSet updates permission set
+  UpdatePermissionSet updates permission set
 
-### Update information about the permission set with a specific id.
+  ### Update information about the permission set with a specific id.
 
 */
-func (a *Client) UpdatePermissionSet(params *UpdatePermissionSetParams) (*UpdatePermissionSetOK, error) {
+func (a *Client) UpdatePermissionSet(params *UpdatePermissionSetParams, opts ...ClientOption) (*UpdatePermissionSetOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdatePermissionSetParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_permission_set",
 		Method:             "PATCH",
 		PathPattern:        "/permission_sets/{permission_set_id}",
@@ -605,27 +1030,37 @@ func (a *Client) UpdatePermissionSet(params *UpdatePermissionSetParams) (*Update
 		Reader:             &UpdatePermissionSetReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdatePermissionSetOK), nil
-
+	success, ok := result.(*UpdatePermissionSetOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_permission_set: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-UpdateRole updates role
+  UpdateRole updates role
 
-### Update information about the role with a specific id.
+  ### Update information about the role with a specific id.
 
 */
-func (a *Client) UpdateRole(params *UpdateRoleParams) (*UpdateRoleOK, error) {
+func (a *Client) UpdateRole(params *UpdateRoleParams, opts ...ClientOption) (*UpdateRoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "update_role",
 		Method:             "PATCH",
 		PathPattern:        "/roles/{role_id}",
@@ -636,12 +1071,23 @@ func (a *Client) UpdateRole(params *UpdateRoleParams) (*UpdateRoleOK, error) {
 		Reader:             &UpdateRoleReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
-	return result.(*UpdateRoleOK), nil
-
+	success, ok := result.(*UpdateRoleOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for update_role: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

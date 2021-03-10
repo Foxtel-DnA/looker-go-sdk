@@ -13,76 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateIntegrationHubParams creates a new UpdateIntegrationHubParams object
-// with the default values initialized.
+// NewUpdateIntegrationHubParams creates a new UpdateIntegrationHubParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateIntegrationHubParams() *UpdateIntegrationHubParams {
-	var ()
 	return &UpdateIntegrationHubParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateIntegrationHubParamsWithTimeout creates a new UpdateIntegrationHubParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateIntegrationHubParamsWithTimeout(timeout time.Duration) *UpdateIntegrationHubParams {
-	var ()
 	return &UpdateIntegrationHubParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateIntegrationHubParamsWithContext creates a new UpdateIntegrationHubParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateIntegrationHubParamsWithContext(ctx context.Context) *UpdateIntegrationHubParams {
-	var ()
 	return &UpdateIntegrationHubParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateIntegrationHubParamsWithHTTPClient creates a new UpdateIntegrationHubParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateIntegrationHubParamsWithHTTPClient(client *http.Client) *UpdateIntegrationHubParams {
-	var ()
 	return &UpdateIntegrationHubParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateIntegrationHubParams contains all the parameters to send to the API endpoint
-for the update integration hub operation typically these are written to a http.Request
+/* UpdateIntegrationHubParams contains all the parameters to send to the API endpoint
+   for the update integration hub operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateIntegrationHubParams struct {
 
-	/*Body
-	  Integration Hub
+	/* Body.
 
+	   Integration Hub
 	*/
 	Body *models.IntegrationHub
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*IntegrationHubID
-	  Id of Integration Hub
 
+	/* IntegrationHubID.
+
+	   Id of Integration Hub
+
+	   Format: int64
 	*/
 	IntegrationHubID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateIntegrationHubParams) WithDefaults() *UpdateIntegrationHubParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update integration hub params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateIntegrationHubParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update integration hub params
@@ -158,7 +175,6 @@ func (o *UpdateIntegrationHubParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,16 +185,17 @@ func (o *UpdateIntegrationHubParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param integration_hub_id

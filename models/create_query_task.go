@@ -6,14 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // CreateQueryTask create query task
+//
 // swagger:model CreateQueryTask
 type CreateQueryTask struct {
 
@@ -34,7 +36,7 @@ type CreateQueryTask struct {
 	// Required: true
 	QueryID *int64 `json:"query_id"`
 
-	// Desired result format
+	// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
 	// Required: true
 	ResultFormat *string `json:"result_format"`
 
@@ -74,6 +76,25 @@ func (m *CreateQueryTask) validateResultFormat(formats strfmt.Registry) error {
 	if err := validate.Required("result_format", "body", m.ResultFormat); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+// ContextValidate validate this create query task based on the context it is used
+func (m *CreateQueryTask) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateQueryTask) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
 
 	return nil
 }

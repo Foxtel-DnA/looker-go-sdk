@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // ScheduledPlansForLookmlDashboardReader is a Reader for the ScheduledPlansForLookmlDashboard structure.
@@ -24,30 +23,26 @@ type ScheduledPlansForLookmlDashboardReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ScheduledPlansForLookmlDashboardReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewScheduledPlansForLookmlDashboardOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewScheduledPlansForLookmlDashboardBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewScheduledPlansForLookmlDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewScheduledPlansForLookmlDashboardOK() *ScheduledPlansForLookmlDashboardOK
 	return &ScheduledPlansForLookmlDashboardOK{}
 }
 
-/*ScheduledPlansForLookmlDashboardOK handles this case with default header values.
+/* ScheduledPlansForLookmlDashboardOK describes a response with status code 200, with default header values.
 
 Scheduled Plan
 */
@@ -66,6 +61,9 @@ type ScheduledPlansForLookmlDashboardOK struct {
 
 func (o *ScheduledPlansForLookmlDashboardOK) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id}][%d] scheduledPlansForLookmlDashboardOK  %+v", 200, o.Payload)
+}
+func (o *ScheduledPlansForLookmlDashboardOK) GetPayload() []*models.ScheduledPlan {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookmlDashboardOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewScheduledPlansForLookmlDashboardBadRequest() *ScheduledPlansForLookmlDas
 	return &ScheduledPlansForLookmlDashboardBadRequest{}
 }
 
-/*ScheduledPlansForLookmlDashboardBadRequest handles this case with default header values.
+/* ScheduledPlansForLookmlDashboardBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type ScheduledPlansForLookmlDashboardBadRequest struct {
 
 func (o *ScheduledPlansForLookmlDashboardBadRequest) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id}][%d] scheduledPlansForLookmlDashboardBadRequest  %+v", 400, o.Payload)
+}
+func (o *ScheduledPlansForLookmlDashboardBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookmlDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewScheduledPlansForLookmlDashboardNotFound() *ScheduledPlansForLookmlDashb
 	return &ScheduledPlansForLookmlDashboardNotFound{}
 }
 
-/*ScheduledPlansForLookmlDashboardNotFound handles this case with default header values.
+/* ScheduledPlansForLookmlDashboardNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type ScheduledPlansForLookmlDashboardNotFound struct {
 
 func (o *ScheduledPlansForLookmlDashboardNotFound) Error() string {
 	return fmt.Sprintf("[GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id}][%d] scheduledPlansForLookmlDashboardNotFound  %+v", 404, o.Payload)
+}
+func (o *ScheduledPlansForLookmlDashboardNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ScheduledPlansForLookmlDashboardNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

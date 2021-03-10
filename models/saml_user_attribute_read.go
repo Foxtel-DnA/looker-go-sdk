@@ -6,22 +6,19 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // SamlUserAttributeRead saml user attribute read
+//
 // swagger:model SamlUserAttributeRead
 type SamlUserAttributeRead struct {
-
-	// Operations the current user is able to perform on this object
-	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
 
 	// Name of User Attribute in Saml
 	// Read Only: true
@@ -60,7 +57,6 @@ func (m *SamlUserAttributeRead) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SamlUserAttributeRead) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
@@ -73,7 +69,6 @@ func (m *SamlUserAttributeRead) validateURL(formats strfmt.Registry) error {
 }
 
 func (m *SamlUserAttributeRead) validateUserAttributes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserAttributes) { // not required
 		return nil
 	}
@@ -85,6 +80,81 @@ func (m *SamlUserAttributeRead) validateUserAttributes(formats strfmt.Registry) 
 
 		if m.UserAttributes[i] != nil {
 			if err := m.UserAttributes[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this saml user attribute read based on the context it is used
+func (m *SamlUserAttributeRead) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUserAttributes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SamlUserAttributeRead) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlUserAttributeRead) contextValidateRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "required", "body", m.Required); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlUserAttributeRead) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlUserAttributeRead) contextValidateUserAttributes(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "user_attributes", "body", []*UserAttribute(m.UserAttributes)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.UserAttributes); i++ {
+
+		if m.UserAttributes[i] != nil {
+			if err := m.UserAttributes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("user_attributes" + "." + strconv.Itoa(i))
 				}

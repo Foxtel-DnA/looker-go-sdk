@@ -6,14 +6,22 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // IntegrationParam integration param
+//
 // swagger:model IntegrationParam
 type IntegrationParam struct {
+
+	// When present, the param represents the oauth url the user will be taken to.
+	// Read Only: true
+	DelegateOauthURL string `json:"delegate_oauth_url,omitempty"`
 
 	// Short description of the parameter.
 	// Read Only: true
@@ -28,7 +36,6 @@ type IntegrationParam struct {
 	Label string `json:"label,omitempty"`
 
 	// Name of the parameter.
-	// Read Only: true
 	Name string `json:"name,omitempty"`
 
 	// When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow.
@@ -52,6 +59,107 @@ type IntegrationParam struct {
 
 // Validate validates this integration param
 func (m *IntegrationParam) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this integration param based on the context it is used
+func (m *IntegrationParam) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDelegateOauthURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDescription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHasValue(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLabel(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePerUser(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRequired(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSensitive(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateDelegateOauthURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "delegate_oauth_url", "body", string(m.DelegateOauthURL)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateDescription(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "description", "body", string(m.Description)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateHasValue(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "has_value", "body", m.HasValue); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateLabel(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "label", "body", string(m.Label)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidatePerUser(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "per_user", "body", m.PerUser); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateRequired(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "required", "body", m.Required); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *IntegrationParam) contextValidateSensitive(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "sensitive", "body", m.Sensitive); err != nil {
+		return err
+	}
+
 	return nil
 }
 

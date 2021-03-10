@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // HomepageSectionReader is a Reader for the HomepageSection structure.
@@ -24,30 +23,26 @@ type HomepageSectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *HomepageSectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewHomepageSectionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewHomepageSectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewHomepageSectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewHomepageSectionOK() *HomepageSectionOK {
 	return &HomepageSectionOK{}
 }
 
-/*HomepageSectionOK handles this case with default header values.
+/* HomepageSectionOK describes a response with status code 200, with default header values.
 
 Homepage section
 */
@@ -66,6 +61,9 @@ type HomepageSectionOK struct {
 
 func (o *HomepageSectionOK) Error() string {
 	return fmt.Sprintf("[GET /homepage_sections/{homepage_section_id}][%d] homepageSectionOK  %+v", 200, o.Payload)
+}
+func (o *HomepageSectionOK) GetPayload() *models.HomepageSection {
+	return o.Payload
 }
 
 func (o *HomepageSectionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewHomepageSectionBadRequest() *HomepageSectionBadRequest {
 	return &HomepageSectionBadRequest{}
 }
 
-/*HomepageSectionBadRequest handles this case with default header values.
+/* HomepageSectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type HomepageSectionBadRequest struct {
 
 func (o *HomepageSectionBadRequest) Error() string {
 	return fmt.Sprintf("[GET /homepage_sections/{homepage_section_id}][%d] homepageSectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *HomepageSectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *HomepageSectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewHomepageSectionNotFound() *HomepageSectionNotFound {
 	return &HomepageSectionNotFound{}
 }
 
-/*HomepageSectionNotFound handles this case with default header values.
+/* HomepageSectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type HomepageSectionNotFound struct {
 
 func (o *HomepageSectionNotFound) Error() string {
 	return fmt.Sprintf("[GET /homepage_sections/{homepage_section_id}][%d] homepageSectionNotFound  %+v", 404, o.Payload)
+}
+func (o *HomepageSectionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *HomepageSectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // QueryTaskReader is a Reader for the QueryTask structure.
@@ -24,30 +23,26 @@ type QueryTaskReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *QueryTaskReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewQueryTaskOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewQueryTaskBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewQueryTaskNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewQueryTaskOK() *QueryTaskOK {
 	return &QueryTaskOK{}
 }
 
-/*QueryTaskOK handles this case with default header values.
+/* QueryTaskOK describes a response with status code 200, with default header values.
 
 query_task
 */
@@ -66,6 +61,9 @@ type QueryTaskOK struct {
 
 func (o *QueryTaskOK) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}][%d] queryTaskOK  %+v", 200, o.Payload)
+}
+func (o *QueryTaskOK) GetPayload() *models.QueryTask {
+	return o.Payload
 }
 
 func (o *QueryTaskOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewQueryTaskBadRequest() *QueryTaskBadRequest {
 	return &QueryTaskBadRequest{}
 }
 
-/*QueryTaskBadRequest handles this case with default header values.
+/* QueryTaskBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type QueryTaskBadRequest struct {
 
 func (o *QueryTaskBadRequest) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}][%d] queryTaskBadRequest  %+v", 400, o.Payload)
+}
+func (o *QueryTaskBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewQueryTaskNotFound() *QueryTaskNotFound {
 	return &QueryTaskNotFound{}
 }
 
-/*QueryTaskNotFound handles this case with default header values.
+/* QueryTaskNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type QueryTaskNotFound struct {
 
 func (o *QueryTaskNotFound) Error() string {
 	return fmt.Sprintf("[GET /query_tasks/{query_task_id}][%d] queryTaskNotFound  %+v", 404, o.Payload)
+}
+func (o *QueryTaskNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryTaskNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

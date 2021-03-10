@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // RunLookReader is a Reader for the RunLook structure.
@@ -24,37 +23,38 @@ type RunLookReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *RunLookReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewRunLookOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewRunLookBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewRunLookNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewRunLookUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewRunLookTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewRunLookOK() *RunLookOK {
 	return &RunLookOK{}
 }
 
-/*RunLookOK handles this case with default header values.
+/* RunLookOK describes a response with status code 200, with default header values.
 
 Look
 */
@@ -73,6 +73,9 @@ type RunLookOK struct {
 
 func (o *RunLookOK) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}/run/{result_format}][%d] runLookOK  %+v", 200, o.Payload)
+}
+func (o *RunLookOK) GetPayload() string {
+	return o.Payload
 }
 
 func (o *RunLookOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -90,7 +93,7 @@ func NewRunLookBadRequest() *RunLookBadRequest {
 	return &RunLookBadRequest{}
 }
 
-/*RunLookBadRequest handles this case with default header values.
+/* RunLookBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -100,6 +103,9 @@ type RunLookBadRequest struct {
 
 func (o *RunLookBadRequest) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}/run/{result_format}][%d] runLookBadRequest  %+v", 400, o.Payload)
+}
+func (o *RunLookBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RunLookBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -119,7 +125,7 @@ func NewRunLookNotFound() *RunLookNotFound {
 	return &RunLookNotFound{}
 }
 
-/*RunLookNotFound handles this case with default header values.
+/* RunLookNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -129,6 +135,9 @@ type RunLookNotFound struct {
 
 func (o *RunLookNotFound) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}/run/{result_format}][%d] runLookNotFound  %+v", 404, o.Payload)
+}
+func (o *RunLookNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *RunLookNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,7 +157,7 @@ func NewRunLookUnprocessableEntity() *RunLookUnprocessableEntity {
 	return &RunLookUnprocessableEntity{}
 }
 
-/*RunLookUnprocessableEntity handles this case with default header values.
+/* RunLookUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -159,10 +168,45 @@ type RunLookUnprocessableEntity struct {
 func (o *RunLookUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}/run/{result_format}][%d] runLookUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *RunLookUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *RunLookUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewRunLookTooManyRequests creates a RunLookTooManyRequests with default headers values
+func NewRunLookTooManyRequests() *RunLookTooManyRequests {
+	return &RunLookTooManyRequests{}
+}
+
+/* RunLookTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type RunLookTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *RunLookTooManyRequests) Error() string {
+	return fmt.Sprintf("[GET /looks/{look_id}/run/{result_format}][%d] runLookTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *RunLookTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *RunLookTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

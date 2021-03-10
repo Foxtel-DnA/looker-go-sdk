@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // DeleteConnectionReader is a Reader for the DeleteConnection structure.
@@ -24,30 +23,32 @@ type DeleteConnectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteConnectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteConnectionNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteConnectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteConnectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteConnectionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteConnectionNoContent() *DeleteConnectionNoContent {
 	return &DeleteConnectionNoContent{}
 }
 
-/*DeleteConnectionNoContent handles this case with default header values.
+/* DeleteConnectionNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteConnectionNoContent struct {
 
 func (o *DeleteConnectionNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}][%d] deleteConnectionNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteConnectionNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteConnectionNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteConnectionBadRequest() *DeleteConnectionBadRequest {
 	return &DeleteConnectionBadRequest{}
 }
 
-/*DeleteConnectionBadRequest handles this case with default header values.
+/* DeleteConnectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteConnectionBadRequest struct {
 
 func (o *DeleteConnectionBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}][%d] deleteConnectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteConnectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteConnectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteConnectionNotFound() *DeleteConnectionNotFound {
 	return &DeleteConnectionNotFound{}
 }
 
-/*DeleteConnectionNotFound handles this case with default header values.
+/* DeleteConnectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteConnectionNotFound struct {
 func (o *DeleteConnectionNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /connections/{connection_name}][%d] deleteConnectionNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteConnectionNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteConnectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteConnectionTooManyRequests creates a DeleteConnectionTooManyRequests with default headers values
+func NewDeleteConnectionTooManyRequests() *DeleteConnectionTooManyRequests {
+	return &DeleteConnectionTooManyRequests{}
+}
+
+/* DeleteConnectionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteConnectionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteConnectionTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /connections/{connection_name}][%d] deleteConnectionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteConnectionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteConnectionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

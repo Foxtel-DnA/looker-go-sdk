@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // LookReader is a Reader for the Look structure.
@@ -24,30 +23,26 @@ type LookReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *LookReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewLookOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewLookBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewLookNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewLookOK() *LookOK {
 	return &LookOK{}
 }
 
-/*LookOK handles this case with default header values.
+/* LookOK describes a response with status code 200, with default header values.
 
 Look
 */
@@ -66,6 +61,9 @@ type LookOK struct {
 
 func (o *LookOK) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}][%d] lookOK  %+v", 200, o.Payload)
+}
+func (o *LookOK) GetPayload() *models.LookWithQuery {
+	return o.Payload
 }
 
 func (o *LookOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewLookBadRequest() *LookBadRequest {
 	return &LookBadRequest{}
 }
 
-/*LookBadRequest handles this case with default header values.
+/* LookBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type LookBadRequest struct {
 
 func (o *LookBadRequest) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}][%d] lookBadRequest  %+v", 400, o.Payload)
+}
+func (o *LookBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LookBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewLookNotFound() *LookNotFound {
 	return &LookNotFound{}
 }
 
-/*LookNotFound handles this case with default header values.
+/* LookNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type LookNotFound struct {
 
 func (o *LookNotFound) Error() string {
 	return fmt.Sprintf("[GET /looks/{look_id}][%d] lookNotFound  %+v", 404, o.Payload)
+}
+func (o *LookNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *LookNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

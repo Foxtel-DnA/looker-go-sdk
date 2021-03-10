@@ -6,22 +6,31 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
-	strfmt "github.com/go-openapi/strfmt"
-
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // OIDCGroupRead o ID c group read
+//
 // swagger:model OIDCGroupRead
 type OIDCGroupRead struct {
 
-	// Operations the current user is able to perform on this object
+	// Unique Id
 	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
+	ID int64 `json:"id,omitempty"`
+
+	// Unique Id of group in Looker
+	// Read Only: true
+	LookerGroupID int64 `json:"looker_group_id,omitempty"`
+
+	// Name of group in Looker
+	// Read Only: true
+	LookerGroupName string `json:"looker_group_name,omitempty"`
 
 	// Name of group in OIDC
 	// Read Only: true
@@ -30,11 +39,6 @@ type OIDCGroupRead struct {
 	// Looker Roles
 	// Read Only: true
 	Roles []*Role `json:"roles"`
-
-	// Link to oidc config
-	// Read Only: true
-	// Format: uri
-	URL strfmt.URI `json:"url,omitempty"`
 }
 
 // Validate validates this o ID c group read
@@ -45,10 +49,6 @@ func (m *OIDCGroupRead) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateURL(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -56,7 +56,6 @@ func (m *OIDCGroupRead) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OIDCGroupRead) validateRoles(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Roles) { // not required
 		return nil
 	}
@@ -80,14 +79,89 @@ func (m *OIDCGroupRead) validateRoles(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *OIDCGroupRead) validateURL(formats strfmt.Registry) error {
+// ContextValidate validate this o ID c group read based on the context it is used
+func (m *OIDCGroupRead) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
 
-	if swag.IsZero(m.URL) { // not required
-		return nil
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
 	}
 
-	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+	if err := m.contextValidateLookerGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLookerGroupName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRoles(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OIDCGroupRead) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", int64(m.ID)); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCGroupRead) contextValidateLookerGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "looker_group_id", "body", int64(m.LookerGroupID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCGroupRead) contextValidateLookerGroupName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "looker_group_name", "body", string(m.LookerGroupName)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCGroupRead) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "name", "body", string(m.Name)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *OIDCGroupRead) contextValidateRoles(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "roles", "body", []*Role(m.Roles)); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.Roles); i++ {
+
+		if m.Roles[i] != nil {
+			if err := m.Roles[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("roles" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

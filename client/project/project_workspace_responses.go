@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // ProjectWorkspaceReader is a Reader for the ProjectWorkspace structure.
@@ -24,30 +23,26 @@ type ProjectWorkspaceReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ProjectWorkspaceReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewProjectWorkspaceOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewProjectWorkspaceBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewProjectWorkspaceNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewProjectWorkspaceOK() *ProjectWorkspaceOK {
 	return &ProjectWorkspaceOK{}
 }
 
-/*ProjectWorkspaceOK handles this case with default header values.
+/* ProjectWorkspaceOK describes a response with status code 200, with default header values.
 
 Project Workspace
 */
@@ -66,6 +61,9 @@ type ProjectWorkspaceOK struct {
 
 func (o *ProjectWorkspaceOK) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/current_workspace][%d] projectWorkspaceOK  %+v", 200, o.Payload)
+}
+func (o *ProjectWorkspaceOK) GetPayload() *models.ProjectWorkspace {
+	return o.Payload
 }
 
 func (o *ProjectWorkspaceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewProjectWorkspaceBadRequest() *ProjectWorkspaceBadRequest {
 	return &ProjectWorkspaceBadRequest{}
 }
 
-/*ProjectWorkspaceBadRequest handles this case with default header values.
+/* ProjectWorkspaceBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type ProjectWorkspaceBadRequest struct {
 
 func (o *ProjectWorkspaceBadRequest) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/current_workspace][%d] projectWorkspaceBadRequest  %+v", 400, o.Payload)
+}
+func (o *ProjectWorkspaceBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ProjectWorkspaceBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewProjectWorkspaceNotFound() *ProjectWorkspaceNotFound {
 	return &ProjectWorkspaceNotFound{}
 }
 
-/*ProjectWorkspaceNotFound handles this case with default header values.
+/* ProjectWorkspaceNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type ProjectWorkspaceNotFound struct {
 
 func (o *ProjectWorkspaceNotFound) Error() string {
 	return fmt.Sprintf("[GET /projects/{project_id}/current_workspace][%d] projectWorkspaceNotFound  %+v", 404, o.Payload)
+}
+func (o *ProjectWorkspaceNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *ProjectWorkspaceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

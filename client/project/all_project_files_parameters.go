@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewAllProjectFilesParams creates a new AllProjectFilesParams object
-// with the default values initialized.
+// NewAllProjectFilesParams creates a new AllProjectFilesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAllProjectFilesParams() *AllProjectFilesParams {
-	var ()
 	return &AllProjectFilesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAllProjectFilesParamsWithTimeout creates a new AllProjectFilesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAllProjectFilesParamsWithTimeout(timeout time.Duration) *AllProjectFilesParams {
-	var ()
 	return &AllProjectFilesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAllProjectFilesParamsWithContext creates a new AllProjectFilesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAllProjectFilesParamsWithContext(ctx context.Context) *AllProjectFilesParams {
-	var ()
 	return &AllProjectFilesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAllProjectFilesParamsWithHTTPClient creates a new AllProjectFilesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAllProjectFilesParamsWithHTTPClient(client *http.Client) *AllProjectFilesParams {
-	var ()
 	return &AllProjectFilesParams{
 		HTTPClient: client,
 	}
 }
 
-/*AllProjectFilesParams contains all the parameters to send to the API endpoint
-for the all project files operation typically these are written to a http.Request
+/* AllProjectFilesParams contains all the parameters to send to the API endpoint
+   for the all project files operation.
+
+   Typically these are written to a http.Request.
 */
 type AllProjectFilesParams struct {
 
-	/*Fields
-	  Requested fields
+	/* Fields.
 
+	   Requested fields
 	*/
 	Fields *string
-	/*ProjectID
-	  Project Id
 
+	/* ProjectID.
+
+	   Project Id
 	*/
 	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the all project files params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllProjectFilesParams) WithDefaults() *AllProjectFilesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the all project files params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AllProjectFilesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the all project files params
@@ -144,16 +158,17 @@ func (o *AllProjectFilesParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param project_id

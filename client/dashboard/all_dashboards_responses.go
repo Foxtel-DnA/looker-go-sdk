@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AllDashboardsReader is a Reader for the AllDashboards structure.
@@ -24,30 +23,26 @@ type AllDashboardsReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AllDashboardsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAllDashboardsOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAllDashboardsBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAllDashboardsNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewAllDashboardsOK() *AllDashboardsOK {
 	return &AllDashboardsOK{}
 }
 
-/*AllDashboardsOK handles this case with default header values.
+/* AllDashboardsOK describes a response with status code 200, with default header values.
 
 dashboards
 */
@@ -66,6 +61,9 @@ type AllDashboardsOK struct {
 
 func (o *AllDashboardsOK) Error() string {
 	return fmt.Sprintf("[GET /dashboards][%d] allDashboardsOK  %+v", 200, o.Payload)
+}
+func (o *AllDashboardsOK) GetPayload() []*models.DashboardBase {
+	return o.Payload
 }
 
 func (o *AllDashboardsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewAllDashboardsBadRequest() *AllDashboardsBadRequest {
 	return &AllDashboardsBadRequest{}
 }
 
-/*AllDashboardsBadRequest handles this case with default header values.
+/* AllDashboardsBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type AllDashboardsBadRequest struct {
 
 func (o *AllDashboardsBadRequest) Error() string {
 	return fmt.Sprintf("[GET /dashboards][%d] allDashboardsBadRequest  %+v", 400, o.Payload)
+}
+func (o *AllDashboardsBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllDashboardsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewAllDashboardsNotFound() *AllDashboardsNotFound {
 	return &AllDashboardsNotFound{}
 }
 
-/*AllDashboardsNotFound handles this case with default header values.
+/* AllDashboardsNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type AllDashboardsNotFound struct {
 
 func (o *AllDashboardsNotFound) Error() string {
 	return fmt.Sprintf("[GET /dashboards][%d] allDashboardsNotFound  %+v", 404, o.Payload)
+}
+func (o *AllDashboardsNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AllDashboardsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateDashboardReader is a Reader for the UpdateDashboard structure.
@@ -24,44 +23,44 @@ type UpdateDashboardReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateDashboardReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateDashboardOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateDashboardBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateDashboardNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 405:
 		result := NewUpdateDashboardMethodNotAllowed()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateDashboardUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateDashboardTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewUpdateDashboardOK() *UpdateDashboardOK {
 	return &UpdateDashboardOK{}
 }
 
-/*UpdateDashboardOK handles this case with default header values.
+/* UpdateDashboardOK describes a response with status code 200, with default header values.
 
 Dashboard
 */
@@ -80,6 +79,9 @@ type UpdateDashboardOK struct {
 
 func (o *UpdateDashboardOK) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardOK  %+v", 200, o.Payload)
+}
+func (o *UpdateDashboardOK) GetPayload() *models.Dashboard {
+	return o.Payload
 }
 
 func (o *UpdateDashboardOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewUpdateDashboardBadRequest() *UpdateDashboardBadRequest {
 	return &UpdateDashboardBadRequest{}
 }
 
-/*UpdateDashboardBadRequest handles this case with default header values.
+/* UpdateDashboardBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type UpdateDashboardBadRequest struct {
 
 func (o *UpdateDashboardBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateDashboardBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDashboardBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewUpdateDashboardNotFound() *UpdateDashboardNotFound {
 	return &UpdateDashboardNotFound{}
 }
 
-/*UpdateDashboardNotFound handles this case with default header values.
+/* UpdateDashboardNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type UpdateDashboardNotFound struct {
 
 func (o *UpdateDashboardNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateDashboardNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDashboardNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewUpdateDashboardMethodNotAllowed() *UpdateDashboardMethodNotAllowed {
 	return &UpdateDashboardMethodNotAllowed{}
 }
 
-/*UpdateDashboardMethodNotAllowed handles this case with default header values.
+/* UpdateDashboardMethodNotAllowed describes a response with status code 405, with default header values.
 
 Resource Can't Be Modified
 */
@@ -167,6 +175,9 @@ type UpdateDashboardMethodNotAllowed struct {
 
 func (o *UpdateDashboardMethodNotAllowed) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardMethodNotAllowed  %+v", 405, o.Payload)
+}
+func (o *UpdateDashboardMethodNotAllowed) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDashboardMethodNotAllowed) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewUpdateDashboardUnprocessableEntity() *UpdateDashboardUnprocessableEntity
 	return &UpdateDashboardUnprocessableEntity{}
 }
 
-/*UpdateDashboardUnprocessableEntity handles this case with default header values.
+/* UpdateDashboardUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type UpdateDashboardUnprocessableEntity struct {
 func (o *UpdateDashboardUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateDashboardUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateDashboardUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateDashboardTooManyRequests creates a UpdateDashboardTooManyRequests with default headers values
+func NewUpdateDashboardTooManyRequests() *UpdateDashboardTooManyRequests {
+	return &UpdateDashboardTooManyRequests{}
+}
+
+/* UpdateDashboardTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateDashboardTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateDashboardTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /dashboards/{dashboard_id}][%d] updateDashboardTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateDashboardTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateDashboardTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -13,76 +13,93 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewUpdateLookParams creates a new UpdateLookParams object
-// with the default values initialized.
+// NewUpdateLookParams creates a new UpdateLookParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateLookParams() *UpdateLookParams {
-	var ()
 	return &UpdateLookParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateLookParamsWithTimeout creates a new UpdateLookParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateLookParamsWithTimeout(timeout time.Duration) *UpdateLookParams {
-	var ()
 	return &UpdateLookParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateLookParamsWithContext creates a new UpdateLookParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateLookParamsWithContext(ctx context.Context) *UpdateLookParams {
-	var ()
 	return &UpdateLookParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateLookParamsWithHTTPClient creates a new UpdateLookParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateLookParamsWithHTTPClient(client *http.Client) *UpdateLookParams {
-	var ()
 	return &UpdateLookParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateLookParams contains all the parameters to send to the API endpoint
-for the update look operation typically these are written to a http.Request
+/* UpdateLookParams contains all the parameters to send to the API endpoint
+   for the update look operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateLookParams struct {
 
-	/*Body
-	  Look
+	/* Body.
 
+	   Look
 	*/
 	Body *models.LookWithQuery
-	/*Fields
-	  Requested fields.
 
+	/* Fields.
+
+	   Requested fields.
 	*/
 	Fields *string
-	/*LookID
-	  Id of look
 
+	/* LookID.
+
+	   Id of look
+
+	   Format: int64
 	*/
 	LookID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLookParams) WithDefaults() *UpdateLookParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update look params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLookParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update look params
@@ -158,7 +175,6 @@ func (o *UpdateLookParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
@@ -169,16 +185,17 @@ func (o *UpdateLookParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param look_id

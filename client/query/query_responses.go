@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // QueryReader is a Reader for the Query structure.
@@ -24,30 +23,26 @@ type QueryReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *QueryReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewQueryOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewQueryBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewQueryNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewQueryOK() *QueryOK {
 	return &QueryOK{}
 }
 
-/*QueryOK handles this case with default header values.
+/* QueryOK describes a response with status code 200, with default header values.
 
 Query
 */
@@ -66,6 +61,9 @@ type QueryOK struct {
 
 func (o *QueryOK) Error() string {
 	return fmt.Sprintf("[GET /queries/{query_id}][%d] queryOK  %+v", 200, o.Payload)
+}
+func (o *QueryOK) GetPayload() *models.Query {
+	return o.Payload
 }
 
 func (o *QueryOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -85,7 +83,7 @@ func NewQueryBadRequest() *QueryBadRequest {
 	return &QueryBadRequest{}
 }
 
-/*QueryBadRequest handles this case with default header values.
+/* QueryBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -95,6 +93,9 @@ type QueryBadRequest struct {
 
 func (o *QueryBadRequest) Error() string {
 	return fmt.Sprintf("[GET /queries/{query_id}][%d] queryBadRequest  %+v", 400, o.Payload)
+}
+func (o *QueryBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,7 +115,7 @@ func NewQueryNotFound() *QueryNotFound {
 	return &QueryNotFound{}
 }
 
-/*QueryNotFound handles this case with default header values.
+/* QueryNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -124,6 +125,9 @@ type QueryNotFound struct {
 
 func (o *QueryNotFound) Error() string {
 	return fmt.Sprintf("[GET /queries/{query_id}][%d] queryNotFound  %+v", 404, o.Payload)
+}
+func (o *QueryNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *QueryNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

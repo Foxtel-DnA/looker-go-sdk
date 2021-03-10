@@ -13,65 +13,78 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
-// NewPerformDataActionParams creates a new PerformDataActionParams object
-// with the default values initialized.
+// NewPerformDataActionParams creates a new PerformDataActionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewPerformDataActionParams() *PerformDataActionParams {
-	var ()
 	return &PerformDataActionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewPerformDataActionParamsWithTimeout creates a new PerformDataActionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewPerformDataActionParamsWithTimeout(timeout time.Duration) *PerformDataActionParams {
-	var ()
 	return &PerformDataActionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewPerformDataActionParamsWithContext creates a new PerformDataActionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewPerformDataActionParamsWithContext(ctx context.Context) *PerformDataActionParams {
-	var ()
 	return &PerformDataActionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewPerformDataActionParamsWithHTTPClient creates a new PerformDataActionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewPerformDataActionParamsWithHTTPClient(client *http.Client) *PerformDataActionParams {
-	var ()
 	return &PerformDataActionParams{
 		HTTPClient: client,
 	}
 }
 
-/*PerformDataActionParams contains all the parameters to send to the API endpoint
-for the perform data action operation typically these are written to a http.Request
+/* PerformDataActionParams contains all the parameters to send to the API endpoint
+   for the perform data action operation.
+
+   Typically these are written to a http.Request.
 */
 type PerformDataActionParams struct {
 
-	/*Body
-	  Data Action Request
+	/* Body.
 
+	   Data Action Request
 	*/
 	Body *models.DataActionRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the perform data action params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PerformDataActionParams) WithDefaults() *PerformDataActionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the perform data action params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PerformDataActionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the perform data action params
@@ -125,7 +138,6 @@ func (o *PerformDataActionParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

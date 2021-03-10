@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // AddGroupUserReader is a Reader for the AddGroupUser structure.
@@ -24,37 +23,32 @@ type AddGroupUserReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *AddGroupUserReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewAddGroupUserOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewAddGroupUserBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 403:
 		result := NewAddGroupUserForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewAddGroupUserNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +57,7 @@ func NewAddGroupUserOK() *AddGroupUserOK {
 	return &AddGroupUserOK{}
 }
 
-/*AddGroupUserOK handles this case with default header values.
+/* AddGroupUserOK describes a response with status code 200, with default header values.
 
 Added user.
 */
@@ -73,6 +67,9 @@ type AddGroupUserOK struct {
 
 func (o *AddGroupUserOK) Error() string {
 	return fmt.Sprintf("[POST /groups/{group_id}/users][%d] addGroupUserOK  %+v", 200, o.Payload)
+}
+func (o *AddGroupUserOK) GetPayload() *models.User {
+	return o.Payload
 }
 
 func (o *AddGroupUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +89,7 @@ func NewAddGroupUserBadRequest() *AddGroupUserBadRequest {
 	return &AddGroupUserBadRequest{}
 }
 
-/*AddGroupUserBadRequest handles this case with default header values.
+/* AddGroupUserBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +99,9 @@ type AddGroupUserBadRequest struct {
 
 func (o *AddGroupUserBadRequest) Error() string {
 	return fmt.Sprintf("[POST /groups/{group_id}/users][%d] addGroupUserBadRequest  %+v", 400, o.Payload)
+}
+func (o *AddGroupUserBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AddGroupUserBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +121,7 @@ func NewAddGroupUserForbidden() *AddGroupUserForbidden {
 	return &AddGroupUserForbidden{}
 }
 
-/*AddGroupUserForbidden handles this case with default header values.
+/* AddGroupUserForbidden describes a response with status code 403, with default header values.
 
 Permission Denied
 */
@@ -131,6 +131,9 @@ type AddGroupUserForbidden struct {
 
 func (o *AddGroupUserForbidden) Error() string {
 	return fmt.Sprintf("[POST /groups/{group_id}/users][%d] addGroupUserForbidden  %+v", 403, o.Payload)
+}
+func (o *AddGroupUserForbidden) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AddGroupUserForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +153,7 @@ func NewAddGroupUserNotFound() *AddGroupUserNotFound {
 	return &AddGroupUserNotFound{}
 }
 
-/*AddGroupUserNotFound handles this case with default header values.
+/* AddGroupUserNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -160,6 +163,9 @@ type AddGroupUserNotFound struct {
 
 func (o *AddGroupUserNotFound) Error() string {
 	return fmt.Sprintf("[POST /groups/{group_id}/users][%d] addGroupUserNotFound  %+v", 404, o.Payload)
+}
+func (o *AddGroupUserNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *AddGroupUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

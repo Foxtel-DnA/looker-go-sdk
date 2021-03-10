@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // GitStatus git status
+//
 // swagger:model GitStatus
 type GitStatus struct {
 
@@ -38,6 +42,77 @@ type GitStatus struct {
 
 // Validate validates this git status
 func (m *GitStatus) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this git status based on the context it is used
+func (m *GitStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAction(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateConflict(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRevertable(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateText(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GitStatus) contextValidateAction(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "action", "body", string(m.Action)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitStatus) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *GitStatus) contextValidateConflict(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "conflict", "body", m.Conflict); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitStatus) contextValidateRevertable(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "revertable", "body", m.Revertable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *GitStatus) contextValidateText(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "text", "body", string(m.Text)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

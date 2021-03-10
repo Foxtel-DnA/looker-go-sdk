@@ -13,64 +13,79 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteModelSetParams creates a new DeleteModelSetParams object
-// with the default values initialized.
+// NewDeleteModelSetParams creates a new DeleteModelSetParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteModelSetParams() *DeleteModelSetParams {
-	var ()
 	return &DeleteModelSetParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteModelSetParamsWithTimeout creates a new DeleteModelSetParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteModelSetParamsWithTimeout(timeout time.Duration) *DeleteModelSetParams {
-	var ()
 	return &DeleteModelSetParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteModelSetParamsWithContext creates a new DeleteModelSetParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteModelSetParamsWithContext(ctx context.Context) *DeleteModelSetParams {
-	var ()
 	return &DeleteModelSetParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteModelSetParamsWithHTTPClient creates a new DeleteModelSetParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteModelSetParamsWithHTTPClient(client *http.Client) *DeleteModelSetParams {
-	var ()
 	return &DeleteModelSetParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteModelSetParams contains all the parameters to send to the API endpoint
-for the delete model set operation typically these are written to a http.Request
+/* DeleteModelSetParams contains all the parameters to send to the API endpoint
+   for the delete model set operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteModelSetParams struct {
 
-	/*ModelSetID
-	  id of model set
+	/* ModelSetID.
 
+	   id of model set
+
+	   Format: int64
 	*/
 	ModelSetID int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteModelSetParams) WithDefaults() *DeleteModelSetParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete model set params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteModelSetParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete model set params

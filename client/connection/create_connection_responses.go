@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // CreateConnectionReader is a Reader for the CreateConnection structure.
@@ -24,44 +23,44 @@ type CreateConnectionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *CreateConnectionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewCreateConnectionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewCreateConnectionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewCreateConnectionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewCreateConnectionConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewCreateConnectionUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewCreateConnectionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewCreateConnectionOK() *CreateConnectionOK {
 	return &CreateConnectionOK{}
 }
 
-/*CreateConnectionOK handles this case with default header values.
+/* CreateConnectionOK describes a response with status code 200, with default header values.
 
 Connection
 */
@@ -80,6 +79,9 @@ type CreateConnectionOK struct {
 
 func (o *CreateConnectionOK) Error() string {
 	return fmt.Sprintf("[POST /connections][%d] createConnectionOK  %+v", 200, o.Payload)
+}
+func (o *CreateConnectionOK) GetPayload() *models.DBConnection {
+	return o.Payload
 }
 
 func (o *CreateConnectionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewCreateConnectionBadRequest() *CreateConnectionBadRequest {
 	return &CreateConnectionBadRequest{}
 }
 
-/*CreateConnectionBadRequest handles this case with default header values.
+/* CreateConnectionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type CreateConnectionBadRequest struct {
 
 func (o *CreateConnectionBadRequest) Error() string {
 	return fmt.Sprintf("[POST /connections][%d] createConnectionBadRequest  %+v", 400, o.Payload)
+}
+func (o *CreateConnectionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateConnectionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewCreateConnectionNotFound() *CreateConnectionNotFound {
 	return &CreateConnectionNotFound{}
 }
 
-/*CreateConnectionNotFound handles this case with default header values.
+/* CreateConnectionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type CreateConnectionNotFound struct {
 
 func (o *CreateConnectionNotFound) Error() string {
 	return fmt.Sprintf("[POST /connections][%d] createConnectionNotFound  %+v", 404, o.Payload)
+}
+func (o *CreateConnectionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateConnectionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewCreateConnectionConflict() *CreateConnectionConflict {
 	return &CreateConnectionConflict{}
 }
 
-/*CreateConnectionConflict handles this case with default header values.
+/* CreateConnectionConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type CreateConnectionConflict struct {
 
 func (o *CreateConnectionConflict) Error() string {
 	return fmt.Sprintf("[POST /connections][%d] createConnectionConflict  %+v", 409, o.Payload)
+}
+func (o *CreateConnectionConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *CreateConnectionConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewCreateConnectionUnprocessableEntity() *CreateConnectionUnprocessableEnti
 	return &CreateConnectionUnprocessableEntity{}
 }
 
-/*CreateConnectionUnprocessableEntity handles this case with default header values.
+/* CreateConnectionUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type CreateConnectionUnprocessableEntity struct {
 func (o *CreateConnectionUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[POST /connections][%d] createConnectionUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *CreateConnectionUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *CreateConnectionUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewCreateConnectionTooManyRequests creates a CreateConnectionTooManyRequests with default headers values
+func NewCreateConnectionTooManyRequests() *CreateConnectionTooManyRequests {
+	return &CreateConnectionTooManyRequests{}
+}
+
+/* CreateConnectionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type CreateConnectionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *CreateConnectionTooManyRequests) Error() string {
+	return fmt.Sprintf("[POST /connections][%d] createConnectionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *CreateConnectionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *CreateConnectionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -6,20 +6,28 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
 // SamlGroupWrite saml group write
+//
 // swagger:model SamlGroupWrite
 type SamlGroupWrite struct {
 
-	// Operations the current user is able to perform on this object
+	// Unique Id
+	ID int64 `json:"id,omitempty"`
+
+	// Unique Id of group in Looker
 	// Read Only: true
-	Can map[string]bool `json:"can,omitempty"`
+	LookerGroupID int64 `json:"looker_group_id,omitempty"`
+
+	// Name of group in Looker
+	LookerGroupName string `json:"looker_group_name,omitempty"`
 
 	// Name of group in Saml
 	Name string `json:"name,omitempty"`
@@ -48,12 +56,47 @@ func (m *SamlGroupWrite) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SamlGroupWrite) validateURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.URL) { // not required
 		return nil
 	}
 
 	if err := validate.FormatOf("url", "body", "uri", m.URL.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this saml group write based on the context it is used
+func (m *SamlGroupWrite) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateLookerGroupID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateURL(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SamlGroupWrite) contextValidateLookerGroupID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "looker_group_id", "body", int64(m.LookerGroupID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SamlGroupWrite) contextValidateURL(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "url", "body", strfmt.URI(m.URL)); err != nil {
 		return err
 	}
 

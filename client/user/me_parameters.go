@@ -13,63 +13,76 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewMeParams creates a new MeParams object
-// with the default values initialized.
+// NewMeParams creates a new MeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewMeParams() *MeParams {
-	var ()
 	return &MeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewMeParamsWithTimeout creates a new MeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewMeParamsWithTimeout(timeout time.Duration) *MeParams {
-	var ()
 	return &MeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewMeParamsWithContext creates a new MeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewMeParamsWithContext(ctx context.Context) *MeParams {
-	var ()
 	return &MeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewMeParamsWithHTTPClient creates a new MeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewMeParamsWithHTTPClient(client *http.Client) *MeParams {
-	var ()
 	return &MeParams{
 		HTTPClient: client,
 	}
 }
 
-/*MeParams contains all the parameters to send to the API endpoint
-for the me operation typically these are written to a http.Request
+/* MeParams contains all the parameters to send to the API endpoint
+   for the me operation.
+
+   Typically these are written to a http.Request.
 */
 type MeParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the me params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *MeParams) WithDefaults() *MeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the me params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *MeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the me params
@@ -128,16 +141,17 @@ func (o *MeParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) 
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

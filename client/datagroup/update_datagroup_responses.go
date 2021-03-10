@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateDatagroupReader is a Reader for the UpdateDatagroup structure.
@@ -24,44 +23,44 @@ type UpdateDatagroupReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateDatagroupReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateDatagroupOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateDatagroupBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateDatagroupNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 409:
 		result := NewUpdateDatagroupConflict()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateDatagroupUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateDatagroupTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -70,7 +69,7 @@ func NewUpdateDatagroupOK() *UpdateDatagroupOK {
 	return &UpdateDatagroupOK{}
 }
 
-/*UpdateDatagroupOK handles this case with default header values.
+/* UpdateDatagroupOK describes a response with status code 200, with default header values.
 
 Datagroup
 */
@@ -80,6 +79,9 @@ type UpdateDatagroupOK struct {
 
 func (o *UpdateDatagroupOK) Error() string {
 	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupOK  %+v", 200, o.Payload)
+}
+func (o *UpdateDatagroupOK) GetPayload() *models.Datagroup {
+	return o.Payload
 }
 
 func (o *UpdateDatagroupOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -99,7 +101,7 @@ func NewUpdateDatagroupBadRequest() *UpdateDatagroupBadRequest {
 	return &UpdateDatagroupBadRequest{}
 }
 
-/*UpdateDatagroupBadRequest handles this case with default header values.
+/* UpdateDatagroupBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -109,6 +111,9 @@ type UpdateDatagroupBadRequest struct {
 
 func (o *UpdateDatagroupBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateDatagroupBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDatagroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +133,7 @@ func NewUpdateDatagroupNotFound() *UpdateDatagroupNotFound {
 	return &UpdateDatagroupNotFound{}
 }
 
-/*UpdateDatagroupNotFound handles this case with default header values.
+/* UpdateDatagroupNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -138,6 +143,9 @@ type UpdateDatagroupNotFound struct {
 
 func (o *UpdateDatagroupNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateDatagroupNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDatagroupNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -157,7 +165,7 @@ func NewUpdateDatagroupConflict() *UpdateDatagroupConflict {
 	return &UpdateDatagroupConflict{}
 }
 
-/*UpdateDatagroupConflict handles this case with default header values.
+/* UpdateDatagroupConflict describes a response with status code 409, with default header values.
 
 Resource Already Exists
 */
@@ -167,6 +175,9 @@ type UpdateDatagroupConflict struct {
 
 func (o *UpdateDatagroupConflict) Error() string {
 	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupConflict  %+v", 409, o.Payload)
+}
+func (o *UpdateDatagroupConflict) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateDatagroupConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -186,7 +197,7 @@ func NewUpdateDatagroupUnprocessableEntity() *UpdateDatagroupUnprocessableEntity
 	return &UpdateDatagroupUnprocessableEntity{}
 }
 
-/*UpdateDatagroupUnprocessableEntity handles this case with default header values.
+/* UpdateDatagroupUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -197,10 +208,45 @@ type UpdateDatagroupUnprocessableEntity struct {
 func (o *UpdateDatagroupUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateDatagroupUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateDatagroupUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateDatagroupTooManyRequests creates a UpdateDatagroupTooManyRequests with default headers values
+func NewUpdateDatagroupTooManyRequests() *UpdateDatagroupTooManyRequests {
+	return &UpdateDatagroupTooManyRequests{}
+}
+
+/* UpdateDatagroupTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateDatagroupTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateDatagroupTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /datagroups/{datagroup_id}][%d] updateDatagroupTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateDatagroupTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateDatagroupTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

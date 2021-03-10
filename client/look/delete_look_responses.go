@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // DeleteLookReader is a Reader for the DeleteLook structure.
@@ -24,30 +23,32 @@ type DeleteLookReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *DeleteLookReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 204:
 		result := NewDeleteLookNoContent()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewDeleteLookBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewDeleteLookNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewDeleteLookTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +57,7 @@ func NewDeleteLookNoContent() *DeleteLookNoContent {
 	return &DeleteLookNoContent{}
 }
 
-/*DeleteLookNoContent handles this case with default header values.
+/* DeleteLookNoContent describes a response with status code 204, with default header values.
 
 Successfully deleted.
 */
@@ -66,6 +67,9 @@ type DeleteLookNoContent struct {
 
 func (o *DeleteLookNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /looks/{look_id}][%d] deleteLookNoContent  %+v", 204, o.Payload)
+}
+func (o *DeleteLookNoContent) GetPayload() string {
+	return o.Payload
 }
 
 func (o *DeleteLookNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +87,7 @@ func NewDeleteLookBadRequest() *DeleteLookBadRequest {
 	return &DeleteLookBadRequest{}
 }
 
-/*DeleteLookBadRequest handles this case with default header values.
+/* DeleteLookBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +97,9 @@ type DeleteLookBadRequest struct {
 
 func (o *DeleteLookBadRequest) Error() string {
 	return fmt.Sprintf("[DELETE /looks/{look_id}][%d] deleteLookBadRequest  %+v", 400, o.Payload)
+}
+func (o *DeleteLookBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *DeleteLookBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +119,7 @@ func NewDeleteLookNotFound() *DeleteLookNotFound {
 	return &DeleteLookNotFound{}
 }
 
-/*DeleteLookNotFound handles this case with default header values.
+/* DeleteLookNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -123,8 +130,43 @@ type DeleteLookNotFound struct {
 func (o *DeleteLookNotFound) Error() string {
 	return fmt.Sprintf("[DELETE /looks/{look_id}][%d] deleteLookNotFound  %+v", 404, o.Payload)
 }
+func (o *DeleteLookNotFound) GetPayload() *models.Error {
+	return o.Payload
+}
 
 func (o *DeleteLookNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewDeleteLookTooManyRequests creates a DeleteLookTooManyRequests with default headers values
+func NewDeleteLookTooManyRequests() *DeleteLookTooManyRequests {
+	return &DeleteLookTooManyRequests{}
+}
+
+/* DeleteLookTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type DeleteLookTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *DeleteLookTooManyRequests) Error() string {
+	return fmt.Sprintf("[DELETE /looks/{look_id}][%d] deleteLookTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *DeleteLookTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *DeleteLookTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

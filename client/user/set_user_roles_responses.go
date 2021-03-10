@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // SetUserRolesReader is a Reader for the SetUserRoles structure.
@@ -24,30 +23,26 @@ type SetUserRolesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *SetUserRolesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewSetUserRolesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewSetUserRolesBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewSetUserRolesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -56,7 +51,7 @@ func NewSetUserRolesOK() *SetUserRolesOK {
 	return &SetUserRolesOK{}
 }
 
-/*SetUserRolesOK handles this case with default header values.
+/* SetUserRolesOK describes a response with status code 200, with default header values.
 
 Roles of user.
 */
@@ -66,6 +61,9 @@ type SetUserRolesOK struct {
 
 func (o *SetUserRolesOK) Error() string {
 	return fmt.Sprintf("[PUT /users/{user_id}/roles][%d] setUserRolesOK  %+v", 200, o.Payload)
+}
+func (o *SetUserRolesOK) GetPayload() []*models.Role {
+	return o.Payload
 }
 
 func (o *SetUserRolesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -83,7 +81,7 @@ func NewSetUserRolesBadRequest() *SetUserRolesBadRequest {
 	return &SetUserRolesBadRequest{}
 }
 
-/*SetUserRolesBadRequest handles this case with default header values.
+/* SetUserRolesBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -93,6 +91,9 @@ type SetUserRolesBadRequest struct {
 
 func (o *SetUserRolesBadRequest) Error() string {
 	return fmt.Sprintf("[PUT /users/{user_id}/roles][%d] setUserRolesBadRequest  %+v", 400, o.Payload)
+}
+func (o *SetUserRolesBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserRolesBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -112,7 +113,7 @@ func NewSetUserRolesNotFound() *SetUserRolesNotFound {
 	return &SetUserRolesNotFound{}
 }
 
-/*SetUserRolesNotFound handles this case with default header values.
+/* SetUserRolesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -122,6 +123,9 @@ type SetUserRolesNotFound struct {
 
 func (o *SetUserRolesNotFound) Error() string {
 	return fmt.Sprintf("[PUT /users/{user_id}/roles][%d] setUserRolesNotFound  %+v", 404, o.Payload)
+}
+func (o *SetUserRolesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *SetUserRolesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

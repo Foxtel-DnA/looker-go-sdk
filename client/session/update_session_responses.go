@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UpdateSessionReader is a Reader for the UpdateSession structure.
@@ -24,37 +23,38 @@ type UpdateSessionReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UpdateSessionReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUpdateSessionOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 400:
 		result := NewUpdateSessionBadRequest()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 404:
 		result := NewUpdateSessionNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	case 422:
 		result := NewUpdateSessionUnprocessableEntity()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
+	case 429:
+		result := NewUpdateSessionTooManyRequests()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -63,7 +63,7 @@ func NewUpdateSessionOK() *UpdateSessionOK {
 	return &UpdateSessionOK{}
 }
 
-/*UpdateSessionOK handles this case with default header values.
+/* UpdateSessionOK describes a response with status code 200, with default header values.
 
 Session
 */
@@ -73,6 +73,9 @@ type UpdateSessionOK struct {
 
 func (o *UpdateSessionOK) Error() string {
 	return fmt.Sprintf("[PATCH /session][%d] updateSessionOK  %+v", 200, o.Payload)
+}
+func (o *UpdateSessionOK) GetPayload() *models.APISession {
+	return o.Payload
 }
 
 func (o *UpdateSessionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -92,7 +95,7 @@ func NewUpdateSessionBadRequest() *UpdateSessionBadRequest {
 	return &UpdateSessionBadRequest{}
 }
 
-/*UpdateSessionBadRequest handles this case with default header values.
+/* UpdateSessionBadRequest describes a response with status code 400, with default header values.
 
 Bad Request
 */
@@ -102,6 +105,9 @@ type UpdateSessionBadRequest struct {
 
 func (o *UpdateSessionBadRequest) Error() string {
 	return fmt.Sprintf("[PATCH /session][%d] updateSessionBadRequest  %+v", 400, o.Payload)
+}
+func (o *UpdateSessionBadRequest) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateSessionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -121,7 +127,7 @@ func NewUpdateSessionNotFound() *UpdateSessionNotFound {
 	return &UpdateSessionNotFound{}
 }
 
-/*UpdateSessionNotFound handles this case with default header values.
+/* UpdateSessionNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -131,6 +137,9 @@ type UpdateSessionNotFound struct {
 
 func (o *UpdateSessionNotFound) Error() string {
 	return fmt.Sprintf("[PATCH /session][%d] updateSessionNotFound  %+v", 404, o.Payload)
+}
+func (o *UpdateSessionNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UpdateSessionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,7 +159,7 @@ func NewUpdateSessionUnprocessableEntity() *UpdateSessionUnprocessableEntity {
 	return &UpdateSessionUnprocessableEntity{}
 }
 
-/*UpdateSessionUnprocessableEntity handles this case with default header values.
+/* UpdateSessionUnprocessableEntity describes a response with status code 422, with default header values.
 
 Validation Error
 */
@@ -161,10 +170,45 @@ type UpdateSessionUnprocessableEntity struct {
 func (o *UpdateSessionUnprocessableEntity) Error() string {
 	return fmt.Sprintf("[PATCH /session][%d] updateSessionUnprocessableEntity  %+v", 422, o.Payload)
 }
+func (o *UpdateSessionUnprocessableEntity) GetPayload() *models.ValidationError {
+	return o.Payload
+}
 
 func (o *UpdateSessionUnprocessableEntity) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.ValidationError)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewUpdateSessionTooManyRequests creates a UpdateSessionTooManyRequests with default headers values
+func NewUpdateSessionTooManyRequests() *UpdateSessionTooManyRequests {
+	return &UpdateSessionTooManyRequests{}
+}
+
+/* UpdateSessionTooManyRequests describes a response with status code 429, with default header values.
+
+Too Many Requests
+*/
+type UpdateSessionTooManyRequests struct {
+	Payload *models.Error
+}
+
+func (o *UpdateSessionTooManyRequests) Error() string {
+	return fmt.Sprintf("[PATCH /session][%d] updateSessionTooManyRequests  %+v", 429, o.Payload)
+}
+func (o *UpdateSessionTooManyRequests) GetPayload() *models.Error {
+	return o.Payload
+}
+
+func (o *UpdateSessionTooManyRequests) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.Error)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -10,10 +10,9 @@ import (
 	"io"
 
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/strfmt"
 
-	strfmt "github.com/go-openapi/strfmt"
-
-	models "github.com/billtrust/looker-go-sdk/models"
+	"github.com/billtrust/looker-go-sdk/models"
 )
 
 // UserAttributeUserValuesReader is a Reader for the UserAttributeUserValues structure.
@@ -24,23 +23,20 @@ type UserAttributeUserValuesReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *UserAttributeUserValuesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-
 	case 200:
 		result := NewUserAttributeUserValuesOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-
 	case 404:
 		result := NewUserAttributeUserValuesNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return nil, result
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -49,7 +45,7 @@ func NewUserAttributeUserValuesOK() *UserAttributeUserValuesOK {
 	return &UserAttributeUserValuesOK{}
 }
 
-/*UserAttributeUserValuesOK handles this case with default header values.
+/* UserAttributeUserValuesOK describes a response with status code 200, with default header values.
 
 Value of user attribute.
 */
@@ -59,6 +55,9 @@ type UserAttributeUserValuesOK struct {
 
 func (o *UserAttributeUserValuesOK) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/attribute_values][%d] userAttributeUserValuesOK  %+v", 200, o.Payload)
+}
+func (o *UserAttributeUserValuesOK) GetPayload() []*models.UserAttributeWithValue {
+	return o.Payload
 }
 
 func (o *UserAttributeUserValuesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -76,7 +75,7 @@ func NewUserAttributeUserValuesNotFound() *UserAttributeUserValuesNotFound {
 	return &UserAttributeUserValuesNotFound{}
 }
 
-/*UserAttributeUserValuesNotFound handles this case with default header values.
+/* UserAttributeUserValuesNotFound describes a response with status code 404, with default header values.
 
 Not Found
 */
@@ -86,6 +85,9 @@ type UserAttributeUserValuesNotFound struct {
 
 func (o *UserAttributeUserValuesNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{user_id}/attribute_values][%d] userAttributeUserValuesNotFound  %+v", 404, o.Payload)
+}
+func (o *UserAttributeUserValuesNotFound) GetPayload() *models.Error {
+	return o.Payload
 }
 
 func (o *UserAttributeUserValuesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

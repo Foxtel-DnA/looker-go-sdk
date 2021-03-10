@@ -13,68 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewQueryTaskParams creates a new QueryTaskParams object
-// with the default values initialized.
+// NewQueryTaskParams creates a new QueryTaskParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewQueryTaskParams() *QueryTaskParams {
-	var ()
 	return &QueryTaskParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewQueryTaskParamsWithTimeout creates a new QueryTaskParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewQueryTaskParamsWithTimeout(timeout time.Duration) *QueryTaskParams {
-	var ()
 	return &QueryTaskParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewQueryTaskParamsWithContext creates a new QueryTaskParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewQueryTaskParamsWithContext(ctx context.Context) *QueryTaskParams {
-	var ()
 	return &QueryTaskParams{
-
 		Context: ctx,
 	}
 }
 
 // NewQueryTaskParamsWithHTTPClient creates a new QueryTaskParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewQueryTaskParamsWithHTTPClient(client *http.Client) *QueryTaskParams {
-	var ()
 	return &QueryTaskParams{
 		HTTPClient: client,
 	}
 }
 
-/*QueryTaskParams contains all the parameters to send to the API endpoint
-for the query task operation typically these are written to a http.Request
+/* QueryTaskParams contains all the parameters to send to the API endpoint
+   for the query task operation.
+
+   Typically these are written to a http.Request.
 */
 type QueryTaskParams struct {
 
-	/*Fields
-	  Requested fields.
+	/* Fields.
 
+	   Requested fields.
 	*/
 	Fields *string
-	/*QueryTaskID
-	  ID of the Query Task
 
+	/* QueryTaskID.
+
+	   ID of the Query Task
 	*/
 	QueryTaskID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the query task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryTaskParams) WithDefaults() *QueryTaskParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the query task params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *QueryTaskParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the query task params
@@ -144,16 +158,17 @@ func (o *QueryTaskParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 
 		// query param fields
 		var qrFields string
+
 		if o.Fields != nil {
 			qrFields = *o.Fields
 		}
 		qFields := qrFields
 		if qFields != "" {
+
 			if err := r.SetQueryParam("fields", qFields); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param query_task_id

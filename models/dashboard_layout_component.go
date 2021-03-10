@@ -6,12 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	strfmt "github.com/go-openapi/strfmt"
+	"context"
 
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DashboardLayoutComponent dashboard layout component
+//
 // swagger:model DashboardLayoutComponent
 type DashboardLayoutComponent struct {
 
@@ -32,6 +36,14 @@ type DashboardLayoutComponent struct {
 	// Read Only: true
 	Deleted *bool `json:"deleted,omitempty"`
 
+	// Dashboard element title, extracted from the Dashboard Element.
+	// Read Only: true
+	ElementTitle string `json:"element_title,omitempty"`
+
+	// Whether or not the dashboard element title is displayed.
+	// Read Only: true
+	ElementTitleHidden *bool `json:"element_title_hidden,omitempty"`
+
 	// Height
 	Height int64 `json:"height,omitempty"`
 
@@ -42,12 +54,100 @@ type DashboardLayoutComponent struct {
 	// Row
 	Row int64 `json:"row,omitempty"`
 
+	// Visualization type, extracted from a query's vis_config
+	// Read Only: true
+	VisType string `json:"vis_type,omitempty"`
+
 	// Width
 	Width int64 `json:"width,omitempty"`
 }
 
 // Validate validates this dashboard layout component
 func (m *DashboardLayoutComponent) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validate this dashboard layout component based on the context it is used
+func (m *DashboardLayoutComponent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCan(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleted(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateElementTitle(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateElementTitleHidden(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVisType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateCan(ctx context.Context, formats strfmt.Registry) error {
+
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateDeleted(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "deleted", "body", m.Deleted); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateElementTitle(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "element_title", "body", string(m.ElementTitle)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateElementTitleHidden(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "element_title_hidden", "body", m.ElementTitleHidden); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DashboardLayoutComponent) contextValidateVisType(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.ReadOnly(ctx, "vis_type", "body", string(m.VisType)); err != nil {
+		return err
+	}
+
 	return nil
 }
 

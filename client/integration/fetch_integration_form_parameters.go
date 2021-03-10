@@ -13,64 +13,82 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/swag"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
-// NewFetchIntegrationFormParams creates a new FetchIntegrationFormParams object
-// with the default values initialized.
+// NewFetchIntegrationFormParams creates a new FetchIntegrationFormParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewFetchIntegrationFormParams() *FetchIntegrationFormParams {
-	var ()
 	return &FetchIntegrationFormParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewFetchIntegrationFormParamsWithTimeout creates a new FetchIntegrationFormParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewFetchIntegrationFormParamsWithTimeout(timeout time.Duration) *FetchIntegrationFormParams {
-	var ()
 	return &FetchIntegrationFormParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewFetchIntegrationFormParamsWithContext creates a new FetchIntegrationFormParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewFetchIntegrationFormParamsWithContext(ctx context.Context) *FetchIntegrationFormParams {
-	var ()
 	return &FetchIntegrationFormParams{
-
 		Context: ctx,
 	}
 }
 
 // NewFetchIntegrationFormParamsWithHTTPClient creates a new FetchIntegrationFormParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewFetchIntegrationFormParamsWithHTTPClient(client *http.Client) *FetchIntegrationFormParams {
-	var ()
 	return &FetchIntegrationFormParams{
 		HTTPClient: client,
 	}
 }
 
-/*FetchIntegrationFormParams contains all the parameters to send to the API endpoint
-for the fetch integration form operation typically these are written to a http.Request
+/* FetchIntegrationFormParams contains all the parameters to send to the API endpoint
+   for the fetch integration form operation.
+
+   Typically these are written to a http.Request.
 */
 type FetchIntegrationFormParams struct {
 
-	/*IntegrationID
-	  Id of Integration
+	/* Body.
 
+	   Integration Form Request
 	*/
-	IntegrationID int64
+	Body map[string]string
+
+	/* IntegrationID.
+
+	   Id of integration
+	*/
+	IntegrationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the fetch integration form params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FetchIntegrationFormParams) WithDefaults() *FetchIntegrationFormParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the fetch integration form params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *FetchIntegrationFormParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the fetch integration form params
@@ -106,14 +124,25 @@ func (o *FetchIntegrationFormParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithBody adds the body to the fetch integration form params
+func (o *FetchIntegrationFormParams) WithBody(body map[string]string) *FetchIntegrationFormParams {
+	o.SetBody(body)
+	return o
+}
+
+// SetBody adds the body to the fetch integration form params
+func (o *FetchIntegrationFormParams) SetBody(body map[string]string) {
+	o.Body = body
+}
+
 // WithIntegrationID adds the integrationID to the fetch integration form params
-func (o *FetchIntegrationFormParams) WithIntegrationID(integrationID int64) *FetchIntegrationFormParams {
+func (o *FetchIntegrationFormParams) WithIntegrationID(integrationID string) *FetchIntegrationFormParams {
 	o.SetIntegrationID(integrationID)
 	return o
 }
 
 // SetIntegrationID adds the integrationId to the fetch integration form params
-func (o *FetchIntegrationFormParams) SetIntegrationID(integrationID int64) {
+func (o *FetchIntegrationFormParams) SetIntegrationID(integrationID string) {
 	o.IntegrationID = integrationID
 }
 
@@ -124,9 +153,14 @@ func (o *FetchIntegrationFormParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
+	}
 
 	// path param integration_id
-	if err := r.SetPathParam("integration_id", swag.FormatInt64(o.IntegrationID)); err != nil {
+	if err := r.SetPathParam("integration_id", o.IntegrationID); err != nil {
 		return err
 	}
 
