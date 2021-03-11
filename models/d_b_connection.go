@@ -127,7 +127,7 @@ type DBConnection struct {
 
 	// Id of user who last modified this connection configuration
 	// Read Only: true
-	UserID string `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 
 	// Username for server authentication
 	Username string `json:"username,omitempty"`
