@@ -62,11 +62,11 @@ type DBConnection struct {
 
 	// Unix timestamp at start of last completed PDT reap process
 	// Read Only: true
-	LastReapAt string `json:"last_reap_at,omitempty"`
+	LastReapAt int64 `json:"last_reap_at,omitempty"`
 
 	// Unix timestamp at start of last completed PDT trigger check process
 	// Read Only: true
-	LastRegenAt string `json:"last_regen_at,omitempty"`
+	LastRegenAt int64 `json:"last_regen_at,omitempty"`
 
 	// Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
 	MaintenanceCron string `json:"maintenance_cron,omitempty"`
