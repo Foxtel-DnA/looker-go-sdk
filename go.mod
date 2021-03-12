@@ -1,4 +1,4 @@
-module github.com/billtrust/looker-go-sdk
+module github.com/Foxtel-DnA/looker-go-sdk
 
 require (
 	github.com/go-openapi/errors v0.19.9

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/billtrust/looker-go-sdk/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // UserCredentialsApi3Reader is a Reader for the UserCredentialsApi3 structure.

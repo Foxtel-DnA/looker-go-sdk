@@ -13,7 +13,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/billtrust/looker-go-sdk/models"
+	models "github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // UserCredentialsAPIReader is a Reader for the UserCredentialsAPI structure.

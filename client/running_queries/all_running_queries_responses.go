@@ -13,7 +13,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/billtrust/looker-go-sdk/models"
+	models "github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // AllRunningQueriesReader is a Reader for the AllRunningQueries structure.

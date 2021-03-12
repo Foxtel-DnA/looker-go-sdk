@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/billtrust/looker-go-sdk/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // SetDefaultThemeReader is a Reader for the SetDefaultTheme structure.

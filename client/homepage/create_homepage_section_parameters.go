@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/billtrust/looker-go-sdk/models"
+	"github.com/Foxtel-DnA/looker-go-sdk/models"
 )
 
 // NewCreateHomepageSectionParams creates a new CreateHomepageSectionParams object,
