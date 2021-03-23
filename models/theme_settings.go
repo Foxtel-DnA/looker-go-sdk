@@ -42,10 +42,10 @@ type ThemeSettings struct {
 	PrimaryButtonColor string `json:"primary_button_color,omitempty"`
 
 	// Toggle to show filters. Defaults to true.
-	ShowFiltersBar bool `json:"show_filters_bar,omitempty"`
+	ShowFiltersBar bool `json:"show_filters_bar"`
 
 	// Toggle to show the title. Defaults to true.
-	ShowTitle bool `json:"show_title,omitempty"`
+	ShowTitle bool `json:"show_title"`
 
 	// Text color for text tiles
 	TextTileTextColor string `json:"text_tile_text_color,omitempty"`
@@ -54,7 +54,7 @@ type ThemeSettings struct {
 	TileBackgroundColor string `json:"tile_background_color,omitempty"`
 
 	// Toggles the tile shadow (New Dashboards)
-	TileShadow bool `json:"tile_shadow,omitempty"`
+	TileShadow bool `json:"tile_shadow"`
 
 	// Text color for tiles
 	TileTextColor string `json:"tile_text_color,omitempty"`
